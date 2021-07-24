@@ -3,6 +3,10 @@ templates:
     install_cert: false
     http_redirect:
         enable: false
+    dns_names:
+        - "*.interpolar.ch"
+        - "*.sharevic.net"
+        - "kmgetubs19.ch"
     app_passthrough:
     #- name: whoami
     #  domain: whoami.mars.fritz.box
