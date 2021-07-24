@@ -1,15 +1,15 @@
 templates:
-    dashboard_hostname: "traefik.mars.fritz.box"
-    install_cert: false
+    dashboard_hostname: "traefik.interpolar.ch"
+    install_cert: true
     http_redirect:
-        enable: false
-    #dns_names:
-    #    - "*.interpolar.ch"
-    #    - "*.sharevic.net"
-    #    - "kmgetubs19.ch"
+      enable: false
+    dns_names:
+      - "*.interpolar.ch"
     app_passthrough:
-    #- name: whoami
-    #  domain: whoami.mars.fritz.box
+      - name: traefik
+        domain: traefik.interpolar.ch
+      - name: argocd-server
+        domain: argo.interpolar.ch
 
 traefik:
     # Removing to allow IP setting
@@ -20,17 +20,17 @@ traefik:
     #        expose: true
     #        protocol: UDP
     globalArguments:
-        - "--global.checknewversion"
-        - "--serversTransport.insecureSkipVerify=true"
+      - "--global.checknewversion"
+      - "--serversTransport.insecureSkipVerify=true"
     service:
-        spec:
-            externalTrafficPolicy: Local
+      spec:
+        externalTrafficPolicy: Local
     ingressRoute:
-        dashboard:
-            enabled: true
+      dashboard:
+        enabled: true
     providers:
-      #kubernetesCRD:
-      #  enabled: true
+      kubernetesCRD:
+        enabled: true
       kubernetesIngress:
         enabled: true
         # IP used for Kubernetes Ingress endpoints
