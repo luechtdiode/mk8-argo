@@ -1,0 +1,38 @@
+templates:
+    dashboard_hostname: "traefik.mars.fritz.box"
+    install_cert: false
+    http_redirect:
+        enable: false
+    app_passthrough:
+    #- name: whoami
+    #  domain: whoami.mars.fritz.box
+
+traefik:
+    # Removing to allow IP setting
+    #ports:
+    #    udp53:
+    #        exposedPort: 53
+    #        port: 5300
+    #        expose: true
+    #        protocol: UDP
+    globalArguments:
+        - "--global.checknewversion"
+        - "--serversTransport.insecureSkipVerify=true"
+    service:
+        spec:
+            externalTrafficPolicy: Local
+    ingressRoute:
+        dashboard:
+            enabled: true
+    providers:
+      #kubernetesCRD:
+      #  enabled: true
+      kubernetesIngress:
+        enabled: true
+        # IP used for Kubernetes Ingress endpoints
+        publishedService:
+          enabled: true
+          # Published Kubernetes Service to copy status from. Format: namespace/servicename
+          # By default this Traefik service
+          # pathOverride: ""
+

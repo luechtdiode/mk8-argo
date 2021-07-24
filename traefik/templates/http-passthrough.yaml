@@ -1,0 +1,46 @@
+{{ range .Values.templates.app_passthrough }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: http-passthrough-{{ .name }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`{{ trimPrefix "http://" .domain }}`)
+      kind: Rule
+      priority: 5
+      services:
+        - kind: Service
+          name: app-passthrough-{{ .name }}
+          port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: https-passthrough-{{ .name }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`{{ trimPrefix "https://" .domain }}`)
+    kind: Rule
+    priority: 5 
+    services:
+    - kind: Service
+      name: app-passthrough-{{ .name }}
+      port: 443
+  tls:
+      store:
+          name: default
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: app-passthrough-{{ .name }}
+spec:
+  type: ExternalName
+  externalName: {{ .domain }}
+{{ end }}
+

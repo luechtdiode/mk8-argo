@@ -1,0 +1,26 @@
+{{- if .Values.templates.install_cert }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: traefik-cert
+spec:
+  secretName: traefik-cert
+  duration: 2160h
+  renewBefore: 360h
+  isCA: false
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 496
+  usages:
+  - server auth
+  - client auth
+  dnsNames:
+  {{- range .Values.templates.dns_names }}
+  - {{ . | quote }}
+  {{- end }}
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+{{- end }}
+
