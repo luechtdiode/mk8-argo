@@ -22,9 +22,41 @@ traefik:
     globalArguments:
       - "--global.checknewversion"
       - "--serversTransport.insecureSkipVerify=true"
+    additionalArguments:
+      - --providers.file.filename=/data/traefik-config.yaml
+      - --entrypoints.websecure.http.tls.certresolver=cloudflare
+      - --entrypoints.websecure.http.tls.domains[0].main=interpolar.ch
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.interpolar.ch
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1
+      - --certificatesresolvers.cloudflare.acme.storage=/certs/acme.json
+    env:
+      - name: CF_API_EMAIL
+        valueFrom:
+          secretKeyRef:
+            key: dns_cloudflare_email
+            name: acme-provider-email-secret
+      - name: CF_DNS_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            key: dns_cloudflare_api_token
+            name: acme-provider-api-token-secret
+    persistence:
+      enabled: true
+      path: /certs
+      size: 128Mi
+    volumes:
+      - mountPath: /data
+        name: traefik-config
+        type: configMap
+    ports:
+      web:
+        redirectTo: websecure
     service:
       spec:
         externalTrafficPolicy: Local
+    ingressClass:
+      fallbackApiVersion: v1
     ingressRoute:
       dashboard:
         enabled: true
@@ -32,7 +64,6 @@ traefik:
       kubernetesCRD:
         enabled: true
       kubernetesIngress:
-        enabled: true
         # IP used for Kubernetes Ingress endpoints
         publishedService:
           enabled: true
