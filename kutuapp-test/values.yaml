@@ -12,7 +12,7 @@ kutuapp:
     type: ClusterIP        
   resources:
     requests:
-      cpus: 2.00
+      cpu: 2.00
       memory: 2Gi
     limits:
       memory: 2Gi
