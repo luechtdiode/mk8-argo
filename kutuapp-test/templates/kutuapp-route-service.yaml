@@ -13,7 +13,12 @@ spec:
       priority: 5
       services:
         - kind: Service
+          {{- if .host }}
           name: app-passthrough-{{ .name }}
+          {{- end}}
+          {{- if not .host }}
+          name: {{ .name }}
+          {{- end }}
           port: {{ .port }}
       middlewares:
       - name: standard
@@ -31,7 +36,11 @@ spec:
     priority: 5 
     services:
     - kind: Service
-      name: {{ .name }}
+          {{- if .host }}
+          name: app-passthrough-{{ .name }}
+          {{- end}}
+          {{- if not .host }}
+          name: {{ .name }}
       port: {{ .portSecure }}
     middlewares:
     - name: standard
