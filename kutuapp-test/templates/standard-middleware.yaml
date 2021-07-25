@@ -76,14 +76,14 @@ metadata:
   name: security-response-header
 spec:
   headers:
+    #sslRedirect: true  
+    #forceSTSHeader: true
+    #stsIncludeSubdomains: true
+    #stsPreload: true
+    #stsSeconds: 15552000
     frameDeny: true
-    sslRedirect: true  
     browserXssFilter: true
     contentTypeNosniff: true
-    forceSTSHeader: true
-    stsIncludeSubdomains: true
-    stsPreload: true
-    stsSeconds: 15552000
     contentSecurityPolicy: "default-src 'self' data: gap: ws: wss:; style-src 'self' 'unsafe-inline'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: *.fbcdn.net pbs.twimg.com media.licdn.com *.cdninstagram.com *.googleusercontent.com *.akamaihd.net;"
     accessControlAllowCredentials: true
     accessControlAllowHeaders:
