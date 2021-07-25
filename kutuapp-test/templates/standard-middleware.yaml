@@ -24,6 +24,7 @@ spec:
     - name: max-connections
     - name: ratelimit
     - name: circuitbreaker    
+    - name: security-response-header
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
@@ -68,3 +69,37 @@ metadata:
 spec:
   circuitBreaker:
     expression: LatencyAtQuantileMS(50.0) > 1500 || ResponseCodeRatio(500, 600, 0, 600) > 0.50
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: security-response-header
+spec:
+  headers:
+    frameDeny: true
+    sslRedirect: true  
+    browserXssFilter: true
+    contentTypeNosniff: true
+    forceSTSHeader: true
+    stsIncludeSubdomains: true
+    stsPreload: true
+    stsSeconds: 15552000
+    contentSecurityPolicy: "default-src 'self' data: gap: ws: wss:; style-src 'self' 'unsafe-inline'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: *.fbcdn.net pbs.twimg.com media.licdn.com *.cdninstagram.com *.googleusercontent.com *.akamaihd.net;"
+    accessControlAllowCredentials: true
+    accessControlAllowHeaders:
+    - "x-access-token"
+    - "Authorization"
+    - "DNT"
+    - "User-Agent"
+    - "X-Requested-With"
+    - "If-Modified-Since"
+    - "Cache-Control"
+    - "Content-Type"
+    - "Range"
+    accessControlExposeHeaders:
+    - "Content-Length"
+    - "Content-Range"
+    accessControlAllowOriginList: [ "*" ]
+    customResponseHeaders:
+      cache-control: "private, max-age=0, no-cache, no-store, must-revalidate"
+      pragma: "no-cache"
