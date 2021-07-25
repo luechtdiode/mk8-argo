@@ -46,7 +46,7 @@ metadata:
   name: app-passthrough-{{ .name }}
 spec:
   type: ExternalName
-  externalName: {{ .host }}:{{ .port }}
+  externalName: {{ .host }}
 {{- end }}  
 {{ end }}
 
