@@ -14,7 +14,7 @@ spec:
       services:
         - kind: Service
           name: app-passthrough-{{ .name }}
-          port: {{ .portSecure }}
+          port: {{ .port }}
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -30,7 +30,7 @@ spec:
     services:
     - kind: Service
       name: app-passthrough-{{ .name }}
-      port: {{ .port }}
+      port: {{ .portSecure }}
   tls:
       store:
           name: default
