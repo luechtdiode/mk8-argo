@@ -10,7 +10,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/$V
 
 kubectl apply -n argocd -f argocd-server-ingress-route.yaml
 
-wait 10
+kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -n argocd
 
 echo "login argo-cd with user 'admin' and pw:"
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
