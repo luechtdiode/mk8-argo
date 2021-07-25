@@ -1,6 +1,6 @@
 templates:
     dashboard_hostname: "traefik.interpolar.ch"
-    install_cert: true
+    install_cert: false
     http_redirect:
       enable: false
     dns_names:
