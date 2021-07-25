@@ -1,0 +1,80 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: postgres
+  labels:
+    app: kutuapp
+    component: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kutuapp
+      component: postgres
+  template:
+    metadata:
+      labels:
+        app: kutuapp
+        component: postgres
+    spec:
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: kutu-data
+        - name: postgres-config
+          configMap:
+            name: postgres-config
+      containers:
+        - resources:
+            limits:
+              memory: 1Gi
+            requests:
+              cpus: 2.00
+              memory: 64Mi
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - '-i'
+                - '-c'
+                - >-
+                  psql -h 127.0.0.1 -U $POSTGRES_USER -q -d $POSTGRES_USER -c 'SELECT
+                  1'
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 10
+          terminationMessagePath: /dev/termination-log
+          name: postgres
+          env:
+            - name: PGDATA
+              value: /var/lib/pgsql/data           
+            - name: POSTGRES_USER
+              value: kutuapp
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kutu-postgres-secret
+                  key: password
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/pgsql/
+            - name: postgres-config
+              mountPath: /docker-entrypoint-initdb.d/  
+          terminationMessagePolicy: File
+          image: postgres:12.1-alpine
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

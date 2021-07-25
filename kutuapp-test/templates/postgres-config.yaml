@@ -1,0 +1,10 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: postgres-config
+  namespace: kutuapp-test
+
+data:
+  init.sql: |-
+    CREATE SCHEMA IF NOT EXISTS kutu;
+    SET search_path TO kutu;
