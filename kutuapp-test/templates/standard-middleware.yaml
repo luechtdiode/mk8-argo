@@ -88,6 +88,16 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
+  name: cache-header
+spec:
+  headers:
+    customResponseHeaders:
+      cache-control: "private, max-age=0, no-cache, no-store, must-revalidate"
+      pragma: "no-cache"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
   name: security-response-header
 spec:
   headers:
