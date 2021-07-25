@@ -38,13 +38,15 @@ spec:
   tls:
       store:
           name: default
-# ---
-# kind: Service
-# apiVersion: v1
-# metadata:
-#   name: app-passthrough-{{ .name }}
-# spec:
-#   type: ExternalName
-#   externalName: {{ .domain }}
-# {{ end }}
+{{- if .host }}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: app-passthrough-{{ .name }}
+spec:
+  type: ExternalName
+  externalName: {{ .host }}:{{ .port }}
+{{- end }}  
+{{ end }}
 
