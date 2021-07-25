@@ -19,7 +19,7 @@ metadata:
 spec:
   chain:
     middlewares:
-    - name: https-only
+    #- name: https-only
     - name: limited-body
     - name: max-connections
     - name: ratelimit
