@@ -1,0 +1,67 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: standard
+spec:
+  chain:
+    middlewares:
+    - name: https-only
+    - name: limited-body
+    - name: max-connections
+    - name: ratelimit
+    - name: circuitbreaker    
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: https-only
+spec:
+  redirectScheme:
+    scheme: https
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: limited-body
+spec:
+  buffering:
+    maxRequestBodyBytes: 2000000
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: local-ipwhitelist
+spec:
+  ipWhiteList:
+    sourceRange:
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: max-connections
+spec:
+  inFlightReq:
+    amount: 400
+---
+# Here, an average of 100 requests per second is allowed.
+# In addition, a burst of 50 requests is allowed.
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: ratelimit
+spec:
+  rateLimit:
+    average: 60
+    burst: 140
+---
+# Latency Check
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: circuitbreaker
+spec:
+  circuitBreaker:
+    expression: LatencyAtQuantileMS(50.0) > 1500 || ResponseCodeRatio(500, 600, 0, 600) > 0.50
