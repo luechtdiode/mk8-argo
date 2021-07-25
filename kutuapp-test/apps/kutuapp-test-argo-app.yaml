@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
     name: kutuapp
-    namespace: kutuapp-test
+    namespace: argocd
 spec:
     destination:
         namespace: kutuapp-test
@@ -17,6 +17,7 @@ spec:
         repoURL: https://github.com/luechtdiode/mk8-argo.git
     syncPolicy:
         automated:
-            prune: true
+          prune: true
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
