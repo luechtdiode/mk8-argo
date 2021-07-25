@@ -29,7 +29,7 @@ spec:
     priority: 5 
     services:
     - kind: Service
-      name: app-passthrough-{{ .name }}
+      name: {{ .name }}
       port: {{ .portSecure }}
   tls:
       store:
