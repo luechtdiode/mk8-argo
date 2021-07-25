@@ -31,22 +31,23 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`{{ trimPrefix "https://" .domain }}`)
-    kind: Rule
-    priority: 5 
-    services:
-    - kind: Service
-          {{- if .host }}
-          name: app-passthrough-{{ .name }}
-          {{- end}}
-          {{- if not .host }}
-          name: {{ .name }}
-      port: {{ .portSecure }}
-    middlewares:
-    - name: standard
+    - match: Host(`{{ trimPrefix "https://" .domain }}`)
+      kind: Rule
+      priority: 5 
+      services:
+      - kind: Service
+        {{- if .host }}
+        name: app-passthrough-{{ .name }}
+        {{- end}}
+        {{- if not .host }}
+        name: {{ .name }}
+        {{- end }}
+        port: {{ .portSecure }}
+      middlewares:
+      - name: standard
   tls:
-      store:
-          name: default
+    store:
+      name: default
 {{- if .host }}
 ---
 kind: Service
