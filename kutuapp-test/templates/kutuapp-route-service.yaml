@@ -47,7 +47,7 @@ spec:
       - name: standard
   tls:
     store:
-      name: default
+      name: default-tlsstore
 {{- if .host }}
 ---
 kind: Service

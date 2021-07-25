@@ -19,7 +19,7 @@ spec:
         kind: TraefikService
   tls:
       store:
-          name: default
+          name: default-tlsstore
 {{- end }}
 {{- if .Values.templates.http_redirect.enable }}
 ---
