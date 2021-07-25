@@ -20,6 +20,7 @@ spec:
   chain:
     middlewares:
     #- name: https-only
+    - name: compress
     - name: limited-body
     - name: max-connections
     - name: ratelimit
@@ -33,7 +34,7 @@ metadata:
 spec:
   chain:
     middlewares:
-    #- name: https-only
+    #- name: https-only    
     - name: limited-body
     - name: max-connections
     - name: ratelimit
@@ -49,6 +50,14 @@ spec:
   redirectScheme:
     scheme: https
 ---
+# Enable gzip compression
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: compress
+spec:
+  compress: {}
+---  
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
