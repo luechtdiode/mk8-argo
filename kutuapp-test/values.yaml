@@ -3,6 +3,11 @@ routes:
     domain: kutuapp-test.interpolar.ch
     port: 5757
     portSecure: 5757
+  - name: kutuapp-pluto
+    domain: kutuapp.sharevic.net
+    port: 5757
+    portSecure: 5757
+    host: pluto.fritz.box
 
 kutuapp:
   replicaCount: 1
