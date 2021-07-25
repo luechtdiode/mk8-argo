@@ -25,6 +25,21 @@ spec:
     - name: ratelimit
     - name: circuitbreaker    
     - name: security-response-header
+---  
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: secure
+spec:
+  chain:
+    middlewares:
+    #- name: https-only
+    - name: limited-body
+    - name: max-connections
+    - name: ratelimit
+    - name: circuitbreaker    
+    - name: security-response-header
+    - name: more-security-response-header
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
@@ -76,15 +91,9 @@ metadata:
   name: security-response-header
 spec:
   headers:
-    #sslRedirect: true  
-    #forceSTSHeader: true
-    #stsIncludeSubdomains: true
-    #stsPreload: true
-    #stsSeconds: 15552000
     frameDeny: true
     browserXssFilter: true
     contentTypeNosniff: true
-    contentSecurityPolicy: "default-src 'self' data: gap: ws: wss:; style-src 'self' 'unsafe-inline'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: *.fbcdn.net pbs.twimg.com media.licdn.com *.cdninstagram.com *.googleusercontent.com *.akamaihd.net;"
     accessControlAllowCredentials: true
     accessControlAllowHeaders:
     - "x-access-token"
@@ -103,3 +112,16 @@ spec:
     customResponseHeaders:
       cache-control: "private, max-age=0, no-cache, no-store, must-revalidate"
       pragma: "no-cache"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: more-security-response-header
+spec:
+  headers:
+    sslRedirect: true  
+    forceSTSHeader: true
+    stsIncludeSubdomains: true
+    stsPreload: true
+    stsSeconds: 15552000
+    contentSecurityPolicy: "default-src 'self' data: gap: ws: wss:; style-src 'self' 'unsafe-inline'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: *.fbcdn.net pbs.twimg.com media.licdn.com *.cdninstagram.com *.googleusercontent.com *.akamaihd.net;"
