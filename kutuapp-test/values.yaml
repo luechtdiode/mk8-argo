@@ -1,6 +1,8 @@
 routes:
-  - name: kutuapp-test
+  - name: kutuapp-test    
     domain: kutuapp-test.interpolar.ch
+    port: http
+    portSecure: http
 
 kutuapp:
   replicaCount: 1
