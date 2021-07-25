@@ -1,8 +1,8 @@
 routes:
   - name: kutuapp-test    
     domain: kutuapp-test.interpolar.ch
-    port: http
-    portSecure: http
+    port: 5757
+    portSecure: 5757
 
 kutuapp:
   replicaCount: 1
