@@ -2,14 +2,12 @@ templates:
     dashboard_hostname: "traefik.interpolar.ch"
     install_cert: false
     http_redirect:
-      enable: false
+      enable: true
     dns_names:
       - "*.interpolar.ch"
+      - "*.sharevic.net"
+      - "kmgetubs19.ch"
     app_passthrough:
-      - name: traefik
-        domain: traefik.interpolar.ch
-      - name: argocd-server
-        domain: argo.interpolar.ch
 
 traefik:
     # Removing to allow IP setting
