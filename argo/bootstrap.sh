@@ -8,6 +8,10 @@ VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/
 
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/$VERSION/manifests/install.yaml
 
+kubectl apply -n argocd -f argocd-server-ingress-route.yaml
+
+wait 10
+
 echo "login argo-cd with user 'admin' and pw:"
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 
