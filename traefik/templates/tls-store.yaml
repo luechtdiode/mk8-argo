@@ -2,7 +2,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: TLSStore
 metadata:
   name: default
-  namespace: traefik
+  namespace: default
 
 {{- if .Values.templates.default_cert }}
 spec:
