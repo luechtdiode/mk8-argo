@@ -13,6 +13,11 @@ spec:
       services:
         - name: argocd-server
           port: 443
+      middlewares:
+      - name: security-response-header
+      - name: more-security-response-header
+      tls:
+        certResolver: {{ .dns_resolver }}
     - kind: Rule
       match: Host(`argo.interpolar.ch`) && Headers(`Content-Type`, `application/grpc`)
       priority: 11
@@ -20,7 +25,9 @@ spec:
         - name: argocd-server
           port: 443
           scheme: h2c
-  tls:
-      store:
-          name: default
+      middlewares:
+      - name: security-response-header
+      - name: more-security-response-header
+      tls:
+        certResolver: cf-production
 
