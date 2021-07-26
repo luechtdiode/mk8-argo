@@ -1,7 +1,5 @@
 templates:
     dashboard_hostname: "traefik.interpolar.ch"
-    install_cert: false
-    #default_cert: "traefik-cert"
     #authsecretname:  traefik-dashboard-user-secret
     http_redirect:
       enable: true
@@ -21,8 +19,6 @@ traefik:
     additionalArguments:
       - --providers.file.filename=/data/traefik-config.yaml
       - --entrypoints.websecure.http.tls.certresolver=cf-production
-      - --entrypoints.websecure.http.tls.domains[0].main=interpolar.ch
-      - --entrypoints.websecure.http.tls.domains[0].sans=*.interpolar.ch
       - --certificatesresolvers.cf-staging.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
       - --certificatesresolvers.cf-staging.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.cf-staging.acme.dnschallenge.resolvers=1.1.1.1
