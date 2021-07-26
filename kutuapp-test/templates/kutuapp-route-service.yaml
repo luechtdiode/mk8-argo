@@ -56,6 +56,8 @@ metadata:
 spec:
   type: ExternalName
   externalName: {{ .host }}
+  ports:
+  - port: {{ .portSecure }}
 {{- end }}  
 {{ end }}
 
