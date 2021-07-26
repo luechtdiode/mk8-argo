@@ -65,16 +65,6 @@ traefik:
           # this is the name of a TLSOption definition
           options: ""
           certResolver: "cf-production"
-          domains:
-           - main: interpolar.ch
-             sans:
-               - *.interpolar.ch
-           - main: sharevic.net
-             sans:
-               - *.sharevic.net
-           - main: kmgetubs19.ch
-             sans:
-               - *.kmgetubs19.ch
     tlsOptions:
       default:
         minVersion: VersionTLS12
