@@ -40,7 +40,7 @@ traefik:
             key: dns_cloudflare_api_token
             name: acme-provider-api-token-secret
     persistence:
-      enabled: false
+      enabled: true
       path: /certs
       size: 128Mi
     volumes:
