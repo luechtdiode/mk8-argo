@@ -1,13 +1,10 @@
 templates:
     dashboard_hostname: "traefik.interpolar.ch"
     install_cert: false
+    #default_cert: "traefik-cert"
     http_redirect:
       enable: true
-    dns_names:
-      - "*.interpolar.ch"
-      - "*.sharevic.net"
-      - "kmgetubs19.ch"
-    app_passthrough:
+    dns_resolver: "cf-staging"
 
 traefik:
     # Removing to allow IP setting
@@ -25,9 +22,15 @@ traefik:
       - --entrypoints.websecure.http.tls.certresolver=cloudflare
       - --entrypoints.websecure.http.tls.domains[0].main=interpolar.ch
       - --entrypoints.websecure.http.tls.domains[0].sans=*.interpolar.ch
-      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
-      - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1
-      - --certificatesresolvers.cloudflare.acme.storage=/certs/acme.json
+      - --certificatesresolvers.cf-staging.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.cf-staging.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.cf-staging.acme.dnschallenge.resolvers=1.1.1.1
+      - --certificatesresolvers.cf-staging.acme.storage=/certs/acme-stageing.json
+      - --certificatesresolvers.cf-production.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.cf-production.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.cf-production.acme.dnschallenge.resolvers=1.1.1.1
+      - --certificatesresolvers.cf-production.acme.storage=/certs/acme.json
+
     env:
       - name: CF_API_EMAIL
         valueFrom:
