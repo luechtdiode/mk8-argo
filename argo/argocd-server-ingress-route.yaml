@@ -15,7 +15,9 @@ spec:
           port: 443
       middlewares:
       - name: security-response-header
+        namespace: kutuapp-test
       - name: more-security-response-header
+        namespace: kutuapp-test
       tls:
         certResolver: cf-production
     - kind: Rule
@@ -27,7 +29,9 @@ spec:
           scheme: h2c
       middlewares:
       - name: security-response-header
+        namespace: kutuapp-test
       - name: more-security-response-header
+        namespace: kutuapp-test
       tls:
         certResolver: cf-production
 
