@@ -17,7 +17,7 @@ spec:
       - name: security-response-header
       - name: more-security-response-header
       tls:
-        certResolver: {{ .dns_resolver }}
+        certResolver: cf-production
     - kind: Rule
       match: Host(`argo.interpolar.ch`) && Headers(`Content-Type`, `application/grpc`)
       priority: 11
