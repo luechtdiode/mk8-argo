@@ -45,9 +45,21 @@ spec:
         port: {{ .portSecure }}
       middlewares:
       - name: standard
+      {{- if .host }}
+      - name: app-passthrough-{{ .name }}-header
+      {{- end }}
       tls:
         certResolver: {{ .dns_resolver }}
 {{- if .host }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: app-passthrough-{{ .name }}-header
+spec:
+  headers:
+    customRequestHeaders:
+      Host: "https://kutuapp.sharevic.net"
 ---
 kind: Service
 apiVersion: v1
