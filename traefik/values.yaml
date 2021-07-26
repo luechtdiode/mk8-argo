@@ -50,6 +50,40 @@ traefik:
     ports:
       web:
         redirectTo: websecure
+      websecure:
+        # port: 8443
+        # hostPort: 8443
+        # expose: true
+        # exposedPort: 443
+        # The port protocol (TCP/UDP)
+        # protocol: TCP
+        # nodePort: 32443
+        # Set TLS at the entrypoint
+        # https://doc.traefik.io/traefik/routing/entrypoints/#tls
+        tls:
+          enabled: true
+          # this is the name of a TLSOption definition
+          options: ""
+          certResolver: "cf-production"
+          domains:
+           - main: interpolar.ch
+             sans:
+               - *.interpolar.ch
+           - main: sharevic.net
+             sans:
+               - *.sharevic.net
+           - main: kmgetubs19.ch
+             sans:
+               - *.kmgetubs19.ch
+    tlsOptions:
+      default:
+        minVersion: VersionTLS12
+        maxVersion: VersionTLS13
+        sniStrict: true
+        preferServerCipherSuites: true
+        curvePreferences:
+          - CurveP521
+          - CurveP384
     service:
       spec:
         externalTrafficPolicy: Local
