@@ -1,9 +1,10 @@
 ---
+{{- if .Values.templates.authsecretname }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: auth
 spec:
   basicAuth:
-    secret: authsecret
-
+    secret: authsecretname
+{{- end }}
