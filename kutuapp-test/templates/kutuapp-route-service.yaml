@@ -46,8 +46,8 @@ spec:
       middlewares:
       - name: standard
   tls:
-    stores:
-      default: {}
+      store:
+          name: default
 {{- if .host }}
 ---
 kind: Service

@@ -32,9 +32,8 @@ spec:
       name: app-passthrough-{{ .name }}
       port: 443
   tls:
-    certResolver: default
-    stores:
-      default: {}
+      store:
+          name: default
 ---
 kind: Service
 apiVersion: v1

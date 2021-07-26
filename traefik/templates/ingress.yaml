@@ -18,9 +18,8 @@ spec:
       - name: api@internal
         kind: TraefikService
   tls:
-    certResolver: default
-    stores:
-      default: {}
+      store:
+          name: default
 {{- end }}
 {{- if .Values.templates.http_redirect.enable }}
 ---

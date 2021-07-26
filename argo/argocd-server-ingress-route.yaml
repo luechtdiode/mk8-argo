@@ -21,7 +21,6 @@ spec:
           port: 443
           scheme: h2c
   tls:
-    certResolver: default
-    stores:
-      default: {}
+      store:
+          name: default
 
