@@ -45,9 +45,8 @@ spec:
         port: {{ .portSecure }}
       middlewares:
       - name: standard
-  tls:
-      store:
-          name: default
+      tls:
+        certResolver: {{ .dns_resolver }}
 {{- if .host }}
 ---
 kind: Service

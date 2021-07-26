@@ -1,10 +1,12 @@
 routes:
   - name: kutuapp
     domain: kutuapp-test.interpolar.ch
+    dns_resolver: "cf-production"
     port: 5757
     portSecure: 5757
   - name: kutuapp-pluto
     domain: kutuapp.sharevic.net
+    dns_resolver: "cf-production"
     port: 5757
     portSecure: 5757
     host: pluto.fritz.box
