@@ -61,3 +61,20 @@ kutuapp:
   - mountPath: /home/kutuapp/db
     subPath: db
     name: kutuapp-data
+
+adminer:
+  replicaCount: 1
+  image:
+    repository: adminer
+    tag: 4
+  network:
+    http:
+      containerPort: 8080
+      servicePort: 2222
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 800Mi
+  
