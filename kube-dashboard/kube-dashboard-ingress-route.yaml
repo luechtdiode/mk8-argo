@@ -1,17 +1,17 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: argocd-server-ingress-route
-  namespace: argocd
+  name: kube-dashboard-ingress-route
+  namespace: kube-system
 spec:
   entryPoints:
     - websecure
   routes:
     - kind: Rule
-      match: HostRegexp(`{subdomain:argo}.interpolar.ch`)
+      match: Host(`kube.interpolar.ch`)
       priority: 10
       services:
-        - name: argocd-server
+        - name: kubernetes-dashboard
           port: 443
       middlewares:
       - name: security-response-header
@@ -21,10 +21,10 @@ spec:
       tls:
         certResolver: cf-production
     - kind: Rule
-      match: Host(`argo.interpolar.ch`) && Headers(`Content-Type`, `application/grpc`)
+      match: Host(`kube.interpolar.ch`) && Headers(`Content-Type`, `application/grpc`)
       priority: 11
       services:
-        - name: argocd-server
+        - name: kubernetes-dashboard
           port: 443
           scheme: h2c
       middlewares:
