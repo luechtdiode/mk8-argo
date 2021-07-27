@@ -5,7 +5,6 @@ metadata:
 spec:
   chain:
     middlewares:
-    - name: http-redirect
     - name: compress
     - name: limited-body
     - name: max-connections

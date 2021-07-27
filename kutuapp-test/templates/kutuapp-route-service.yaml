@@ -22,6 +22,7 @@ spec:
           port: {{ .port }}
       middlewares:
       - name: standard
+        namespace: traefik
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -60,7 +61,7 @@ metadata:
 spec:
   headers:
     customRequestHeaders:
-      Host: "https://kutuapp.sharevic.net"
+      Forwarded: for=unknown;host={{ .domain }};proto=https
 ---
 kind: Service
 apiVersion: v1
