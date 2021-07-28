@@ -14,4 +14,4 @@ kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -
 
 echo "login argo-cd with user 'admin' and pw: $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)"
 
-ech "after complete traefik- install; use kubectl apply -n argocd -f apps/argocd-app.yaml to activate ArgoCD managed by ArgoCD"
+echo "after complete traefik- install; use kubectl apply -n argocd -f apps/argocd-app.yaml to activate ArgoCD managed by ArgoCD"
