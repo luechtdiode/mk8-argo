@@ -26,11 +26,19 @@ server:
           config:
             clientID: Iv1.696e329182673296
             clientSecret: $dex.github.clientSecret
-  dex:
-    envFrom:
-      name: dex-argo-github-secret
+    resource.customizations.health.bitnami.com_SealedSecret: |
+      hs = {}
+      hs.status = "Healthy"
+      hs.message = "Controller doesn't report resource status"
+      return hs
   rbacConfig:
     policy.default: 'role:readonly'
     policy.csv: |
       g, luechtdiode, role:admin
     scopes: '[preferred_username, groups, email]'
+
+argocd.dex:
+  envFrom:
+    - secretRef:
+        name: dex-argo-github-secret
+
