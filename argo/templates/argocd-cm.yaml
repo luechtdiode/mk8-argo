@@ -1,0 +1,29 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  admin.enabled: 'false'
+  dex.config: |
+    connectors:
+      # GitHub
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientID: Iv1.696e329182673296
+          clientSecret: $GITHUB_CLIENT_SECRET
+  repositories: |
+    - type: git
+      url: https://github.com/luechtdiode/mk8-argo.git
+  resource.customizations.health.bitnami.com_SealedSecret: |
+    hs = {}
+    hs.status = "Healthy"
+    hs.message = "Controller doesn't report resource status"
+    return hs      
+  url: 'https://argo.interpolar.ch:8443'
+
