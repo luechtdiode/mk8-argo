@@ -10,7 +10,7 @@ spec:
     project: default
     source:
         path: argo
-        targetRevision: HEAD
+        targetRevision: 4dffbb7651ad805049a1c2c7ce65679ee8a801b1
         helm:
             valueFiles:
                 - values.yaml
