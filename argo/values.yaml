@@ -6,12 +6,13 @@ global:
   image:
     tag: "v2.0.5"
 server:
-  certificate.domain: 'argo.interpolar.ch:8843'
+  certificate:
+    domain: 'argo.interpolar.ch'
   global:
     image:
       tag: v2.0.5
   config:
-    url: 'https://argo.interpolar.ch:8443'
+    url: https://argo.interpolar.ch:8443
     admin.enabled: 'false'
     repositories: |
       - type: git
