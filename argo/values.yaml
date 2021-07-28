@@ -3,11 +3,9 @@ templates:
   certResolver: 'cf-production'
 
 global:
-  hostAliases:
-    - 'argo.interpolar.ch'
-    - 'argo.mars.fritz.box'
+  image:
+    tag: "v2.0.5"
 server:
-  installCRDs: false
   certificate.domain: 'argo.interpolar.ch:8843'
   global:
     image:
