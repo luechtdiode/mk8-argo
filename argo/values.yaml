@@ -1,25 +1,37 @@
 templates:
-    argo_uri: 'argo.interpolar.ch'
-    certResolver: 'cf-production'
+  argo_uri: 'argo.interpolar.ch'
+  certResolver: 'cf-production'
 
+global:
+  hostAliases:
+    - 'argo.interpolar.ch'
+    - 'argo.mars.fritz.box'
 server:
-    config:
-        url: 'https://argo.interpolar.ch:8443'
-        admin.enabled: 'false'
-        repositories: |
-            - type: git
-              url: https://github.com/luechtdiode/mk8-argo.git
-        dex.config: |
-            connectors:
-            # GitHub
-            - type: github
-                id: github
-                name: GitHub
-                config:
-                clientID: Iv1.696e329182673296
-                clientSecret: $dex.github.clientSecret
-    rbacConfig:
-        policy.default: 'role:readonly'
-        policy.csv: |
-            g, luechtdiode, role:admin
-        scopes: '[preferred_username, groups, email]'
+  installCRDs: false
+  certificate.domain: 'argo.interpolar.ch:8843'
+  global:
+    image:
+      tag: v2.0.5
+  config:
+    url: 'https://argo.interpolar.ch:8443'
+    admin.enabled: 'false'
+    repositories: |
+      - type: git
+        url: https://github.com/luechtdiode/mk8-argo.git
+    dex.config: |
+      connectors:
+        # GitHub
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            clientID: Iv1.696e329182673296
+            clientSecret: $dex.github.clientSecret
+  dex:
+    enfFrom:
+      name: dex-argo-github-secret
+  rbacConfig:
+    policy.default: 'role:readonly'
+    policy.csv: |
+      g, luechtdiode, role:admin
+    scopes: '[preferred_username, groups, email]'
