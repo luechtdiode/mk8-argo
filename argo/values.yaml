@@ -26,7 +26,7 @@ server:
             clientID: Iv1.696e329182673296
             clientSecret: $dex.github.clientSecret
   dex:
-    enfFrom:
+    envFrom:
       name: dex-argo-github-secret
   rbacConfig:
     policy.default: 'role:readonly'
