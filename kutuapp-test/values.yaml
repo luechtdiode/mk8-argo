@@ -30,6 +30,11 @@ kutuapp:
     limits:
       memory: 2Gi
   env:
+    - name: X_KUTU_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: kutu-postgres-secret
+          key: kutusecret
     - name: X_DB_CONFIG_NAME
       value: kutudb_pg
     - name: X_POSTGRES_HOST
