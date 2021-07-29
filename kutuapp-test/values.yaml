@@ -4,12 +4,6 @@ routes:
     dns_resolver: "cf-production"
     port: 5757
     portSecure: 5757
-  - name: kutuapp-pluto
-    domain: kutuapp.sharevic.net
-    dns_resolver: "cf-production"
-    port: 5757
-    portSecure: 5757
-    host: pluto.fritz.box
 
 kutuapp:
   replicaCount: 1
@@ -22,7 +16,7 @@ kutuapp:
       # ingress:
       #  host: competition.sharevic.net
   service:
-    type: ClusterIP        
+    type: NodePort
   resources:
     requests:
       cpu: 2.00
