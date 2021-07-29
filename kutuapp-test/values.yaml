@@ -40,7 +40,10 @@ kutuapp:
     - name: X_POSTGRES_HOST
       value: postgres
     - name: X_POSTGRES_USER
-      value: kutuapp
+      valueFrom:
+        secretKeyRef:
+          name: kutu-postgres-secret
+          key: user      
     - name: X_POSTGRES_PASSWORD
       valueFrom:
         secretKeyRef:
