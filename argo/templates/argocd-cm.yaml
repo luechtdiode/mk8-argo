@@ -20,10 +20,12 @@ data:
   repositories: |
     - type: git
       url: https://github.com/luechtdiode/mk8-argo.git
-  resource.customizations.health.bitnami.com_SealedSecret: |
-    hs = {}
-    hs.status = "Healthy"
-    hs.message = "Controller doesn't report resource status"
-    return hs      
+  resource.customizations: |
+    bitnami.com/SealedSecret:
+      health.lua: |
+        hs = {}
+        hs.status = "Healthy"
+        hs.message = "Controller doesn't report resource status"
+        return hs  
   url: 'https://argo.interpolar.ch:8443'
 
