@@ -20,6 +20,9 @@ data:
   repositories: |
     - type: git
       url: https://github.com/luechtdiode/mk8-argo.git
+  helm.repositories: |
+    - url: https://charts.helm.sh/stable
+      name: stable
   resource.customizations: |
     bitnami.com/SealedSecret:
       health.lua: |
