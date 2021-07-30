@@ -20,9 +20,12 @@ data:
   repositories: |
     - type: git
       url: https://github.com/luechtdiode/mk8-argo.git
-  helm.repositories: |
-    - url: https://charts.helm.sh/stable
-      name: stable
+    - name: stable
+      type: helm
+      url: https://charts.helm.sh/stable
+    - name: incubator-library
+      type: helm
+      url: https://registry.baloise.dev/chartrepo/library
   resource.customizations: |
     bitnami.com/SealedSecret:
       health.lua: |
