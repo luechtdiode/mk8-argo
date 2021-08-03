@@ -43,6 +43,8 @@ kutuapp:
         secretKeyRef:
           name: kutu-postgres-secret
           key: password
+  defaultAffinityRules:
+    enabled: false
   persistence:
     enabled: true
     name: kutuapp-data
