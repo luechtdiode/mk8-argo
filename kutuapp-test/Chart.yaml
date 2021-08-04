@@ -10,7 +10,7 @@ dependencies:
     version: 2.1.0
     repository: https://registry.baloise.dev/chartrepo/library
     alias: adminer
-  - name: arhat-dev
+  - name: proton-bridge
     version: 0.1.2
     repository: https://helm-charts.arhat.dev
     alias: mailer
