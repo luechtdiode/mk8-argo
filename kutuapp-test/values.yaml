@@ -80,4 +80,31 @@ adminer:
     requests:
       cpu: 0.5
       memory: 800Mi
-  
+
+mailer:
+  replicaCount: 1
+  image:
+    repository: shenxn/protonmail-bridge
+    tag: 1.8.7-build
+  network:
+    smtp:
+      containerPort: 25
+      servicePort: 25
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.1
+      memory: 100Mi
+  persistence:
+    enabled: true
+    name: kutuapp-mailbridge-data
+    storageClass: microk8s-hostpath
+    accessModes: ReadWriteMany
+    size: 100Mi
+    annotations:
+      pv.kubernetes.io/bound-by-controller: 'yes'
+      volume.beta.kubernetes.io/storage-provisioner: microk8s.io/hostpath          
+  volumeMounts:
+    - mountPath: /root/
+      name: kutuapp-mailbridge-data
