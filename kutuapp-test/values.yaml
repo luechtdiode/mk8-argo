@@ -82,29 +82,80 @@ adminer:
       memory: 800Mi
 
 mailer:
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  podAnnotations: {}
+
   replicaCount: 1
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
   image:
-    repository: shenxn/protonmail-bridge
-    tag: 1.8.7-build
-  network:
-    smtp:
-      containerPort: 25
-      servicePort: 25
+    repository: ghcr.io/arhat-dev/proton-bridge
+    pullPolicy: Always
+    tag: "1.8"
+
+  env:
+  - name: PUB_KEY
+    valueFrom:
+      secretKeyRef:
+        name: bridge-secret
+        key: pub.gpg
+  - name: SEC_KEY
+    valueFrom:
+      secretKeyRef:
+        name: bridge-secret
+        key: secret.gpg
+  - name: CRED_DIR_NAME
+    valueFrom:
+      secretKeyRef:
+        name: bridge-secret
+        key: cred_dirname.txt
+  - name: CRED_FILE_NAME
+    valueFrom:
+      secretKeyRef:
+        name: bridge-secret
+        key: cred_filename.txt
+  - name: CRED_FILE_CONTENT
+    valueFrom:
+      secretKeyRef:
+        name: bridge-secret
+        key: cred.gpg
+  - name: PROTONMAIL_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: bridge-secret
+        key: username
+  - name: PROTONMAIL_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: bridge-secret
+        key: password
+
+  podSecurityContext:
+    fsGroup: 1000
+
+  securityContext:
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1000
+
   service:
-    type: NodePort
-  resources:
-    requests:
-      cpu: 0.1
-      memory: 100Mi
-  persistence:
-    enabled: true
-    name: kutuapp-mailbridge-data
-    storageClass: microk8s-hostpath
-    accessModes: ReadWriteMany
-    size: 100Mi
-    annotations:
-      pv.kubernetes.io/bound-by-controller: 'yes'
-      volume.beta.kubernetes.io/storage-provisioner: microk8s.io/hostpath          
-  volumeMounts:
-    - mountPath: /root/
-      name: kutuapp-mailbridge-data
+    type: ClusterIP
+    smtp:
+      port: 587
+    imap:
+      port: 143
+
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
