@@ -94,7 +94,7 @@ mailer:
 
   image:
     repository: ghcr.io/arhat-dev/proton-bridge
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     tag: "1.8"
 
   env:
@@ -146,11 +146,11 @@ mailer:
     runAsUser: 1000
 
   service:
-    type: ClusterIP
+    type: NodePort
     smtp:
-      port: 587
+      port: 30587
     imap:
-      port: 143
+      port: 30143
 
   resources: {}
     # limits:
