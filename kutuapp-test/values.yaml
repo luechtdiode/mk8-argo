@@ -9,7 +9,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: master-a05ebd8
+    tag: feature.208_passwd_reset-b153b21
   network:
     http:
       servicePort: 5757
