@@ -9,7 +9,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: feature.209_reset-login-2f440a0
+    tag: master-6f2a682
   network:
     http:
       servicePort: 5757
