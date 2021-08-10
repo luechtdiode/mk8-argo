@@ -84,7 +84,7 @@ traefik:
         enabled: true
     providers:
       kubernetesCRD:
-        enabled: false
+        enabled: true
       kubernetesIngress:
         # IP used for Kubernetes Ingress endpoints
         publishedService:
