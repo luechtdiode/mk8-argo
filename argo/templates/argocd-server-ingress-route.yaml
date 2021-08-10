@@ -15,7 +15,7 @@ spec:
           port: 443
       middlewares:
       - name: security-response-header
-      #  namespace: traefik
+        namespace: traefik
       #- name: more-security-response-header
       #  namespace: traefik
       tls:
