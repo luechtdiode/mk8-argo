@@ -13,9 +13,9 @@ spec:
       services:
         - name: argocd-server
           port: 443
-      #middlewares:
-      #- name: security-response-header
-      #  namespace: traefik
+      middlewares:
+      - name: security-response-header
+        namespace: traefik
       #- name: more-security-response-header
       #  namespace: traefik
       tls:
