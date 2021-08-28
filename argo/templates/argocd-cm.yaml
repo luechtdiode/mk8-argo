@@ -27,6 +27,9 @@ data:
     - name: incubator-library
       type: helm
       url: https://registry.baloise.dev/chartrepo/library
+    - name: rook-release
+		  type: helm
+		  url: https://charts.rook.io/release  
   resource.customizations: |
     bitnami.com/SealedSecret:
       health.lua: |

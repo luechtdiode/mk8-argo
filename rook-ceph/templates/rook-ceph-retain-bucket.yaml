@@ -1,0 +1,11 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: rook-ceph-retain-bucket
+provisioner: rook-ceph.ceph.rook.io/bucket
+parameters:
+  objectStoreName: block-store1
+  objectStoreNamespace: rook-ceph
+  region: ch-bs
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
