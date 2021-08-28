@@ -2,15 +2,15 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
     name: rook-ceph
-    namespace: roock-ceph
+    namespace: rook-ceph
 
 spec:
     destination:
-        namespace: roock-ceph
+        namespace: rook-ceph
         server: https://kubernetes.default.svc
     project: default
     source:
-        path: roock-ceph
+        path: rook-ceph
         targetRevision: HEAD
         helm:
             valueFiles:
