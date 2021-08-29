@@ -1,10 +1,10 @@
-name: sealed-secretes
+name: rook-ceph
 apiVersion: v2
 version: 1.0.0
 dependencies:
     - name: rook-ceph
       version: '^1.7.2'
       repository: https://charts.rook.io/release
-    - name: rook-ceph-cluster
-      version: '^1.7.2'
-      repository: https://charts.rook.io/release
+    #- name: rook-ceph-cluster
+    #  version: '^1.7.2'
+    #  repository: https://charts.rook.io/release
