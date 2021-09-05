@@ -2,8 +2,8 @@ routes:
   - name: odoo11
     domain: kmgetubs19.interpolar.ch
     dns_resolver: "cf-production"
-    port: 8050
-    portSecure: 8050
+    port: 8069
+    portSecure: 8069
 
 odoo11:
   replicaCount: 1
