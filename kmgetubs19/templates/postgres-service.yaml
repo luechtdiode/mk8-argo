@@ -4,7 +4,7 @@ metadata:
   labels:
     app: odoo11
     component: postgres
-  name: postgres
+  name: db
   namespace: kmgetubs19
 spec:
   type: ClusterIP
