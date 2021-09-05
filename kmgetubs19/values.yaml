@@ -1,0 +1,52 @@
+routes:
+  - name: odoo11
+    domain: kmgetubs19.interpolar.ch
+    dns_resolver: "cf-production"
+    port: 8050
+    portSecure: 8050
+
+odoo11:
+  replicaCount: 1
+  image:
+    repository: odoo
+    tag: 11
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 8050
+    initialDelaySeconds: 10
+  timeoutSeconds: 1    
+  network:
+    http:
+      servicePort: 8050
+      # ingress:
+      #  host: competition.sharevic.net
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      memory: 2Gi
+  defaultAffinityRules:
+    enabled: false
+  persistence:
+    enabled: true
+    name: odoo-web-data
+    storageClass: rook-cephfs    
+    accessModes: ReadWriteMany
+    size: 300Mi
+  volumes:
+    - name: config-cm
+      configMap:
+        name: odoo-config
+  volumeMounts:
+    - mountPath: /var/lib/odoo
+      subPath: webdata
+      name: odoo-web-data
+    - mountPath: /etc/odoo
+      name: config-cm
+    - mountPath: /mnt/extra-addons
+      subPath: odooaddons
+      name: odoo-web-data
