@@ -162,3 +162,11 @@ Cleanup rook-ceph for reinstall
 . ~/microk8s-setup/mk8-argo/rook-ceph/ceph-cleanup.sh
 
 ```
+
+
+Then make it GitOps ready
+-------------------------
+```bash
+kubectl apply -f ~/microk8s-setup/mk8-argo/kmgetubs19/apps/kmgetubs19-argo-app.yaml
+# not ready now kubectl apply -f ~/microk8s-setup/mk8-argo/argo/apps/argocd-app.yaml 
+```
