@@ -1,4 +1,5 @@
 rook-ceph:
   csi:
+    # fix for microk8s distribution, as proposed by https://github.com/ceph/ceph-csi/issues/1067
     # default kubeletDirPath: /var/lib/kubelet
     kubeletDirPath: /var/snap/microk8s/common/var/lib/kubelet/
