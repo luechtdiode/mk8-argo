@@ -1,0 +1,4 @@
+rook-ceph:
+  csi:
+    # default kubeletDirPath: /var/lib/kubelet
+    kubeletDirPath: /var/snap/microk8s/common/var/lib/kubelet/
