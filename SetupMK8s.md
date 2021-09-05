@@ -151,6 +151,7 @@ kubectl apply -n kube-system -f ~/microk8s-setup/mk8-argo/kube-dashboard/kube-da
 
 Install rook-ceph storage
 -------------------------
+https://github.com/trulede/mk8s_rook
 ```
 kubectl apply -f ~/microk8s-setup/mk8-argo/rook-ceph/apps/rook-ceph-operator-app.yaml
 ```
