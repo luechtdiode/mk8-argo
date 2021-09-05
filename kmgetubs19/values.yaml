@@ -13,12 +13,12 @@ odoo11:
   readinessProbe:
     httpGet:
       path: /
-      port: 8050
+      port: 8069
     initialDelaySeconds: 10
   timeoutSeconds: 1    
   network:
     http:
-      servicePort: 8050
+      servicePort: 8069
       # ingress:
       #  host: competition.sharevic.net
   service:
