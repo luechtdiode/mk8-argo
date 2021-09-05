@@ -28,7 +28,10 @@ rook-ceph-cluster:
           enabled: true
     dashboard:
       enabled: true
-      port: 7000
+      host:
+        name: ceph-rook.mars.fritz.box
+        path: dashboard
+      # port: 7000
     crashCollector:
       disable: true
     storage:
