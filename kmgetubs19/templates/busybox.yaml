@@ -15,8 +15,7 @@ spec:
       persistentVolumeClaim:
         claimName: odoo-web-data
   containers:
-  #busybox
-  - image: postgres:12.1-alpine
+  - image: busybox
     command:
       - sleep
       - "3600"
