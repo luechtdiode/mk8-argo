@@ -10,3 +10,4 @@ data:
     proxy_mode = True
     max_cron_threads = 1
     workers = 4
+    addons_paths=/var/lib/odoo/.local/share/Odoo/addons/11.0,/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons,/mnt/extra-addons/theme_backend_v11,/mnt/extra-addons/web_responsive
