@@ -45,8 +45,9 @@ odoo11:
     - mountPath: /var/lib/odoo
       subPath: webdata
       name: odoo-web-data
-    - mountPath: /etc/odoo
+    - mountPath: /etc/odoo/odoo.conf
       name: config-cm
+      subPath: odoo.conf
     - mountPath: /mnt/extra-addons
       subPath: odooaddons
       name: odoo-web-data
