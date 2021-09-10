@@ -1,0 +1,12 @@
+openebs-zfslocalpv:
+  rbac:
+    # rbac.pspEnabled: `true` if PodSecurityPolicy resources should be created
+    pspEnabled: true
+  zfsNode:
+    # fix for microk8s distribution, as proposed by https://github.com/ceph/ceph-csi/issues/1067
+    # default kubeletDirPath: /var/lib/kubelet
+    kubeletDir: /var/snap/microk8s/common/var/lib/kubelet/
+  zfsController:
+    # fix for microk8s distribution, as proposed by https://github.com/ceph/ceph-csi/issues/1067
+    # default kubeletDirPath: /var/lib/kubelet
+    kubeletDir: /var/snap/microk8s/common/var/lib/kubelet/
