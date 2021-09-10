@@ -152,6 +152,7 @@ kubectl apply -n kube-system -f ~/microk8s-setup/mk8-argo/kube-dashboard/kube-da
 Install rook-ceph storage
 -------------------------
 https://github.com/trulede/mk8s_rook
+*actually, unresolved reboot-osd-failures*
 ```
 kubectl apply -f ~/microk8s-setup/mk8-argo/rook-ceph/apps/rook-ceph-operator-app.yaml
 ```
@@ -161,6 +162,15 @@ Cleanup rook-ceph for reinstall
 ```
 . ~/microk8s-setup/mk8-argo/rook-ceph/ceph-cleanup.sh
 
+```
+
+Install OpenEBS storage
+-----------------------
+https://github.com/openebs/zfs-localpv
+```bash
+apt-get install zfsutils-linux
+zpool create zfspv-pool /dev/sdb
+kubectl label node mars openebs.io/rack=rack1
 ```
 
 
