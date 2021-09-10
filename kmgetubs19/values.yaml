@@ -35,7 +35,7 @@ odoo11:
     enabled: true
     name: odoo-web-data
     storageClass: openebs-zfspv
-    accessModes: ReadWriteMany
+    accessModes: ReadWriteOnce
     size: 300Mi
   volumes:
     - name: config-cm
