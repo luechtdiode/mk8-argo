@@ -31,12 +31,6 @@ odoo11:
       memory: 2Gi
   defaultAffinityRules:
     enabled: false
-  persistence:
-    enabled: false
-    name: odoo-web-data
-    storageClass: openebs-zfspv
-    accessModes: ReadWriteOnce
-    size: 300Mi
   volumes:
     - name: config-cm
       configMap:
