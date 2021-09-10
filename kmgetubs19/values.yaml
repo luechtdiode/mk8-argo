@@ -32,7 +32,7 @@ odoo11:
   defaultAffinityRules:
     enabled: false
   persistence:
-    enabled: true
+    enabled: false
     name: odoo-web-data
     storageClass: openebs-zfspv
     accessModes: ReadWriteOnce
