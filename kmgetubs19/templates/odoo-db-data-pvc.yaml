@@ -9,5 +9,5 @@ spec:
   resources:
     requests:
       storage: 300Mi
-  storageClassName: rook-cephfs
+  storageClassName: openebs-zfspv
   volumeMode: Filesystem

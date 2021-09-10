@@ -34,7 +34,7 @@ odoo11:
   persistence:
     enabled: true
     name: odoo-web-data
-    storageClass: rook-cephfs    
+    storageClass: openebs-zfspv
     accessModes: ReadWriteMany
     size: 300Mi
   volumes:
