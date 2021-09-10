@@ -32,6 +32,9 @@ odoo11:
   defaultAffinityRules:
     enabled: false
   volumes:
+    - name: odoo-web-data
+      persistentVolumeClaim:
+        claimName: odoo-web-data  
     - name: config-cm
       configMap:
         name: odoo-config
