@@ -5,9 +5,9 @@ metadata:
   namespace: kmgetubs19
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 300Mi
-  storageClassName: openebs-zfspv
+  storageClassName: openebs-hostpath
   volumeMode: Filesystem
