@@ -153,9 +153,15 @@ Install rook-ceph storage
 -------------------------
 https://github.com/trulede/mk8s_rook
 *actually, unresolved reboot-osd-failures*
+https://github.com/rook/rook/issues/7519
+https://github.com/ceph/ceph-ansible/issues/2354
 ```
 kubectl apply -f ~/microk8s-setup/mk8-argo/rook-ceph/apps/rook-ceph-operator-app.yaml
 ```
+https://s3-website.cern.ch/cephdocs/ops/create_a_cluster_short.html
+https://github.com/el95149/vagrant-microk8s-ceph/tree/master/cookbooks/common
+https://jonathangazeley.com/2020/09/10/building-a-hyperconverged-kubernetes-cluster-with-microk8s-and-ceph/
+https://www.youtube.com/watch?v=4JRYIEH_1DM
 
 Cleanup rook-ceph for reinstall
 ---------------------
@@ -168,8 +174,10 @@ Install OpenEBS storage
 -----------------------
 https://github.com/openebs/zfs-localpv
 ```bash
-apt-get install zfsutils-linux
-zpool create zfspv-pool /dev/sdb
+microk8s enable openebs
+sudo apt-get install zfsutils-linux
+sudo zpool create zfspv-pool /dev/sdb
+sudo zfs set mountpoint=/var/snap/microk8s/common/var/openebs/local zfspv-pool
 kubectl label node mars openebs.io/rack=rack1
 ```
 
