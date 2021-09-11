@@ -49,8 +49,8 @@ kutuapp:
     enabled: true
     name: kutuapp-data
     storageClass: openebs-hostpath
-    accessModes: ReadWriteMany
-    size: 1Gi
+    accessModes: ReadWriteOnce
+    size: 10Gi
     annotations:
       pv.kubernetes.io/bound-by-controller: 'yes'
   volumeMounts:
