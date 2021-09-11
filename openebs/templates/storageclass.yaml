@@ -3,6 +3,7 @@ kind: StorageClass
 metadata:
   name: openebs-zfspv
 parameters:
+  shared: "yes"
   recordsize: "4k"
   compression: "off"
   dedup: "on"
