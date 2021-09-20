@@ -9,7 +9,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: master-bac3363
+    tag: master-4d44b79
   network:
     http:
       servicePort: 5757
