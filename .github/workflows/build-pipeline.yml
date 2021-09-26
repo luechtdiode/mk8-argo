@@ -18,7 +18,6 @@ on:
 jobs:
 
   build-docker-distribution:
-    needs: build-app
     runs-on: ubuntu-latest
     environment: dockerhub
     steps:
