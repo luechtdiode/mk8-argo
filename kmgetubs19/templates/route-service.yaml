@@ -45,7 +45,7 @@ spec:
         {{- end }}
         port: {{ .portSecure }}
       middlewares:
-      - name: standard
+      - name: secure
       #  namespace: traefik
       {{- if .host }}
       - name: app-passthrough-{{ .name }}-header
