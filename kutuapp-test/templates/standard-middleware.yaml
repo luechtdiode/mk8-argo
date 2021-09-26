@@ -19,7 +19,7 @@ metadata:
 spec:
   chain:
     middlewares:
-    - name: http-redirect 
+    #- name: http-redirect 
     - name: limited-body
     - name: max-connections
     - name: ratelimit
