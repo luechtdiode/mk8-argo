@@ -39,8 +39,8 @@ data:
       log_format                      main    '[$time_local] ra="$remote_addr" - $request '
                                               '"$status" $body_bytes_sent "$http_referer" "$server_name" '
                                               '"$http_user_agent" "$http_x_forwarded_for"';
-      access_log                      /dev/stdout combined if=$loggable;
-      error_log                       /dev/stderr combined;
+      access_log                      /dev/stdout main if=$loggable;
+      error_log                       /dev/stderr warn;
       
       include http-header.conf;
 
