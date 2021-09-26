@@ -5,6 +5,16 @@
 # or to provide custom queries or build logic.
 name: "Build-Pipeline"
 
+on:
+  #schedule:
+  #  - cron: '35 6 * * *'
+  push:
+    branches: [ master ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ master ]
+
 jobs:
 
   build-docker-distribution:
