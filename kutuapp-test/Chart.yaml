@@ -9,7 +9,7 @@ dependencies:
 - name: generic-chart
     version: 2.1.0
     repository: https://registry.baloise.dev/chartrepo/library
-    alias: kutuapp_waf
+    alias: kutuappwaf
   - name: generic-chart
     version: 2.1.0
     repository: https://registry.baloise.dev/chartrepo/library
