@@ -14,8 +14,6 @@ kutuapp-waf:
     http:
       containerPort: 80
       servicePort: 5858
-      ingress:
-       host: kutuapp-test.interpolar.ch
   service:
     type: NodePort
   resources:
