@@ -5,6 +5,31 @@ routes:
     port: 5757
     portSecure: 5757
 
+kutuapp-waf:
+  replicaCount: 1
+  image:
+    repository: luechtdiode/nginx-naxsi
+    tag: master-1df1bb5
+  network:
+    http:
+      containerPort: 80
+      servicePort: 5858
+      ingress:
+       host: kutuapp-test.interpolar.ch
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 800Mi
+  volumeMounts:
+    - name: nginx-config
+      mountPath: /etc/nginx
+  volumes:
+    - name: nginx-config
+      configMap:
+        name: nginx-cm
+
 kutuapp:
   replicaCount: 1
   image:
