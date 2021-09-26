@@ -1,9 +1,35 @@
 routes:
-  - name: odoo11
+  - name: odoo11-waf
     domain: kmgetubs19.interpolar.ch
     dns_resolver: "cf-production"
     port: 8069
     portSecure: 8069
+
+odoo11-waf:
+  replicaCount: 1
+  image:
+    repository: luechtdiode/nginx-naxsi
+    tag: master-1df1bb5
+  network:
+    http:
+      containerPort: 80
+      servicePort: 8069
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 128Mi
+    limits:
+      cpu: 1.00
+      memory: 512Mi
+  volumeMounts:
+    - name: nginx-config
+      mountPath: /etc/nginx
+  volumes:
+    - name: nginx-config
+      configMap:
+        name: nginx-cm
 
 odoo11:
   replicaCount: 1
