@@ -5,7 +5,7 @@ routes:
     port: 5757
     portSecure: 5757
 
-kutuappwaf:
+kutuapp-waf:
   replicaCount: 1
   image:
     repository: luechtdiode/nginx-naxsi
