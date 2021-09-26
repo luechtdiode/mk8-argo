@@ -9,7 +9,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r2b5-alpha5
+    tag: v2r2b6
   network:
     http:
       servicePort: 5757
@@ -48,12 +48,11 @@ kutuapp:
   persistence:
     enabled: true
     name: kutuapp-data
-    storageClass: microk8s-hostpath
-    accessModes: ReadWriteMany
-    size: 1Gi
+    storageClass: openebs-hostpath
+    accessModes: ReadWriteOnce
+    size: 10Gi
     annotations:
       pv.kubernetes.io/bound-by-controller: 'yes'
-      volume.beta.kubernetes.io/storage-provisioner: microk8s.io/hostpath      
   volumeMounts:
   - mountPath: /home/kutuapp
     subPath: appdataroot

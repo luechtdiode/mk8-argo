@@ -1,0 +1,16 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-local-hostpath
+  annotations:
+    openebs.io/cas-type: local
+    cas.openebs.io/config: |
+      - name: NodeAffinityLabel
+        value: "openebs.io/rack=rack1"
+      - name: StorageType
+        value: hostpath
+      - name: BasePath
+        value: /mnt/zfspv-pool
+provisioner: openebs.io/local
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer

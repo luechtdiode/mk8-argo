@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: kutu-data
+  name: odoo-db-data
+  namespace: kmgetubs19
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 300Mi
   storageClassName: openebs-hostpath
   volumeMode: Filesystem

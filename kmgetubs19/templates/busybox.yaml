@@ -1,0 +1,35 @@
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: busybox
+#   namespace: kmgetubs19
+# spec:
+#   volumes:
+#     - name: config-cm
+#       configMap:
+#         name: odoo-config
+#     - name: odoo-db-data
+#       persistentVolumeClaim:
+#         claimName: odoo-db-data
+#     - name: odoo-web-data
+#       persistentVolumeClaim:
+#         claimName: odoo-web-data
+#   containers:
+#   - image: busybox
+#     command:
+#       - sleep
+#       - "3600"
+#     imagePullPolicy: IfNotPresent
+#     name: busybox
+#     volumeMounts:
+#       - mountPath: /var/lib/pgsql/
+#         name: odoo-db-data        
+#       - mountPath: /var/lib/odoo
+#         subPath: webdata
+#         name: odoo-web-data
+#       - mountPath: /etc/odoo
+#         name: config-cm
+#       - mountPath: /mnt/extra-addons
+#         subPath: odooaddons
+#         name: odoo-web-data
+#   restartPolicy: Never
