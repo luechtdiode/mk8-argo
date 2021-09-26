@@ -50,10 +50,10 @@ jobs:
           password: ${{ secrets.DOCKER_ACCESSTOKEN }}
       - name: Build, Tag & Push Dockerfile
         run: |
-          docker build ./nginx-naxsi -t nginx-naxsi:latest
-          docker tag nginx-naxsi:latest nginx-naxsi:$TAG
-          docker push nginx-naxsi:latest
-          docker push nginx-naxsi:$TAG
+          docker build ./nginx-naxsi -t luechtdiode/nginx-naxsi:latest
+          docker tag luechtdiode/nginx-naxsi:latest luechtdiode/nginx-naxsi:$TAG
+          docker push luechtdiode/nginx-naxsi:latest
+          docker push luechtdiode/nginx-naxsi:$TAG
           echo "$TAG is built properly and pushed to Dockerhub"
         env:
           TAG: ${{ steps.build_tags.outputs.DOCKER_TAG }}
