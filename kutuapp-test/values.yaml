@@ -1,9 +1,9 @@
 routes:
-  - name: kutuapp
+  - name: kutuapp-waf
     domain: kutuapp-test.interpolar.ch
     dns_resolver: "cf-production"
-    port: 5757
-    portSecure: 5757
+    port: 5858
+    portSecure: 5858
 
 kutuapp-waf:
   replicaCount: 1
@@ -19,7 +19,10 @@ kutuapp-waf:
   resources:
     requests:
       cpu: 0.5
-      memory: 800Mi
+      memory: 128Mi
+    limits:
+      cpu: 1.00
+      memory: 512Mi
   volumeMounts:
     - name: nginx-config
       mountPath: /etc/nginx
