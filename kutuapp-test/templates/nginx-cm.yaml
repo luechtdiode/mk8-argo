@@ -98,7 +98,6 @@ data:
 
       location / {
         include            naxsi.rules;
-        include            naxsi_all.rules;
         include            naxsi_relax.rules;
         
         # allows zip uploads
