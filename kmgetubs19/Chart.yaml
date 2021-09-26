@@ -6,3 +6,7 @@ dependencies:
     version: 2.1.0
     repository: https://registry.baloise.dev/chartrepo/library
     alias: odoo11
+  - name: generic-chart
+    version: 2.1.0
+    repository: https://registry.baloise.dev/chartrepo/library
+    alias: odoo11-waf
