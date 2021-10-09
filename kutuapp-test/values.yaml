@@ -35,7 +35,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: feature.abusehandler-89ed58f
+    tag: feature.abusehandler-cba6c6f
   network:
     http:
       servicePort: 5757
