@@ -18,7 +18,7 @@ kutuapp-waf:
     type: NodePort
   resources:
     requests:
-      cpu: 0.5
+      cpu: 0.2
       memory: 128Mi
     limits:
       cpu: 1.00
@@ -35,7 +35,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: feature.abusehandler-451d46a
+    tag: feature.abusehandler-89ed58f
   network:
     http:
       servicePort: 5757
@@ -45,9 +45,10 @@ kutuapp:
     type: NodePort
   resources:
     requests:
-      cpu: 2.00
-      memory: 2Gi
+      cpu: 0.20
+      memory: 600Mi
     limits:
+      cpu: 2.00
       memory: 2Gi
   env:
     - name: X_KUTU_SECRET
@@ -104,8 +105,11 @@ adminer:
   resources:
     requests:
       cpu: 0.5
-      memory: 800Mi
-
+      memory: 100Mi
+    limits:
+      cpu: 0.5
+      memory: 1Gi
+      
 mailer:
   nodeSelector: {}
   tolerations: []
