@@ -21,7 +21,7 @@ data:
       # https://stackoverflow.com/questions/32851858/explain-limit-conn-zone-server-name-in-nginx
       # https://www.nginx.com/blog/tuning-nginx/
       # https://www.nginx.com/blog/mitigating-ddos-attacks-with-nginx-and-nginx-plus/
-      limit_conn_zone $binary_remote_addr zone=addr:10m;
+      # limit_conn_zone $binary_remote_addr zone=addr:10m;
       # limit_req_zone $binary_remote_addr zone=one:10m rate=80r/s;
       # limit_req zone=one burst=200 nodelay;
       # limit_req_status 503;  # default value anyway
@@ -33,12 +33,12 @@ data:
       default_type                    application/octet-stream;
 
       map $status $loggable {
-          ~^[23]  0;
+          ~^[123]  0;
           default 1;
       }
       log_format                      main    '[$time_local] ra="$remote_addr" - $request '
-                                              '"$status" $body_bytes_sent "$http_referer" "$server_name" '
-                                              '"$http_user_agent" "$http_x_forwarded_for"';
+                                              'status="$status" $body_bytes_sent ref="$http_referer" "$server_name" '
+                                              '"$http_user_agent" fa="$http_x_forwarded_for"';
       access_log                      /dev/stdout main if=$loggable;
       error_log                       /dev/stderr warn;
       
@@ -91,13 +91,13 @@ data:
       include http-header.conf;
       
       set $cache-config "non-cached";
-      if ($uri  ~* \.(jpg|jpeg|png|gif|ico|css|js|mp3|woff|otf|ttf|font|svg)$) {
+      if ($uri  ~* \.(jpg|jpeg|png|gif|ico|css|js|mp3|woff|otf|ttf|font|svg|txt)$) {
         set $cache-config "cached-1d";
       }
       if ($uri  ~ /assets/*) {
         set $cache-config "cached-30d";
       }
-      if ($uri ~ /\{favicon.ico|favicon.png|robots.txt}$) {
+      if ($uri ~ /\{favicon.ico|favicon.png|logo.png}$) {
         set $cache-config "cached-1y";
       }
 
