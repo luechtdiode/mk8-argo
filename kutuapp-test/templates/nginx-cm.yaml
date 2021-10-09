@@ -21,7 +21,7 @@ data:
       # https://stackoverflow.com/questions/32851858/explain-limit-conn-zone-server-name-in-nginx
       # https://www.nginx.com/blog/tuning-nginx/
       # https://www.nginx.com/blog/mitigating-ddos-attacks-with-nginx-and-nginx-plus/
-      # limit_conn_zone $binary_remote_addr zone=addr:10m;
+      limit_conn_zone $binary_remote_addr zone=addr:10m;
       # limit_req_zone $binary_remote_addr zone=one:10m rate=80r/s;
       # limit_req zone=one burst=200 nodelay;
       # limit_req_status 503;  # default value anyway
