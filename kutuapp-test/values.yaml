@@ -10,6 +10,8 @@ kutuapp-waf:
   image:
     repository: luechtdiode/nginx-naxsi
     tag: master-1df1bb5
+  defaultAffinityRules:
+    enabled: false
   network:
     http:
       containerPort: 80
