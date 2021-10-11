@@ -47,11 +47,11 @@ kutuapp:
     type: NodePort
   resources:
     requests:
-      cpu: 0.20
-      memory: 600Mi
+      cpu: 0.50
+      memory: 1.5Gi
     limits:
       cpu: 1.00
-      memory: 600Mi
+      memory: 2.0Gi
   env:
     - name: X_KUTU_SECRET
       valueFrom:
