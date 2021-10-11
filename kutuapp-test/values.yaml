@@ -19,10 +19,10 @@ kutuapp-waf:
   resources:
     requests:
       cpu: 0.2
-      memory: 128Mi
+      memory: 32Mi
     limits:
       cpu: 1.00
-      memory: 512Mi
+      memory: 32Mi
   volumeMounts:
     - name: nginx-config
       mountPath: /etc/nginx
@@ -35,7 +35,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: feature.abusehandler-cba6c6f
+    tag: v2r2b7
   network:
     http:
       servicePort: 5757
@@ -48,8 +48,8 @@ kutuapp:
       cpu: 0.20
       memory: 600Mi
     limits:
-      cpu: 2.00
-      memory: 2Gi
+      cpu: 1.00
+      memory: 600Mi
   env:
     - name: X_KUTU_SECRET
       valueFrom:
