@@ -1,5 +1,5 @@
 apiVersion: v2
-version: 1.0.0
+version: 2.2.7
 name: kutuapp-test
 dependencies:
   - name: generic-chart
