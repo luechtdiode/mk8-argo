@@ -10,7 +10,6 @@ spec:
     - name: max-connections
     - name: ratelimit
     - name: circuitbreaker    
-    - name: security-response-header
 ---  
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
