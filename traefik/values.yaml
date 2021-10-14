@@ -49,7 +49,19 @@ traefik:
         type: configMap
     ports:
       web:
-        redirectTo: websecure
+        port: 8000
+        # hostPort: 8000
+        expose: true
+        exposedPort: 80
+        # The port protocol (TCP/UDP)
+        protocol: TCP
+        # Use nodeport if set. This is useful if you have configured Traefik in a
+        # LoadBalancer
+        # nodePort: 32080
+        # Port Redirections
+        # Added in 2.2, you can make permanent redirects via entrypoints.
+        # https://docs.traefik.io/routing/entrypoints/#redirection
+        # redirectTo: websecure
       websecure:
         # port: 8443
         # hostPort: 8443
