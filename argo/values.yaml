@@ -8,7 +8,7 @@ argo-cd:
         valueFrom:
           secretKeyRef:
             name: dex-argo-github-secret
-            key: dex.github.clientsecret
+            key: dex.github.clientSecret
   server:
     rbacConfig:
       policy.csv: |
