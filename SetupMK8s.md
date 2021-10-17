@@ -7,7 +7,7 @@ Install Microk8s
 ```bash
   sudo snap remove microk8s
   snap info microk8s
-  sudo snap install microk8s --classic --channel=1.21/stable
+  sudo snap install microk8s --classic --channel=latest/stable
   sudo usermod -a -G microk8s $USER
   sudo chown -f -R $USER ~/.kube
   su - $USER
@@ -39,12 +39,11 @@ add DNS for NodeName
 nano /var/snap/microk8s/current/certs/csr.conf.template
 ```
 
-
 Activate plugins
 ----------------
 (use the two ip-addresses of cni1/2 for metallb setup)
 ```bash
-  microk8s enable rbac dns storage ingress dashboard metallb helm3
+  microk8s enable rbac dns storage ingress dashboard metallb helm3 fluentd
   sudo snap install kustomize
 ```
 
@@ -62,114 +61,6 @@ Make dashboard accessible (optional)
 kubectl patch svc kubernetes-dashboard -n kube-system -p '{"spec": {"type": "NodePort"}}'
 ```
 
-Install SealedSecret
---------------------
-```bash
-cd ~/microk8s-setup/mk8-argo/sealed-secrets
-wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.16.0/kubeseal-linux-amd64 -O kubeseal
-
-sudo install -m 755 kubeseal /usr/local/bin/kubeseal
-
-helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
-helm repo update
-helm dependencies update
-# helm install -n kube-system sealed-secrets . -f values.yaml
-kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.16.0/controller.yaml
-
-cd ../traefik/templates/
-printf "mysecret" | base64 -w 0
-kubeseal <acme-provider-email-secret.yaml --scope cluster-wide -o yaml >acme-provider-email-sealedsecret.yaml
-
-kubeseal <acme-provider-api-key-secret.yaml --scope cluster-wide -o yaml>acme-provider-api-key-sealedsecret.yaml
-
-kubeseal <acme-provider-api-token-secret.yaml --scope cluster-wide -o yaml >acme-provider-api-token-sealedsecret.yaml
-```
-
-*see https://argo-cd.readthedocs.io/en/stable/faq/#why-are-resources-of-type-sealedsecret-stuck-in-the-progressing-state
-for solving endless sync-progressig*
-
-Install Traefik
----------------
-*https://traefik.io/blog/install-and-configure-traefik-with-helm/*
-*https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml*
-### Initial Setup without ArgoCD:
-```bash
-helm repo add traefik https://helm.traefik.io/traefik
-helm repo update
-helm dependencies update
-helm template traefik traefik/traefik -f values.yaml --debug
-kubectl delete namespace traefik
-kubectl create namespace traefik
-helm install -n traefik traefik/traefik . -f values.yaml
-helm upgrade -n traefik traefik/traefik . -f values.yaml
-kubectl apply -f ~/microk8s-setup/mk8-argo/traefik/apps/traefik-argo-app.yaml
-```
-
-Install ArgoCD
---------------
-* https://github.com/chris-sanders/argocd
-* https://chris-sanders.github.io/2020-10-07-argo-in-argo/
-* https://operatorhub.io/operator/argocd-operator
-* https://www.arthurkoziel.com/setting-up-argocd-with-helm/
-* https://rtfm.co.ua/en/argocd-users-access-and-rbac/
-
-Use [GitHub Repo mk8-argo](https://github.com/luechtdiode/mk8-argo) /argo/mootstrap.sh
-
-### Grab Admin-Secret if admin-account is enabled
-```bash
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-```
-
-### (optional) local admin tooling
-```bash
-sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64
-sudo chmod +x /usr/local/bin/argocd
-```
-
-### Create SealedSecred, used to integrate github OAUTH2
-```bash
-kubeseal <dex-argo-github-secret.yaml -o yaml >dex-argo-github-sealedsecret.yaml
-```
-
-### Make ArgoCD Dashboard accessible
-```bash
-kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-```
-
-Then make it GitOps ready
--------------------------
-```bash
-kubectl apply -f ~/microk8s-setup/mk8-argo/traefik/apps/traefik-argo-app.yaml
-# not ready now kubectl apply -f ~/microk8s-setup/mk8-argo/argo/apps/argocd-app.yaml 
-```
-
-Expose Kubernetes Dashboard:
-----------------------------
-```bash
-kubectl apply -n kube-system -f ~/microk8s-setup/mk8-argo/kube-dashboard/kube-dashboard-ingress-route.yaml
-```
-
-Install rook-ceph storage
--------------------------
-https://github.com/trulede/mk8s_rook
-*actually, unresolved reboot-osd-failures*
-https://github.com/rook/rook/issues/7519
-https://github.com/ceph/ceph-ansible/issues/2354
-```
-kubectl apply -f ~/microk8s-setup/mk8-argo/rook-ceph/apps/rook-ceph-operator-app.yaml
-```
-https://s3-website.cern.ch/cephdocs/ops/create_a_cluster_short.html
-https://github.com/el95149/vagrant-microk8s-ceph/tree/master/cookbooks/common
-https://jonathangazeley.com/2020/09/10/building-a-hyperconverged-kubernetes-cluster-with-microk8s-and-ceph/
-https://www.youtube.com/watch?v=4JRYIEH_1DM
-
-Cleanup rook-ceph for reinstall
----------------------
-```
-. ~/microk8s-setup/mk8-argo/rook-ceph/ceph-cleanup.sh
-
-```
-
 Install OpenEBS storage
 -----------------------
 https://github.com/openebs/zfs-localpv
@@ -181,10 +72,36 @@ sudo zfs set mountpoint=/var/snap/microk8s/common/var/openebs/local zfspv-pool
 kubectl label node mars openebs.io/rack=rack1
 ```
 
-
-Then make it GitOps ready
--------------------------
-```bash
-kubectl apply -f ~/microk8s-setup/mk8-argo/kmgetubs19/apps/kmgetubs19-argo-app.yaml
-# not ready now kubectl apply -f ~/microk8s-setup/mk8-argo/argo/apps/argocd-app.yaml 
+Install via Bootstrap-Setup
+---------------------------
 ```
+helm install argocd
+helm template bootstrap/ | kubectl apply -f -
+```
+
+
+Expose Kubernetes Dashboard:
+----------------------------
+```bash
+kubectl apply -n kube-system -f ~/microk8s-setup/mk8-argo/kube-dashboard/kube-dashboard-ingress-route.yaml
+```
+
+Backup/Restore microk8s cluster
+-------------------------------
+https://discuss.kubernetes.io/t/recovery-of-ha-microk8s-clusters/12931/1
+### Recovery
+
+1. Ensure all cluster nodes are not running with sudo snap stop microk8s or sudo microk8s stop
+2. Take a backup of a known good node (in this example, node 1 or 2) and exclude the info.yaml, metadata1, metadata2 files. An example, creating a tarball of the data: `tar -c -v -z --exclude=*.yaml --exclude=metadata* -f dqlite-data.tar.gz /var/snap/microk8s/current/var/kubernetes/backend`. This will create dqlite-data.tar.gz, containing a known-good replica of the data.
+3. Copy the dqlite-data.tar.gz to any nodes with older data. For example, use scp.
+4. On a node(s) with non-fresh data, take the copied archive, switch to the root user with sudo su, and change directory to the / directory with `cd /.`
+5. Again on the node(s) with non-fresh data, decompress the archive. If you copied the archive to the /home/ubuntu directory with scp, then run `tar zxfv /home/ubuntu/dqlite-data.tar.gz`
+6. Verify that the updated files have been decompressed into /var/snap/microk8s/current/var/kubernetes, the latest sequence numbers on the data file filenames should match between hosts.
+7. Prior to the next step, check the files in /var/snap/microk8s/current/var/kubernetes/backend and compare the files on each node. Make sure that the data files (the numbered dqlite files, e.g. 0000000002834690-0000000002835307 match on each host. You can check sha256sum results for each file to be sure. The list of files should match on each node. Also check the same for the snapshot-* files in the same directory. Once you are sure these files match, proceed to the next step.
+8. Start each node, one at a time, starting with a server which previously had up to date data (in this example, that would be node 1 or node 2, not node 3). If all data files are now in sync, microk8s should start after a short delay, when running sudo microk8s start.
+
+### Verification
+
+Once each node has started, and the microk8s start command has finished running on the last node, verify each node once started successfully has finished replicating and starting up using microks8 status. After you start microk8s, it may take up to 5-10 minutes before the replication is up to date and all nodes are caught up and running, so please be aware of this, the status my show an error connecting during this time, but waiting will show the cluster has returned to full health. If you have to wait more than 10-15 minutes, validate the data files, and repeat this process as necessary.
+
+You should also be able to issue microk8s kubectl get all -A on each node and see all cluster resources once replication has recovered to validate microk8s is back to fully health.
