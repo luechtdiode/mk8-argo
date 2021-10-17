@@ -41,7 +41,7 @@ argo-cd:
 
   ## Argo Configs
   configs:
-    repositories: |
+    repositories:
       luechtiode-devops: 
         name: mk8-argo 
         type: git
