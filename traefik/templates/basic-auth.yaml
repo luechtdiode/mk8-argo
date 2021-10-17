@@ -6,5 +6,5 @@ metadata:
   name: auth
 spec:
   basicAuth:
-    secret: authsecretname
+    secret: {{ .Values.templates.authsecretname }}
 {{- end }}
