@@ -1,0 +1,4 @@
+apiVersion: v2
+name: bootstrap
+description: Bootstrap Chart for Argo CD
+version: 1.0.0

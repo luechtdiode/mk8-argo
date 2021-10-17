@@ -1,0 +1,7 @@
+repository: https://github.com/luechtdiode/mk8-argo.git
+bootstrap:
+ - name: sealed-secrets
+ - name: traefik
+ - name: argocd
+ - name: kmgetubs19
+ - name: kutuapp-test

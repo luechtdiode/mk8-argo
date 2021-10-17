@@ -1,0 +1,24 @@
+{{- range .Values.bootstrap -}}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .name }}-apps
+  namespace: {{ default "argocd" $.Values.argocdNamespace }}
+spec:
+  destination:
+    namespace: {{ default "argocd" $.Values.argocdNamespace }}
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+      valueFiles:
+      - "{{ .name }}.yaml"
+    path: apps
+    repoURL: {{ $.Values.repository }}
+    targetRevision: HEAD
+  syncPolicy:
+      automated: {}
+      syncOptions:
+        - CreateNamespace=true
+{{ end }}
