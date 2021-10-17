@@ -8,9 +8,8 @@ argo-cd:
     env:
       - name: GITHUB_CLIENT_SECRET
         valueFrom:
-          secretKeyRef:
-            name: dex-argo-github-secret
-            key: dex.github.clientSecret
+          - secretRef:
+              name: dex-argo-github-secret
   server:
     rbacConfig:
       policy.csv: |
