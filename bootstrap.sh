@@ -3,14 +3,16 @@
 helm -n argocd uninstall argocd
 kubectl delete namespace argocd
 
+cd argocd
 helm repo add argo-cd https://argoproj.github.io/argo-helm
 helm repo update
 helm dependencies update
-helm template argocd argocd/. -f argocd/values.yaml --debug
+helm template argocd . -f values.yaml --debug
 
 kubectl create namespace argocd
-helm install -n argocd argocd argocd/. -f argocd/values.yaml
-helm upgrade -n argocd argocd argocd/. -f argocd/values.yaml
+helm install -n argocd argocd . -f values.yaml
+helm upgrade -n argocd argocd . -f values.yaml
+cd ..
 
 kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -n argocd
 
