@@ -3,9 +3,12 @@ argo-cd:
 
   dex:
     name: argocd-dex-server
-    envFrom:
-      - secretRef:
-          name: dex-argo-github-secret
+    env:
+      - name: GITHUB_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: dex-argo-github-secret
+            key: dex.github.clientsecret
   server:
     rbacConfig:
       policy.csv: |
