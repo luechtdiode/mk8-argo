@@ -9,7 +9,7 @@ argo-cd:
       - name: GITHUB_CLIENT_SECRET
         valueFrom:
           secretKeyRef:
-            name: dex-argo-github-secret
+            name: dex-argocd-github-secret
             key: dex.github.clientSecret
   server:
     rbacConfig:
