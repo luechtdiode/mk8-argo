@@ -4,13 +4,13 @@ argo-cd:
     image:
       tag: v2.1.3
   dex:
-    name: dex-server
+    name: argocd-dex-server
     env:
       - name: GITHUB_CLIENT_SECRET
         valueFrom:
-          - secretKeyRef:
-              name: dex-argo-github-secret
-              key: dex.github.clientSecret
+          secretKeyRef:
+            name: dex-argo-github-secret
+            key: dex.github.clientSecret
   server:
     rbacConfig:
       policy.csv: |
