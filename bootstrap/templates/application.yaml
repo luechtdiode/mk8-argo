@@ -11,10 +11,14 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
+    #helm:
+    #  valueFiles:
+    #  - "{{ .name }}.yaml"
+    #path: apps
     helm:
       valueFiles:
-      - "{{ .name }}.yaml"
-    path: apps
+        - values.yaml
+    path: {{ .name }} 
     repoURL: {{ $.Values.repository }}
     targetRevision: HEAD
   syncPolicy:
