@@ -54,6 +54,10 @@ argo-cd:
         name: incubator-library
         type: helm
         url: https://registry.baloise.dev/chartrepo/library
+      bitnami-sealed-secrets-repo:
+        name: sealed-secrets
+        type: helm
+        url: https://bitnami-labs.github.io/sealed-secrets  
       rook-release-repo:  
         name: rook-release
         type: helm
