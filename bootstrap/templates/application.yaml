@@ -7,14 +7,10 @@ metadata:
   namespace: {{ default "argocd" $.Values.argocdNamespace }}
 spec:
   destination:
-    namespace: {{ default "argocd" $.Values.argocdNamespace }}
+    namespace: {{ default "argocd" $.Values.name }}
     server: https://kubernetes.default.svc
   project: default
   source:
-    #helm:
-    #  valueFiles:
-    #  - "{{ .name }}.yaml"
-    #path: apps
     helm:
       valueFiles:
         - values.yaml
