@@ -4,7 +4,7 @@ argo-cd:
     image:
       tag: v2.1.3
   dex:
-    name: argocd-dex-server
+    # name: dex-server
     env:
       - name: GITHUB_CLIENT_SECRET
         valueFrom:
