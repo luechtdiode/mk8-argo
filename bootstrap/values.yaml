@@ -3,5 +3,6 @@ bootstrap:
  - name: sealed-secrets
  - name: traefik
  - name: argocd
+ - name: keycloak
  - name: kmgetubs19
  - name: kutuapp-test
