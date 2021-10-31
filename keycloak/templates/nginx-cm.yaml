@@ -74,7 +74,7 @@ data:
     }
         
     upstream idp {
-      server keycloak-idp:8080;
+      server keycloak-idp:443;
     }
 
     server {
