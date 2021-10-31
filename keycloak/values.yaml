@@ -32,10 +32,14 @@ idp-waf:
         name: nginx-cm
 
 idp:
+  hostAliases: ["keycloak.interpolar.ch"]
   global:
     storageClass: openebs-hostpath
   service:
     type: NodePort
+  auth:
+    adminUser: idp-admin
+    managementUser: idp-manager
   serviceMonitor:
     enabled: true
     namespace: "monitoring"
