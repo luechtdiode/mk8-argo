@@ -12,7 +12,7 @@ idp-waf:
     tag: master-1df1bb5
   network:
     http:
-      containerPort: 8080
+      containerPort: 80
       servicePort: 8069
   service:
     type: NodePort
