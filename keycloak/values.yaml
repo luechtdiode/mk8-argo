@@ -3,7 +3,7 @@ idp:
   global:
     storageClass: openebs-hostpath
   service:
-    clusterIP: NodePort
+    type: NodePort
   serviceMonitor:
     enabled: true
     namespace: "monitoring"
