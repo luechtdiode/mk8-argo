@@ -32,7 +32,6 @@ idp-waf:
         name: nginx-cm
 
 idp:
-  hostAliases: ["keycloak.interpolar.ch"]
   global:
     storageClass: openebs-hostpath
   service:
