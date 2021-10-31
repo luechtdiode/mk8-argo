@@ -13,6 +13,8 @@ idp:
   auth:
     adminUser: idp-admin
     managementUser: idp-manager
+  hostAliases:
+    - context: keycloak.interpolar.ch  
   serviceMonitor:
     enabled: true
     namespace: "monitoring"
