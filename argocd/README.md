@@ -5,6 +5,7 @@ Install ArgoCD
 * https://operatorhub.io/operator/argocd-operator
 * https://www.arthurkoziel.com/setting-up-argocd-with-helm/
 * https://rtfm.co.ua/en/argocd-users-access-and-rbac/
+* https://www.arthurkoziel.com/setting-up-argocd-with-helm/
 
 Use [GitHub Repo mk8-argo](https://github.com/luechtdiode/mk8-argo) /bootstrap.sh
 
