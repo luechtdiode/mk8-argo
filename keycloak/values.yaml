@@ -1,5 +1,5 @@
 routes:
-  - name: idp
+  - name: keycloak-idp
     domain: keycloak.interpolar.ch
     dns_resolver: "cf-production"
     port: 80
