@@ -2,7 +2,11 @@ name: keycloak
 apiVersion: v2
 version: 1.0.0
 dependencies:
-    - name: keycloak
-      version: '^5.1.5'
-      repository: https://charts.bitnami.com/bitnami
-      alias: idp
+  - name: generic-chart
+    version: 2.1.0
+    repository: https://registry.baloise.dev/chartrepo/library
+    alias: idp-waf
+  - name: keycloak
+    version: '^5.1.5'
+    repository: https://charts.bitnami.com/bitnami
+    alias: idp
