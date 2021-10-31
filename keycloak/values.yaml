@@ -10,6 +10,11 @@ idp:
     storageClass: openebs-hostpath
   service:
     type: NodePort
+  extraEnvVars:
+    - name: KEYCLOAK_PROXY_ADDRESS_FORWARDING
+      value: "true"
+    - name: KEYCLOAK_FRONTEND_URL
+      value: "https://keycloak.interpolar.ch:8443"
   auth:
     adminUser: idp-admin
     managementUser: idp-manager
