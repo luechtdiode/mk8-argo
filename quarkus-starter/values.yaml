@@ -1,0 +1,24 @@
+routes:
+  - name: quarkus-starter
+    domain: quarkus-starter.interpolar.ch
+    dns_resolver: "cf-production"
+    port: 8080
+    portSecure: 8080
+
+quarkus-starter:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/bcc2021-team-jee-to-mp-quarkus-etc/quarkus-starter
+    tag: 0e1e3d9adaf36ca62d566893c76c4da1957c7ce9
+  network:
+    http:
+      servicePort: 8080
+      ingress:
+        host: quarkus-starter.apps.okd.baloise.dev
+  service:
+    type: ClusterIP        
+  resources:
+    requests:
+      memory: 1Gi
+    limits:
+      memory: 2Gi

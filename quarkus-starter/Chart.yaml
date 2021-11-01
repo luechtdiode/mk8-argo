@@ -1,0 +1,18 @@
+   
+quarkus-starter:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/bcc2021-team-jee-to-mp-quarkus-etc/quarkus-starter
+    tag: 0e1e3d9adaf36ca62d566893c76c4da1957c7ce9
+  network:
+    http:
+      servicePort: 8080
+      ingress:
+        host: quarkus-starter.apps.okd.baloise.dev
+  service:
+    type: ClusterIP        
+  resources:
+    requests:
+      memory: 10Mi
+    limits:
+      memory: 100Mi

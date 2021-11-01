@@ -6,3 +6,4 @@ bootstrap:
  - name: keycloak
  - name: kmgetubs19
  - name: kutuapp-test
+ - name: quarkus-starter
