@@ -13,8 +13,8 @@ quarkus-starter:
   network:
     http:
       servicePort: 8080
-      ingress:
-        host: quarkus-starter.apps.okd.baloise.dev
+      # ingress:
+      #   host: quarkus-starter.apps.okd.baloise.dev
   service:
     type: ClusterIP        
   resources:
