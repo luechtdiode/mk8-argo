@@ -20,7 +20,7 @@ spec:
           name: {{ .name }}
           {{- end }}
           port: {{ .port }}
-      middlewares:
+      middlewares: []
       # - name: standard
       #  namespace: traefik
 ---
@@ -44,7 +44,7 @@ spec:
         name: {{ .name }}
         {{- end }}
         port: {{ .portSecure }}
-      middlewares:
+      middlewares: []
       # - name: secure
       #  namespace: traefik
       {{- if .host }}
