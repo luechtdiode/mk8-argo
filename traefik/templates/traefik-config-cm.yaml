@@ -5,6 +5,10 @@ metadata:
   namespace: traefik
 data:
   traefik-config.yaml: |
+    providers:
+      kubernetesCRD:
+        allowCrossNamespace: true
+        allowExternalNameServices: true
     http:
       middlewares:
         headers-default:
