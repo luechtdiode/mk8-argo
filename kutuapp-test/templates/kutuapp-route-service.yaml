@@ -21,7 +21,8 @@ spec:
           {{- end }}
           port: {{ .port }}
       middlewares:
-      - name: standard
+        - name: standard
+          namespace: traefik
 {{- if .portSecure }}      
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -45,9 +46,10 @@ spec:
         {{- end }}
         port: {{ .portSecure }}
       middlewares:
-      - name: secure
+        - name: secure
+          namespace: traefik
       {{- if .host }}
-      - name: app-passthrough-{{ .domain }}-header
+        - name: app-passthrough-{{ .domain }}-header
       {{- end }}
       tls:
         certResolver: {{ .dns_resolver }}
