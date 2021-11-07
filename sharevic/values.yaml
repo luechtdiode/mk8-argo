@@ -1,6 +1,10 @@
 routes:
   - name: sharevic
-    domain: sharevic.ch
+    domains:
+       - domain: sharevic.net
+       - domain: www.sharevic.net
+       - domain: interpolar.ch
+       - domain: www.interpolar.ch
     host: pluto.fritz.box
     port: 443
     dns_resolver: "cf-production"
