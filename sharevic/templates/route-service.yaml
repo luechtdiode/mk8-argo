@@ -43,7 +43,7 @@ spec:
         {{- if not .host }}
         name: {{ .name }}
         {{- end }}
-        port: {{ .portSecure }}
+        port: {{ .port }}
       middlewares:
         - name: secure
           namespace: traefik
@@ -71,7 +71,7 @@ spec:
   type: ExternalName
   externalName: {{ .host }}
   ports:
-  - port: {{ .portSecure }}
+  - port: {{ .port }}
 {{- end }}  
 {{ end }}
 
