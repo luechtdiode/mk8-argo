@@ -1,6 +1,6 @@
 routes:
   - name: sharevic
     domain: sharevic.ch
-    host: pluto.friz.box
+    host: pluto.fritz.box
     port: 443
     dns_resolver: "cf-production"
