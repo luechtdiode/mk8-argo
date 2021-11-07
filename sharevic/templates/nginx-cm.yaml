@@ -5,7 +5,6 @@ metadata:
   namespace: sharevic
 
 data:
-
   nginx.conf: |
     #user                 nginx nginx;
     worker_processes      1;
