@@ -19,12 +19,8 @@ metadata:
 spec:
   chain:
     middlewares:
-    - name: http-redirect 
-    - name: limited-body
-    - name: max-connections
-    - name: ratelimit
-    - name: circuitbreaker    
-    - name: security-response-header
+    #- name: http-redirect 
+    - name: standard
     - name: more-security-response-header
 ---
 apiVersion: traefik.containo.us/v1alpha1
