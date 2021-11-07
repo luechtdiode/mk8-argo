@@ -28,8 +28,6 @@ sharevic-waf:
     limits:
       cpu: 1.00
       memory: 32Mi
-  defaultAffinityRules:
-    enabled: false
   persistence:
     enabled: true
     name: sharevic-data
