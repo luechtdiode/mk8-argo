@@ -28,23 +28,23 @@ sharevic-waf:
     limits:
       cpu: 1.00
       memory: 32Mi
-  # persistence:
-  #   enabled: true
-  #   name: sharevic-data
-  #   storageClass: openebs-hostpath
-  #   accessModes: ReadWriteOnce
-  #   size: 10Mi
-  #   annotations:
-  #     pv.kubernetes.io/bound-by-controller: 'yes'
+  persistence:
+    enabled: true
+    name: sharevic-data
+    storageClass: openebs-hostpath
+    accessModes: ReadWriteOnce
+    size: 10Mi
+    annotations:
+      pv.kubernetes.io/bound-by-controller: 'yes'
   volumeMounts:
     - name: nginx-config
       mountPath: /etc/nginx
-    # - name: sharevic-data
-    #   subPath: error-pages
-    #   mountPath: /usr/html/error-pages  
-    # - name: sharevic-data
-    #   subPath: terms
-    #   mountPath: /usr/html/terms
+    - name: sharevic-data
+      subPath: error-pages
+      mountPath: /usr/html/error-pages  
+    - name: sharevic-data
+      subPath: terms
+      mountPath: /usr/html/terms
   volumes:
     - name: nginx-config
       configMap:
