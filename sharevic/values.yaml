@@ -1,10 +1,54 @@
 routes:
-  - name: sharevic
+  - name: sharevic-waf
     domains:
        - domain: sharevic.net
        - domain: www.sharevic.net
        - domain: interpolar.ch
        - domain: www.interpolar.ch
-    host: pluto.fritz.box
-    port: 443
+    port: 8080
     dns_resolver: "cf-production"
+
+
+sharevic-waf:
+  replicaCount: 1
+  image:
+    repository: luechtdiode/nginx-naxsi
+    tag: master-1df1bb5
+  defaultAffinityRules:
+    enabled: false
+  network:
+    http:
+      containerPort: 80
+      servicePort: 8080
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 32Mi
+    limits:
+      cpu: 1.00
+      memory: 32Mi
+  defaultAffinityRules:
+    enabled: false
+  persistence:
+    enabled: true
+    name: sharevic-data
+    storageClass: openebs-hostpath
+    accessModes: Readonly
+    size: 10Mi
+    annotations:
+      pv.kubernetes.io/bound-by-controller: 'yes'
+  volumeMounts:
+    - name: nginx-config
+      mountPath: /etc/nginx
+    - name: sharevic-data
+      subPath: error-pages
+      mountPath: /usr/html/error-pages  
+    - name: sharevic-data
+      subPath: terms
+      mountPath: /usr/html/terms
+  volumes:
+    - name: nginx-config
+      configMap:
+        name: nginx-cm
