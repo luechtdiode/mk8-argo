@@ -1,0 +1,6 @@
+routes:
+  - name: sharevic
+    domain: sharevic.ch
+    host: pluto.friz.box
+    dns_resolver: "cf-production"
+    port: 80

@@ -6,4 +6,5 @@ bootstrap:
  - name: keycloak
  - name: kmgetubs19
  - name: kutuapp-test
+ - name: sharevic
  - name: quarkus-starter
