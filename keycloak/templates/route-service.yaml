@@ -14,9 +14,9 @@ spec:
       - kind: Service
         name: {{ .name }}
         port: {{ .port }}
-      middlewares:
-        - name: secure
-          namespace: traefik
+      #middlewares:
+      #  - name: secure
+      #    namespace: traefik
       tls:
         certResolver: {{ .dns_resolver }}
 {{ end }}
