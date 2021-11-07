@@ -21,8 +21,8 @@ spec:
           {{- end }}
           port: {{ .port }}
       middlewares:
-      - name: standard
-      #  namespace: traefik
+        - name: standard
+          namespace: traefik
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -45,11 +45,11 @@ spec:
         {{- end }}
         port: {{ .portSecure }}
       middlewares:
-      - name: secure
-      #  namespace: traefik
-      {{- if .host }}
-      - name: app-passthrough-{{ .name }}-header
-      {{- end }}
+        - name: secure
+          namespace: traefik
+        {{- if .host }}
+        - name: app-passthrough-{{ .name }}-header
+        {{- end }}
       tls:
         certResolver: {{ .dns_resolver }}
 {{- if .host }}
