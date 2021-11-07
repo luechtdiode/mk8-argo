@@ -14,8 +14,7 @@ spec:
       services:
       - kind: Service
         name: svc-{{ .name }}
-        port: {{ .port }}
-      middlewares:
+      #middlewares:
       #- name: secure
       #  namespace: traefik
       #- name: app-passthrough-{{ .name }}-header
