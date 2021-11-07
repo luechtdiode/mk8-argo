@@ -35,7 +35,7 @@ sharevic-waf:
     enabled: true
     name: sharevic-data
     storageClass: openebs-hostpath
-    accessModes: Readonly
+    accessModes: ReadWriteOnce
     size: 10Mi
     annotations:
       pv.kubernetes.io/bound-by-controller: 'yes'
