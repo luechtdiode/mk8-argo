@@ -2,7 +2,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: https-passthrough-{{ .name }}
+  name: https-ingress-route-{{ .name }}
 spec:
   entryPoints:
     - websecure
@@ -12,19 +12,11 @@ spec:
       priority: 5 
       services:
       - kind: Service
-        {{- if .host }}
-        name: app-passthrough-{{ .name }}
-        {{- end}}
-        {{- if not .host }}
         name: {{ .name }}
-        {{- end }}
-        port: {{ .portSecure }}
+        port: {{ .port }}
       middlewares:
         - name: secure
           namespace: traefik
-      {{- if .host }}
-      - name: app-passthrough-{{ .name }}-header
-      {{- end }}
       tls:
         certResolver: {{ .dns_resolver }}
 {{ end }}
