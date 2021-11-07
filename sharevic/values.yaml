@@ -5,7 +5,7 @@ routes:
        - domain: www.sharevic.net
        - domain: interpolar.ch
        - domain: www.interpolar.ch
-    port: 8080
+    port: 80
     dns_resolver: "cf-production"
 
 
@@ -18,8 +18,7 @@ sharevic-waf:
     enabled: false
   network:
     http:
-      containerPort: 80
-      servicePort: 8080
+      servicePort: 80
   service:
     type: NodePort
   resources:
