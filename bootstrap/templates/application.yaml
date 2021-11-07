@@ -18,7 +18,9 @@ spec:
     repoURL: {{ $.Values.repository }}
     targetRevision: HEAD
   syncPolicy:
-      automated: {}
+      automated:
+        prune: true
+        selfHeal: true      
       syncOptions:
         - CreateNamespace=true
 {{ end }}
