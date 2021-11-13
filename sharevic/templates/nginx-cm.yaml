@@ -110,10 +110,8 @@ data:
       
       location / {
         include                   naxsi.rules;
-        include                   naxsi_all.rules;
         include                   naxsi_relax.rules;
         root                     /usr/html/terms;
-        include static-content-locations.conf;
       }
 
       # block of rules for static content
