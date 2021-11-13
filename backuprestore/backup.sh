@@ -10,7 +10,7 @@ function volume_backup()
   SOURCE=$1
   DATE=$(date +%Y-%m-%d-%H%M%S)
 
-  EXCLUDE="--exclude=/mnt/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/*"
+  # EXCLUDE="--exclude=/mnt/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/*"
 
   mkdir -p ${BACKUP_DIR}
 
@@ -31,12 +31,12 @@ function volume_backup()
   backupnr=0${backupnr}
   backupnr=${backupnr: -2}
   filename=backup-${backupnr}.tar.gz
-  tar -cpzf ${BACKUP_DIR}/${filename} -g ${BACKUP_DIR}/${TIMESTAMP} -X $EXCLUDE ${SOURCE]
+  sudo tar -cpzf ${BACKUP_DIR}/${filename} -g ${BACKUP_DIR}/${TIMESTAMP} ${SOURCE} #-X $EXCLUDE ${SOURCE}
 }
 
 function ns_backup()
 {
-  kubectl patch application $1 --type merge --patch "$(cat disable-sync-patch.yaml)"
+  kubectl patch application $1 -n argocd --type merge --patch "$(cat disable-sync-patch.yaml)"
 
   deployments=$(kubectl get deployments -n $1 -o jsonpath='{ .items[*].metadata.name }')
   for deployment in $deployments
@@ -51,11 +51,11 @@ function ns_backup()
       SOURCE="$PVCROOT/$volume"
       volume_backup $SOURCE $BACKUP_DIR
       echo "backup finished. Path $BACKUP_DIR"
-      echo ================================
-    done
-  done
+      echo "================================"
+    done;
+  done;
 
-  kubectl patch application $1 --type merge --patch "$(cat enable-sync-patch.yaml)"
+  kubectl patch application $1 -n argocd --type merge --patch "$(cat enable-sync-patch.yaml)"
 }
 
 
