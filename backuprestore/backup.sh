@@ -27,12 +27,15 @@ function ns_restore()
     kubectl scale --replicas=0 --timeout=3m deployment/$deployment -n $1
   done;
 
-  volumes=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*].spec.volumeName }')
-  for volume in $volumes
-  do
+  vols=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..volumeName}')
+  names=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..name }')
+  for idx in "${!vols[@]}"
+  do 
+    volume=${vols[$idx]}
+    name=${names[$idx]}
     echo "--------------------------------"
-    echo "restore for namespace $1, volume: $volume ..."
-    BACKUP_DIR="$(pwd)/volumes-backup/$1/$volume"
+    echo "restore for namespace $1, name: $name, volume: $volume ..."
+    BACKUP_DIR="$(pwd)/volumes-backup/$1/$name"
     SOURCE="$PVCROOT/$volume"
     volume_restore $SOURCE $BACKUP_DIR
     echo "restore finished. Path $BACKUP_DIR"
@@ -89,12 +92,15 @@ function ns_backup()
     kubectl scale --replicas=0 --timeout=3m deployment/$deployment -n $1
   done;
 
-  volumes=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*].spec.volumeName }')
-  for volume in $volumes
+  vols=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..volumeName}')
+  names=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..name }')
+  for idx in "${!vols[@]}"
   do
+    volume=${vols[$idx]}
+    name=${names[$idx]}
     echo "--------------------------------"
-    echo "backup for namespace $1, volume: $volume ..."
-    BACKUP_DIR="$(pwd)/volumes-backup/$1/$volume"
+    echo "backup for namespace $1, name: $name, volume: $volume ..."
+    BACKUP_DIR="$(pwd)/volumes-backup/$1/$name"
     SOURCE="$PVCROOT/$volume"
     volume_backup $SOURCE $BACKUP_DIR
     echo "backup finished. Path $BACKUP_DIR"
