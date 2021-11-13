@@ -2,7 +2,6 @@
 
 PVCROOT=/var/snap/microk8s/common/var/openebs/local
 
-
 function volume_backup() {
   BACKUP_DIR=$2
   ROTATE_DIR="$2/rotate"
@@ -31,8 +30,7 @@ function volume_backup() {
   backupnr=0${backupnr}
   backupnr=${backupnr: -2}
   filename=backup-${backupnr}.tar.gz
-  
-  tar -cpzf ${BACKUP_DIR}/${filename} -g ${BACKUP_DIR}/${TIMESTAMP} -X $EXCLUDE ${SOURCE]  
+  tar -cpzf ${BACKUP_DIR}/${filename} -g ${BACKUP_DIR}/${TIMESTAMP} -X $EXCLUDE ${SOURCE]
 }
 
 function ns_backup() {
@@ -43,9 +41,9 @@ function ns_backup() {
   do
     kubectl scale --replicas=0 deployment/$deployment -n $1
 
-    volumes=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*].spec.volumeName }')    
+    volumes=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*].spec.volumeName }')
     for volume in $volumes
-    do      
+    do
       echo "backup for namespace $1, deployment $deployment, volume: $volume ..."
       BACKUP_DIR="$(pwd)/volumes-backup/$1/$deployment/$volume"
       SOURCE="$PVCROOT/$volume"
