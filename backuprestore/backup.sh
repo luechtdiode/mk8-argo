@@ -56,4 +56,5 @@ function ns_backup() {
   kubectl patch application $1 --type merge --patch "$(cat enable-sync-patch.yaml)"
 }
 
+
 ns_backup kmgetubs19
