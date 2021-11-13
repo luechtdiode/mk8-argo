@@ -62,7 +62,7 @@ function volume_backup()
 
   if [ "$[backupnr++]" -ge 30 ]; then
     rm -rf ${ROTATE_DIR}_RETENTION
-    mv ${ROTATE_DIR}/* ${ROTATE_DIR}_RETENTION  
+    mv ${ROTATE_DIR}/* ${ROTATE_DIR}_RETENTION
     mkdir -p ${ROTATE_DIR}/${DATE}
     mv ${BACKUP_DIR}/b* ${ROTATE_DIR}/${DATE}
     mv ${BACKUP_DIR}/t* ${ROTATE_DIR}/${DATE}
@@ -72,7 +72,7 @@ function volume_backup()
   backupnr=0${backupnr}
   backupnr=${backupnr: -2}
   filename=backup-${backupnr}.tar.gz
-  sudo tar -cpzfW ${BACKUP_DIR}/${filename} -g ${BACKUP_DIR}/${TIMESTAMP} ${SOURCE}
+  sudo tar -cpzf ${BACKUP_DIR}/${filename} -g ${BACKUP_DIR}/${TIMESTAMP} ${SOURCE}
 }
 
 function ns_backup()
@@ -108,7 +108,7 @@ function install()
   cat /etc/crontab | grep -v 'backuprestore/backup.sh' > crontabcleaned.txt
   cp crontabcleaned.txt crontabupdated.txt
   echo "30 3 * * * root cd $(pwd) && $(pwd)/backup.sh" >> crontabupdated.txt
-  
+
   sudo cp crontabupdated.txt /etc/crontab
 }
 
@@ -120,21 +120,18 @@ then
   ns_backup sharevic
 else
   case $1 in
-	restore)
-		ns_restore $2
-    break
-		;;
-	backup)
-		ns_backup $2
-		break
-		;;
-  install)
-    install
-    echo "daily backup in crontab registered for backup-location $(pwd)"
-    break
-    ;;
-	*)
-		echo "Sorry, I don't understand"
-		;;
+    restore)
+      ns_restore $2
+      ;;
+    backup)
+      ns_backup $2
+      ;;
+    install)
+      install
+      echo "daily backup in crontab registered for backup-location $(pwd)"
+      ;;
+    *)
+      echo "Sorry, I don't understand"
+      ;;
   esac
 fi
