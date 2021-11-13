@@ -36,23 +36,25 @@ function volume_backup()
 
 function ns_backup()
 {
+  echo "backup for namespace $1, disable argo-autosync ..."
   kubectl patch application $1 -n argocd --type merge --patch "$(cat disable-sync-patch.yaml)"
 
   deployments=$(kubectl get deployments -n $1 -o jsonpath='{ .items[*].metadata.name }')
   for deployment in $deployments
   do
-    kubectl scale --replicas=0 deployment/$deployment -n $1
+    echo "backup for namespace $1, stopping deployment $deployment ..."
+    kubectl scale --replicas=0 --timeout=3m deployment/$deployment -n $1
+  done;
 
-    volumes=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*].spec.volumeName }')
-    for volume in $volumes
-    do
-      echo "backup for namespace $1, deployment $deployment, volume: $volume ..."
-      BACKUP_DIR="$(pwd)/volumes-backup/$1/$deployment/$volume"
-      SOURCE="$PVCROOT/$volume"
-      volume_backup $SOURCE $BACKUP_DIR
-      echo "backup finished. Path $BACKUP_DIR"
-      echo "================================"
-    done;
+  volumes=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*].spec.volumeName }')
+  for volume in $volumes
+  do
+    echo "backup for namespace $1, volume: $volume ..."
+    BACKUP_DIR="$(pwd)/volumes-backup/$1/$volume"
+    SOURCE="$PVCROOT/$volume"
+    volume_backup $SOURCE $BACKUP_DIR
+    echo "backup finished. Path $BACKUP_DIR"
+    echo "================================"
   done;
 
   kubectl patch application $1 -n argocd --type merge --patch "$(cat enable-sync-patch.yaml)"
@@ -60,3 +62,6 @@ function ns_backup()
 
 
 ns_backup kmgetubs19
+ns_backup keycloak
+ns_backup kutuapp-test
+ns_backup sharevic
