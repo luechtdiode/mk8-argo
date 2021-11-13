@@ -2,7 +2,8 @@
 
 PVCROOT=/var/snap/microk8s/common/var/openebs/local
 
-function volume_backup() {
+function volume_backup()
+{
   BACKUP_DIR=$2
   ROTATE_DIR="$2/rotate"
   TIMESTAMP="timestamp.dat"
@@ -21,10 +22,10 @@ function volume_backup() {
   backupnr=$[10#${backupnr}]
 
   if [ "$[backupnr++]" -ge 30 ]; then
-  mkdir -p ${ROTATE_DIR}/${DATE}
-  mv ${BACKUP_DIR}/b* ${ROTATE_DIR}/${DATE}
-  mv ${BACKUP_DIR}/t* ${ROTATE_DIR}/${DATE}
-  backupnr=1
+    mkdir -p ${ROTATE_DIR}/${DATE}
+    mv ${BACKUP_DIR}/b* ${ROTATE_DIR}/${DATE}
+    mv ${BACKUP_DIR}/t* ${ROTATE_DIR}/${DATE}
+    backupnr=1
   fi
 
   backupnr=0${backupnr}
@@ -33,7 +34,8 @@ function volume_backup() {
   tar -cpzf ${BACKUP_DIR}/${filename} -g ${BACKUP_DIR}/${TIMESTAMP} -X $EXCLUDE ${SOURCE]
 }
 
-function ns_backup() {
+function ns_backup()
+{
   kubectl patch application $1 --type merge --patch "$(cat disable-sync-patch.yaml)"
 
   deployments=$(kubectl get deployments -n $1 -o jsonpath='{ .items[*].metadata.name }')
