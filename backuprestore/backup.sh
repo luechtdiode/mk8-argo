@@ -11,7 +11,7 @@ function volume_restore()
 
   for archiv in ${BACKUP_DIR}/backup-*.tar.gz
   do
-    tar -xpzf $archiv -C ${TARGET}
+    sudo tar -xpzf $archiv -C ${TARGET}
   done
 }
 
@@ -72,7 +72,9 @@ function volume_backup()
   backupnr=0${backupnr}
   backupnr=${backupnr: -2}
   filename=backup-${backupnr}.tar.gz
-  sudo tar -cpzf ${BACKUP_DIR}/${filename} -g ${BACKUP_DIR}/${TIMESTAMP} ${SOURCE}
+  echo "taring from $SOURCE"
+  echo "         to ${BACKUP_DIR}/$filename"
+  sudo tar -cpzf ${BACKUP_DIR}/${filename} -g ${BACKUP_DIR}/${TIMESTAMP} -C ${SOURCE} .
 }
 
 function ns_backup()
