@@ -9,18 +9,25 @@ function volume_restore()
   BACKUP_DIR=$2
   TARGET=$1
 
+  for d in ${TARGET}/*
+  do 
+    echo "cleaning $d"
+    sudo  rm -rf $d
+  done
+
+  echo "searching for .tar.bz2 archives to restore..."
+  for archiv in ${BACKUP_DIR}/*.tar.bz2
+  do
+    sudo mkdir -p ${TARGET}/data
+    sudo tar -xpjf $archiv -C ${TARGET}/data .
+    echo "$archiv restored to ${TARGET}"
+  done
+
   echo "searching for .tar.gz archives to restore..."
   for archiv in ${BACKUP_DIR}/backup-*.tar.gz
   do
     sudo tar -xpzf $archiv -C ${TARGET} .
-    echo "$archiv restored to ${TARGET}
-  done
-
-  echo "searching for .tar.bz archives to restore..."
-  for archiv in ${BACKUP_DIR}/backup-*.tar.bz2
-  do
-    sudo tar -xpjf $archiv -C ${TARGET} .
-    echo "$archiv restored to ${TARGET}
+    echo "$archiv restored to ${TARGET}"
   done
 }
 
