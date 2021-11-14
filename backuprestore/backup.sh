@@ -150,6 +150,7 @@ then
   ns_backup kmgetubs19
   ns_backup keycloak
   ns_backup kutuapp-test
+  ns_backup kutuapp
   ns_backup sharevic
 else
   case $1 in
@@ -173,8 +174,10 @@ else
          backup <namespace>      => make incremental backup per month from all volumes of the specified namespace
          restore <namespace>     => restore the backed up volumes of the specified namespace
          migrate <namespace> <plutobackup> <pvcname> => fe. 
-           migrate kutuapp backup-kutu-db-data.tar.bz2 kutu-data
-           migrate kutuapp backup-kutuapp.tar.bz2 kutuapp-data
+           migrate kutuapp kutu-db-data-backup.tar.bz2 kutu-data
+           migrate kutuapp kutuapp-backup.tar.bz2 kutuapp-data
+           migrate kutuapp-test kutu-test-db-data-backup.tar.bz2 kutu-data
+           migrate kutuapp-test kutuapp-test-backup.tar.bz2 kutuapp-data
       '
       ;;
   esac
