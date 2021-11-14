@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: kutuapp
+    namespace: argocd
+spec:
+    destination:
+        namespace: kutuapp
+        server: https://kubernetes.default.svc
+    project: default
+    source:
+        path: kutuapp
+        targetRevision: HEAD
+        helm:
+            valueFiles:
+                - values.yaml
+        repoURL: https://github.com/luechtdiode/mk8-argo.git
+    syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

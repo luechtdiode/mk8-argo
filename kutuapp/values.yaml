@@ -1,0 +1,116 @@
+routes:
+  - name: kutuapp-waf
+    domain: kutuapp.sharevic.net
+    dns_resolver: "cf-production"
+    port: 5858
+    portSecure: 5858
+  - name: kutuapp-waf
+    domain: kutuapp.mars
+    port: 5858
+
+kutuapp-waf:
+  replicaCount: 1
+  image:
+    repository: luechtdiode/nginx-naxsi
+    tag: master-1df1bb5
+  defaultAffinityRules:
+    enabled: false
+  network:
+    http:
+      containerPort: 80
+      servicePort: 5858
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 32Mi
+    limits:
+      cpu: 1.00
+      memory: 32Mi
+  volumeMounts:
+    - name: nginx-config
+      mountPath: /etc/nginx
+  volumes:
+    - name: nginx-config
+      configMap:
+        name: nginx-cm
+
+kutuapp:
+  replicaCount: 1
+  image:
+    repository: luechtdiode/kutuapp
+    tag: v2r2b7
+  network:
+    http:
+      servicePort: 5757
+      # ingress:
+      #  host: competition.sharevic.net
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.50
+      memory: 1.5Gi
+    limits:
+      cpu: 1.00
+      memory: 2.0Gi
+  env:
+    - name: X_KUTU_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: kutu-postgres-secret
+          key: kutusecret
+    - name: X_DB_CONFIG_NAME
+      value: kutudb_pg
+    - name: X_POSTGRES_HOST
+      value: postgres
+    - name: X_POSTGRES_USER
+      valueFrom:
+        secretKeyRef:
+          name: kutu-postgres-secret
+          key: user      
+    - name: X_POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: kutu-postgres-secret
+          key: password
+  defaultAffinityRules:
+    enabled: false
+  persistence:
+    enabled: true
+    name: kutuapp-data
+    storageClass: openebs-hostpath
+    accessModes: ReadWriteOnce
+    size: 10Gi
+    annotations:
+      pv.kubernetes.io/bound-by-controller: 'yes'
+  volumeMounts:
+  - mountPath: /home/kutuapp
+    subPath: appdataroot
+    name: kutuapp-data
+  - mountPath: /home/kutuapp/data
+    subPath: data
+    name: kutuapp-data
+  - mountPath: /home/kutuapp/db
+    subPath: db
+    name: kutuapp-data
+
+adminer:
+  replicaCount: 1
+  image:
+    repository: adminer
+    tag: 4
+  network:
+    http:
+      containerPort: 8080
+      servicePort: 2222
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 100Mi
+    limits:
+      cpu: 0.5
+      memory: 1Gi
