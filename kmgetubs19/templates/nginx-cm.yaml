@@ -127,6 +127,7 @@ data:
         BasicRule wl:1310 "mz:ARGS|BODY";
         BasicRule wl:1311 "mz:ARGS|BODY";
         BasicRule wl:1312 "mz:ARGS|BODY";
+        BasicRule wl:1400 "mz:BODY";
         # client_body_buffer_size 512k;
 
         proxy_pass         http://kmgetubs19/;
