@@ -1,0 +1,55 @@
+routes:
+  - name: mbq-waf
+    domain: mbq.sharevic.net
+    dns_resolver: "cf-production"
+    port: 5858
+    portSecure: 5858
+
+
+mbq-waf:
+  replicaCount: 1
+  image:
+    repository: luechtdiode/nginx-naxsi
+    tag: master-1df1bb5
+  defaultAffinityRules:
+    enabled: false
+  network:
+    http:
+      containerPort: 80
+      servicePort: 5858
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 32Mi
+    limits:
+      cpu: 1.00
+      memory: 32Mi
+  volumeMounts:
+    - name: nginx-config
+      mountPath: /etc/nginx
+  volumes:
+    - name: nginx-config
+      configMap:
+        name: nginx-cm
+
+mbq:
+  replicaCount: 1
+  image:
+    repository: mobile-queue
+    tag: v1
+  network:
+    http:
+      servicePort: 8080
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.50
+      memory: 1.5Gi
+    limits:
+      cpu: 1.00
+      memory: 2.0Gi
+  defaultAffinityRules:
+    enabled: false

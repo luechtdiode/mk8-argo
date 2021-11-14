@@ -8,4 +8,5 @@ bootstrap:
  - name: kmgetubs19
  - name: kutuapp-test
  - name: sharevic
+ - name: mbq
  - name: quarkus-starter

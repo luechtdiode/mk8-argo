@@ -1,0 +1,30 @@
+{{ range .Values.routes }}
+    {{- $servicename := .name -}}
+    {{- $servicport := .port -}}
+    {{- $resolver := .dns_resolver -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: https-route-{{ .name }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    {{ range .domains }}
+    - match: Host(`{{ trimPrefix "https://" .domain }}`)
+      kind: Rule
+      priority: 5 
+      services:
+        - kind: Service
+          name: {{ $servicename }}
+          port: {{ $servicport }}
+
+      middlewares:
+      - name: secure
+        namespace: traefik
+      - name: app-passthrough-{{ .name }}-header
+      tls:
+        certResolver: {{ $resolver }}
+    {{ end }}
+{{ end }}
+
