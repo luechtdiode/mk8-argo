@@ -1,6 +1,16 @@
 routes:
   - name: odoo11-waf
-    domain: kmgetubs19.interpolar.ch
+    domain: kmgetubs19.ch
+    dns_resolver: "cf-production"
+    port: 8069
+    portSecure: 8069
+  - name: odoo11-waf
+    domain: www.kmgetubs19.ch
+    dns_resolver: "cf-production"
+    port: 8069
+    portSecure: 8069
+  - name: odoo11-waf
+    domain: kmgetubs19.sharevic.ch
     dns_resolver: "cf-production"
     port: 8069
     portSecure: 8069

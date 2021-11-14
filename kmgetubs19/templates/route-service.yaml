@@ -3,7 +3,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: http-passthrough-{{ .name }}
+  name: http-route-{{ .domain }}
 spec:
   entryPoints:
     - web
@@ -14,7 +14,7 @@ spec:
       services:
         - kind: Service
           {{- if .host }}
-          name: app-passthrough-{{ .name }}
+          name: app-passthrough-{{ .domain }}
           {{- end}}
           {{- if not .host }}
           name: {{ .name }}
@@ -23,11 +23,12 @@ spec:
       middlewares:
         - name: standard
           namespace: traefik
+{{- if .portSecure }}      
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: https-passthrough-{{ .name }}
+  name: https-route-{{ .domain }}
 spec:
   entryPoints:
     - websecure
@@ -38,7 +39,7 @@ spec:
       services:
       - kind: Service
         {{- if .host }}
-        name: app-passthrough-{{ .name }}
+        name: app-passthrough-{{ .domain }}
         {{- end}}
         {{- if not .host }}
         name: {{ .name }}
@@ -47,17 +48,18 @@ spec:
       middlewares:
         - name: secure
           namespace: traefik
-        {{- if .host }}
-        - name: app-passthrough-{{ .name }}-header
-        {{- end }}
+      {{- if .host }}
+        - name: app-passthrough-{{ .domain }}-header
+      {{- end }}
       tls:
         certResolver: {{ .dns_resolver }}
+{{- end }}        
 {{- if .host }}
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: app-passthrough-{{ .name }}-header
+  name: app-passthrough-{{ .domain }}-header
 spec:
   headers:
     customRequestHeaders:
@@ -66,7 +68,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: app-passthrough-{{ .name }}
+  name: app-passthrough-{{ .domain }}
 spec:
   type: ExternalName
   externalName: {{ .host }}
