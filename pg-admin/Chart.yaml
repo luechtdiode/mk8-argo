@@ -1,0 +1,8 @@
+apiVersion: v2
+version: 1.0.0
+name: pg-admin
+dependencies:
+  - name: generic-chart
+    version: 2.1.0
+    repository: https://registry.baloise.dev/chartrepo/library
+    alias: pg-admin

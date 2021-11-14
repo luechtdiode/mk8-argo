@@ -1,0 +1,18 @@
+pg-admin:
+  replicaCount: 1
+  image:
+    repository: dpage/pgadmin4
+    tag: 6.1
+  network:
+    http:
+      containerPort: 80
+      servicePort: 8022
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 100Mi
+    limits:
+      cpu: 0.5
+      memory: 1Gi
