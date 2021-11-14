@@ -55,6 +55,9 @@ kutuapp:
     limits:
       cpu: 1.00
       memory: 2.0Gi
+  envFrom:
+    - secretRef:
+        name: smtp-secret
   env:
     - name: X_KUTU_SECRET
       valueFrom:
