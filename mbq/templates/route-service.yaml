@@ -22,7 +22,6 @@ spec:
       middlewares:
       - name: secure
         namespace: traefik
-      - name: app-passthrough-{{ .name }}-header
       tls:
         certResolver: {{ $resolver }}
     {{ end }}
