@@ -1,6 +1,7 @@
 routes:
   - name: mbq-waf
-    domain: mbq.sharevic.net
+    domains:
+       - domain: mbq.sharevic.net
     dns_resolver: "cf-production"
     port: 5858
     portSecure: 5858
