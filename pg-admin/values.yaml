@@ -9,6 +9,9 @@ pg-admin:
       servicePort: 8022
   service:
     type: NodePort
+  envFrom:
+    - secretRef:
+        name: pgadmin-secret
   resources:
     requests:
       cpu: 0.5
