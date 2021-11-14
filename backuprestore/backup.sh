@@ -9,9 +9,18 @@ function volume_restore()
   BACKUP_DIR=$2
   TARGET=$1
 
+  echo "searching for .tar.gz archives to restore..."
   for archiv in ${BACKUP_DIR}/backup-*.tar.gz
   do
-    sudo tar -xpzf $archiv -C ${TARGET}
+    sudo tar -xpzf $archiv -C ${TARGET} .
+    echo "$archiv restored to ${TARGET}
+  done
+
+  echo "searching for .tar.bz archives to restore..."
+  for archiv in ${BACKUP_DIR}/backup-*.tar.bz2
+  do
+    sudo tar -xpjf $archiv -C ${TARGET} .
+    echo "$archiv restored to ${TARGET}
   done
 }
 
@@ -27,15 +36,13 @@ function ns_restore()
     kubectl scale --replicas=0 --timeout=3m deployment/$deployment -n $1
   done;
 
-  vols=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..volumeName}')
-  names=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..name }')
-  for idx in "${!vols[@]}"
-  do 
-    volume=${vols[$idx]}
-    name=${names[$idx]}
+  pvcnames=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..name }')
+  for pvcname in $pvcnames
+  do
+    volume=$(kubectl get persistentvolumeclaims $pvcname -n $1 -o=jsonpath='{ ..volumeName }')
     echo "--------------------------------"
-    echo "restore for namespace $1, name: $name, volume: $volume ..."
-    BACKUP_DIR="$(pwd)/volumes-backup/$1/$name"
+    echo "restore for namespace $1, pvc-name: $pvcname, volume: $volume ..."
+    BACKUP_DIR="$(pwd)/volumes-backup/$1/$pvcname"
     SOURCE="$PVCROOT/$volume"
     volume_restore $SOURCE $BACKUP_DIR
     echo "restore finished. Path $BACKUP_DIR"
@@ -53,6 +60,7 @@ function volume_backup()
   TIMESTAMP="timestamp.dat"
   SOURCE=$1
   DATE=$(date +%Y-%m-%d-%H%M%S)
+  DAY=$(date +%d)
 
   mkdir -p ${BACKUP_DIR}
 
@@ -63,21 +71,25 @@ function volume_backup()
   backupnr=${backupnr//\?/0}
   backupnr=$[10#${backupnr}]
 
-  if [ "$[backupnr++]" -ge 30 ]; then
+  if [ "$[backupnr++]" -ge $DAY ]; then
     rm -rf ${ROTATE_DIR}_RETENTION
     mv ${ROTATE_DIR}/* ${ROTATE_DIR}_RETENTION
     mkdir -p ${ROTATE_DIR}/${DATE}
     mv ${BACKUP_DIR}/b* ${ROTATE_DIR}/${DATE}
     mv ${BACKUP_DIR}/t* ${ROTATE_DIR}/${DATE}
+    mv ${BACKUP_DIR}/*.log ${ROTATE_DIR}/${DATE}
     backupnr=1
   fi
 
   backupnr=0${backupnr}
   backupnr=${backupnr: -2}
   filename=backup-${backupnr}.tar.gz
-  echo "taring from $SOURCE"
-  echo "         to ${BACKUP_DIR}/$filename"
-  sudo tar -cpzf ${BACKUP_DIR}/${filename} -g ${BACKUP_DIR}/${TIMESTAMP} -C ${SOURCE} .
+  logfilename=pvc-backup.log
+  echo $DATE                                                                                    >> ${BACKUP_DIR}/$logfilename
+  echo "taring from $SOURCE"                                                                    >> ${BACKUP_DIR}/$logfilename
+  echo "         to ${BACKUP_DIR}/$filename"                                                    >> ${BACKUP_DIR}/$logfilename
+  echo $(sudo tar -cpzf ${BACKUP_DIR}/${filename} -g ${BACKUP_DIR}/${TIMESTAMP} -C ${SOURCE} .) >> ${BACKUP_DIR}/$logfilename
+  cat ${BACKUP_DIR}/$logfilename
 }
 
 function ns_backup()
@@ -92,15 +104,13 @@ function ns_backup()
     kubectl scale --replicas=0 --timeout=3m deployment/$deployment -n $1
   done;
 
-  vols=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..volumeName}')
-  names=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..name }')
-  for idx in "${!vols[@]}"
+  pvcnames=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..name }')
+  for pvcname in $pvcnames
   do
-    volume=${vols[$idx]}
-    name=${names[$idx]}
+    volume=$(kubectl get persistentvolumeclaims $pvcname -n $1 -o=jsonpath='{ ..volumeName}')
     echo "--------------------------------"
-    echo "backup for namespace $1, name: $name, volume: $volume ..."
-    BACKUP_DIR="$(pwd)/volumes-backup/$1/$name"
+    echo "backup for namespace $1, pvc-name: $pvcname, volume: $volume ..."
+    BACKUP_DIR="$(pwd)/volumes-backup/$1/$pvcname"
     SOURCE="$PVCROOT/$volume"
     volume_backup $SOURCE $BACKUP_DIR
     echo "backup finished. Path $BACKUP_DIR"
@@ -140,6 +150,11 @@ else
       ;;
     *)
       echo "Sorry, I don't understand"
+      echo 'Usage:
+         ./backup.sh (zero-args) => make incremental backup per month from all volumes of the registered namespaces
+         backup <namespace>      => make incremental backup per month from all volumes of the specified namespace
+         restore <namespace>     => restore the backed up volumes of the specified namespace
+      '
       ;;
   esac
 fi
