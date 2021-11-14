@@ -37,8 +37,8 @@ mbq-waf:
 mbq:
   replicaCount: 1
   image:
-    repository: mobile-queue
-    tag: v1
+    repository: luechtdiode/mobile-queue
+    tag: master-3f6ce2a
   network:
     http:
       servicePort: 8080
