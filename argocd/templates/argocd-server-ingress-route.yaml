@@ -14,7 +14,9 @@ spec:
         - name: argocd-server
           port: 443
       middlewares:
-      - name: secure
+      - name: security-response-header
+        namespace: traefik
+      - name: more-security-response-header
         namespace: traefik
       tls:
         certResolver: cf-production
@@ -26,7 +28,9 @@ spec:
           port: 443
           scheme: h2c
       middlewares:
-      - name: secure
+      - name: security-response-header
+        namespace: traefik
+      - name: more-security-response-header
         namespace: traefik
       tls:
         certResolver: cf-production
