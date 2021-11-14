@@ -64,12 +64,25 @@ kubectl patch svc kubernetes-dashboard -n kube-system -p '{"spec": {"type": "Nod
 Install OpenEBS storage
 -----------------------
 https://github.com/openebs/zfs-localpv
+https://forums.freebsd.org/threads/my-experience-in-freebsd-backup-physical-and-virtual.79670/
 ```bash
 microk8s enable openebs
 sudo apt-get install zfsutils-linux
 sudo zpool create zfspv-pool /dev/sdb
 sudo zfs set mountpoint=/var/snap/microk8s/common/var/openebs/local zfspv-pool
 kubectl label node mars openebs.io/rack=rack1
+```
+Migrate to cStore:
+-------------------
+https://computingforgeeks.com/deploy-and-use-openebs-container-storage-on-kubernetes/
+https://vitobotta.com/2019/07/03/openebs-tips/
+
+```
+sudo apt-get update
+sudo apt-get install open-iscsi
+sudo systemctl enable --now iscsid
+systemctl status iscsid
+kubectl get blockdevice -n openebs
 ```
 
 Install via Bootstrap-Setup
@@ -89,6 +102,7 @@ kubectl apply -n kube-system -f ~/microk8s-setup/mk8-argo/kube-dashboard/kube-da
 Backup/Restore microk8s cluster
 -------------------------------
 https://discuss.kubernetes.io/t/recovery-of-ha-microk8s-clusters/12931/1
+
 ### Recovery
 
 1. Ensure all cluster nodes are not running with sudo snap stop microk8s or sudo microk8s stop
