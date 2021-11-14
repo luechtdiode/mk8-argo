@@ -5,8 +5,10 @@ routes:
     port: 5858
     portSecure: 5858
   - name: kutuapp-waf
-    domain: kutuapp.mars
+    domain: kutuapp.interpolar.ch
+    dns_resolver: "cf-production"
     port: 5858
+    portSecure: 5858
 
 kutuapp-waf:
   replicaCount: 1
