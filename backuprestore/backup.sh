@@ -130,6 +130,14 @@ function install()
   sudo cp crontabupdated.txt /etc/crontab
 }
 
+function migrate()
+{
+  # migrate <namespace> <plutobackup> <pvcname> => fe. migrate kutuapp backup-kutu-db-data.tar.bz2 kutu-data
+  TARGET_DIR=volumes-backup/$1/$3
+  mkdir -p $TARGET_DIR
+  cp ~/pluto-roland/docker-apps/$2 $TARGET_DIR
+}
+
 if [ -z "$1" ]
 then
   ns_backup kmgetubs19
@@ -144,6 +152,9 @@ else
     backup)
       ns_backup $2
       ;;
+    migrate)
+      migrate $2 $3 $4
+      ;;
     install)
       install
       echo "daily backup in crontab registered for backup-location $(pwd)"
@@ -154,6 +165,9 @@ else
          ./backup.sh (zero-args) => make incremental backup per month from all volumes of the registered namespaces
          backup <namespace>      => make incremental backup per month from all volumes of the specified namespace
          restore <namespace>     => restore the backed up volumes of the specified namespace
+         migrate <namespace> <plutobackup> <pvcname> => fe. 
+           migrate kutuapp backup-kutu-db-data.tar.bz2 kutu-data
+           migrate kutuapp backup-kutuapp.tar.bz2 kutuapp-data
       '
       ;;
   esac
