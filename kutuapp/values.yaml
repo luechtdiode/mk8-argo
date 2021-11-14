@@ -90,11 +90,5 @@ kutuapp:
       pv.kubernetes.io/bound-by-controller: 'yes'
   volumeMounts:
   - mountPath: /home/kutuapp
-    subPath: appdataroot
-    name: kutuapp-data
-  - mountPath: /home/kutuapp/data
     subPath: data
-    name: kutuapp-data
-  - mountPath: /home/kutuapp/db
-    subPath: db
     name: kutuapp-data
