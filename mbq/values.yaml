@@ -42,7 +42,7 @@ mbq:
     tag: master-3f6ce2a
   network:
     http:
-      servicePort: 8080
+      servicePort: 5757
   service:
     type: NodePort
   resources:
