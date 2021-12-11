@@ -19,6 +19,8 @@ pg-admin:
     limits:
       cpu: 0.5
       memory: 1Gi
+  defaultAffinityRules:
+    enabled: false
   persistence:
     enabled: true
     name: pgadmin-data
