@@ -2,7 +2,7 @@ pg-admin:
   replicaCount: 1
   image:
     repository: dpage/pgadmin4
-    tag: 6.1
+    tag: 6.2
   network:
     http:
       containerPort: 80
@@ -19,3 +19,16 @@ pg-admin:
     limits:
       cpu: 0.5
       memory: 1Gi
+  defaultAffinityRules:
+    enabled: false
+  persistence:
+    enabled: true
+    name: pgadmin-data
+    storageClass: openebs-hostpath
+    accessModes: ReadWriteOnce
+    size: 10Gi
+    annotations:
+      pv.kubernetes.io/bound-by-controller: 'yes'
+  volumeMounts:
+    - mountPath: /var/lib/pgadmin
+      name: pgadmin-data
