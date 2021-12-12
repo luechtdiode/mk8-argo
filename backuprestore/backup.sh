@@ -152,6 +152,7 @@ then
   ns_backup kutuapp-test
   ns_backup kutuapp
   ns_backup sharevic
+  ns_backup pg-admin
 else
   case $1 in
     restore)
