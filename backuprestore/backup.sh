@@ -1,8 +1,10 @@
 #!/bin/bash
+cd "$(dirname "$0")"
 
 # https://www.ionos.de/digitalguide/server/tools/backup-mit-tar-so-erstellen-sie-archive-unter-linux/
 
 PVCROOT=/var/snap/microk8s/common/var/openebs/local
+kubectl=$(which kubectl)
 
 function volume_restore()
 {
@@ -130,11 +132,12 @@ function ns_backup()
 
 function install()
 {
-  cat /etc/crontab | grep -v 'backuprestore/backup.sh' > crontabcleaned.txt
+  croncmd="kubectl=$(which kubectl) && $(pwd)/backup.sh"
+  sudo crontab -u root -l | grep -v 'backuprestore/backup.sh' > crontabcleaned.txt
   cp crontabcleaned.txt crontabupdated.txt
-  echo "30 3 * * * root cd $(pwd) && $(pwd)/backup.sh" >> crontabupdated.txt
-
-  sudo cp crontabupdated.txt /etc/crontab
+  echo "* * * * * $croncmd >> $(pwd)/backup.log 2>&1" >> crontabupdated.txt
+  sudo crontab -u root crontabupdated.txt
+  # sudo cp crontabupdated.txt /etc/crontab
 }
 
 function migrate()
