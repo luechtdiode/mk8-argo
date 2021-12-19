@@ -3,7 +3,7 @@ bootstrap:
  - name: sealed-secrets
  - name: traefik
  - name: argocd
- - name: kube-dashboard
+ - name: kubernetes-dashboard
  - name: pg-admin
  - name: keycloak
  - name: kmgetubs19
