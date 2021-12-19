@@ -54,7 +54,11 @@ argo-cd:
       bitnami-sealed-secrets-repo:
         name: sealed-secrets
         type: helm
-        url: https://bitnami-labs.github.io/sealed-secrets  
+        url: https://bitnami-labs.github.io/sealed-secrets 
+      kube-dashboard:
+        name: kubernetes-dashboard
+        type: helm
+        url: https://kubernetes.github.io/dashboard/
       rook-release-repo:  
         name: rook-release
         type: helm
