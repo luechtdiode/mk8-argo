@@ -1,0 +1,7 @@
+name: kube-dashboard
+apiVersion: v2
+version: 1.0.0
+dependencies:
+  - name: kuebernetes-dashboard
+    version: '^5.0.5'
+    repository: https://kubernetes.github.io/dashboard/
