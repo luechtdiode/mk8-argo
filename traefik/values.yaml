@@ -19,7 +19,6 @@ traefik:
       - "--serversTransport.insecureSkipVerify=true"
       - "--tracing.jaeger=true"
       - "--tracing.serviceName=traefik"
-      - "--tracing.jaeger.samplingServerURL=http://simplest-agent:5778/sampling"
     additionalArguments:
       - --providers.file.filename=/data/traefik-config.yaml
       - --providers.kubernetesCRD.allowCrossNamespace=true
