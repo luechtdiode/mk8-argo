@@ -20,7 +20,6 @@ traefik:
       - "--tracing.jaeger=true"
       - "--tracing.serviceName=traefik"
       - "--tracing.jaeger.samplingServerURL=http://simplest-agent:5778/sampling"
-      - "--tracing.jaeger.localAgentHostPort=simplest-agent:6831"
     additionalArguments:
       - --providers.file.filename=/data/traefik-config.yaml
       - --providers.kubernetesCRD.allowCrossNamespace=true
@@ -34,6 +33,10 @@ traefik:
       - --certificatesresolvers.cf-production.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.cf-production.acme.dnschallenge.resolvers=1.1.1.1
       - --certificatesresolvers.cf-production.acme.storage=/certs/acme.json
+
+    deployment:
+      annotations:
+        "sidecar.jaegertracing.io/inject": "true"    
 
     env:
       - name: CF_API_EMAIL
