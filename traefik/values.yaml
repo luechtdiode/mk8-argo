@@ -20,6 +20,7 @@ traefik:
       - "--tracing.jaeger=true"
       - "--tracing.serviceName=traefik"
       - "--tracing.jaeger.samplingServerURL=http://simplest-agent:5778/sampling"
+      - "--tracing.jaeger.localAgentHostPort=simplest-agent:6831"
     additionalArguments:
       - --providers.file.filename=/data/traefik-config.yaml
       - --providers.kubernetesCRD.allowCrossNamespace=true
