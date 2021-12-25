@@ -8,5 +8,5 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: openebs-hostpath
+  storageClassName: microk8s-hostpath
   volumeMode: Filesystem

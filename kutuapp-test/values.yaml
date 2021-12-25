@@ -87,9 +87,9 @@ kutuapp:
   persistence:
     enabled: true
     name: kutuapp-data
-    storageClass: openebs-hostpath
+    storageClass: microk8s-hostpath
     accessModes: ReadWriteOnce
-    size: 10Gi
+    size: 1Gi
     annotations:
       pv.kubernetes.io/bound-by-controller: 'yes'
   volumeMounts:
