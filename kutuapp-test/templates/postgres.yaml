@@ -6,7 +6,7 @@ metadata:
     app: kutuapp
     component: postgres
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: kutuapp
