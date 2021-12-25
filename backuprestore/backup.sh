@@ -48,12 +48,26 @@ function ns_restore()
   pvcnames=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..name }')
   for pvcname in $pvcnames
   do
-    volume=$(kubectl get persistentvolumeclaims $pvcname -n $1 -o=jsonpath='{ ..volumeName }')
-    echo "--------------------------------"
-    echo "restore for namespace $1, pvc-name: $pvcname, volume: $volume ..."
     BACKUP_DIR="$(pwd)/volumes-backup/$1/$pvcname"
-    SOURCE="$PVCROOT/$volume"
-    volume_restore $SOURCE $BACKUP_DIR
+    volumename=$(kubectl get persistentvolumeclaims $pvcname -n $1 -o=jsonpath='{ ..volumeName }')
+    storageClass=$(kubectl -n $1 get PersistentVolume $volumename -o jsonpath='{.spec.storageClassName}')
+
+    case $storageClass in 
+      microk8s-hostpath)
+        TARGET_DIR=$(kubectl -n $1 get PersistentVolume $volumename -o jsonpath='{.spec.hostPath.path}')
+        echo "--------------------------------"
+        echo "restore for namespace $1, pvc-name: $pvcname, volume: $volumename to: $TARGET_DIR ..."
+        volume_restore $TARGET_DIR $BACKUP_DIR
+        ;;
+      openebs-hostpath)
+        TARGET_DIR="$PVCROOT/$volumename"
+        echo "--------------------------------"
+        echo "restore for namespace $1, pvc-name: $pvcname, volume: $volumename to: $TARGET_DIR ..."
+        volume_restore $TARGET_DIR $BACKUP_DIR
+        ;;
+      *)
+        echo "Sorry, this pvc is note Filesystem-based: $pvcname"
+    esac
     echo "restore finished. Path $BACKUP_DIR"
   done;
 
@@ -116,12 +130,27 @@ function ns_backup()
   pvcnames=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..name }')
   for pvcname in $pvcnames
   do
-    volume=$(kubectl get persistentvolumeclaims $pvcname -n $1 -o=jsonpath='{ ..volumeName}')
-    echo "--------------------------------"
-    echo "backup for namespace $1, pvc-name: $pvcname, volume: $volume ..."
-    BACKUP_DIR="$(pwd)/volumes-backup/$1/$pvcname"
-    SOURCE="$PVCROOT/$volume"
-    volume_backup $SOURCE $BACKUP_DIR
+    volumename=$(kubectl get persistentvolumeclaims $pvcname -n $1 -o=jsonpath='{ ..volumeName }')
+    storageClass=$(kubectl -n $1 get PersistentVolume $volumename -o jsonpath='{.spec.storageClassName}')
+
+    case $storageClass in 
+      microk8s-hostpath)
+        SOURCE=$(kubectl -n $1 get PersistentVolume $volumename -o jsonpath='{.spec.hostPath.path}')
+        BACKUP_DIR="$(pwd)/volumes-backup/$1/$pvcname"
+        echo "--------------------------------"
+        echo "backup for namespace $1, pvc-name: $pvcname, volume: $volumename from: $SOURCE ..."
+        volume_backup $SOURCE $BACKUP_DIR
+        ;;
+      openebs-hostpath)
+        SOURCE="$PVCROOT/$volumename"
+        BACKUP_DIR="$(pwd)/volumes-backup/$1/$pvcname"
+        echo "--------------------------------"
+        echo "backup for namespace $1, pvc-name: $pvcname, volume: $volumename from: $SOURCE ..."
+        volume_backup $SOURCE $BACKUP_DIR
+        ;;
+      *)
+        echo "Sorry, this pvc is note Filesystem-based: $pvcname"
+    esac
     echo "backup finished. Path $BACKUP_DIR"
   done;
 
