@@ -15,11 +15,11 @@ sudo rm -rf /var/lib/rook
 
 lsblk -f
 DISK="/dev/sdb"
-sudo ceph-volume lvm zap --destroy $DISK
+# sudo ceph-volume lvm zap --destroy $DISK
 
 # alternative (not working, keeps sdb locked)
-# sudo sgdisk --zap-all $DISK
-# sudo dd if=/dev/zero of="$DISK" bs=1M count=100 oflag=direct,dsync
-# sudo rm -rf /dev/ceph-*
-# sudo rm -rf /dev/mapper/ceph--*
-# sudo partprobe $DISK
+sudo sgdisk --zap-all $DISK
+sudo dd if=/dev/zero of="$DISK" bs=1M count=100 oflag=direct,dsync
+sudo rm -rf /dev/ceph-*
+sudo rm -rf /dev/mapper/ceph--*
+sudo partprobe $DISK
