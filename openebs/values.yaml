@@ -1,4 +1,4 @@
-zfslocalpv:
+zfs-localpv:
   analytics:
     enabled: false
   rbac:
