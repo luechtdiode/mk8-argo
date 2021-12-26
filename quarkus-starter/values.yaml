@@ -21,3 +21,13 @@ quarkus-starter:
       memory: 50Mi
     limits:
       memory: 500Mi
+  persistence:
+    enabled: true
+    name: test-data
+    size: 10Mi
+    annotations:
+      pv.kubernetes.io/bound-by-controller: 'yes'
+  volumeMounts:
+  - mountPath: /home/testdata
+    subPath: data
+    name: test-data      
