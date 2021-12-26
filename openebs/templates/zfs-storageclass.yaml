@@ -10,5 +10,5 @@ parameters:
   compression: "off"
   dedup: "off"
   fstype: "zfs"
-  poolname: "zfspv-pool/openebs"
+  poolname: "zfspv-pool"
 provisioner: zfs.csi.openebs.io
