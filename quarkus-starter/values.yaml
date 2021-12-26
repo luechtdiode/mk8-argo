@@ -23,8 +23,9 @@ quarkus-starter:
       memory: 500Mi
   persistence:
     enabled: true
+    storageClass: openebs-zfspv
     name: test-data
-    size: 10Mi
+    size: 1Gi
     annotations:
       pv.kubernetes.io/bound-by-controller: 'yes'
   volumeMounts:
