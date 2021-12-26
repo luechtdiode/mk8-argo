@@ -300,7 +300,7 @@ velero:
     name:
     # Name of a pre-existing secret (if any) in the Velero namespace
     # that should be used to get IAM account credentials. Optional.
-    existingSecret: storej-accessgrant-secret
+    existingSecret:
     # Data to be stored in the Velero secret, if `useSecret` is true and `existingSecret` is empty.
     # As of the current Velero release, Velero only uses one secret key/value at a time.
     # The key must be named `cloud`, and the value corresponds to the entire content of your IAM credentials file.
@@ -319,7 +319,7 @@ velero:
     # Name of a pre-existing secret (if any) in the Velero namespace
     # that will be used to load environment variables into velero and restic.
     # Secret should be in format - https://kubernetes.io/docs/concepts/configuration/secret/#use-case-as-container-environment-variables
-    extraSecretRef: ""
+    extraSecretRef: "storej-accessgrant-secret"
 
   # Whether to create backupstoragelocation crd, if false => do not create a default backup location
   backupsEnabled: true
