@@ -24,10 +24,13 @@ quarkus-starter:
   persistence:
     enabled: true
     storageClass: openebs-zfspv
+    accessModes: ReadWriteOnce
     name: test-data
     size: 1Gi
     annotations:
       pv.kubernetes.io/bound-by-controller: 'yes'
+  defaultAffinityRules:
+    enabled: false
   volumeMounts:
   - mountPath: /home/testdata
     subPath: data

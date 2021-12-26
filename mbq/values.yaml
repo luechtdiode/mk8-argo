@@ -11,7 +11,7 @@ mbq-waf:
   replicaCount: 1
   image:
     repository: luechtdiode/nginx-naxsi
-    tag: master-1df1bb5
+    tag: v1.0.0
   defaultAffinityRules:
     enabled: false
   network:
