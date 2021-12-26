@@ -2,11 +2,13 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: openebs-zfspv
+allowVolumeExpansion: true  
 parameters:
   shared: "yes"
-  recordsize: "16k"
+  thinprovision: "no"
+  recordsize: "4k"
   compression: "off"
-  dedup: "on"
+  dedup: "off"
   fstype: "zfs"
-  poolname: "zfspv-pool"
+  poolname: "zfspv-pool/openebs"
 provisioner: zfs.csi.openebs.io

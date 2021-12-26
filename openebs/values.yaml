@@ -1,4 +1,6 @@
 zfslocalpv:
+  analytics:
+    enabled: false
   rbac:
     # rbac.pspEnabled: `true` if PodSecurityPolicy resources should be created
     pspEnabled: true
