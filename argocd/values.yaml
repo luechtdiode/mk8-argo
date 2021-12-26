@@ -71,3 +71,7 @@ argo-cd:
         name: vmware-tanzu
         type: helm
         url: https://vmware-tanzu.github.io/helm-charts
+      openebs-zfslocalpv:
+        name: openebs-zfslocalpv
+        type: helm
+        url: https://openebs.github.io/zfs-localpv
