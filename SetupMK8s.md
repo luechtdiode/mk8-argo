@@ -69,7 +69,8 @@ https://forums.freebsd.org/threads/my-experience-in-freebsd-backup-physical-and-
 microk8s enable openebs
 sudo apt-get install zfsutils-linux
 sudo zpool create zfspv-pool /dev/sdb
-sudo zfs set mountpoint=/var/snap/microk8s/common/var/openebs/local zfspv-pool
+sudo zfs set mountpoint=/var/snap/microk8s/common/var/openebs/local zfspv-pool 
+# unmount with sudo zfs set mountpoint=none zfspv-pool && zfs unmount /var/snap/microk8s/common/var/openebs/local 
 kubectl label node mars openebs.io/rack=rack1
 ```
 Migrate to cStore:
@@ -93,15 +94,32 @@ helm template bootstrap/ | kubectl apply -f -
 ```
 
 
-Expose Kubernetes Dashboard:
-----------------------------
-```bash
-kubectl apply -n kube-system -f ~/microk8s-setup/mk8-argo/kube-dashboard/kube-dashboard-ingress-route.yaml
-```
-
 Backup/Restore microk8s cluster
 -------------------------------
 https://discuss.kubernetes.io/t/recovery-of-ha-microk8s-clusters/12931/1
+
+### Backup secrets
+```bash
+# cd mk8-argo project-root
+sudo find ./* -name "*-secret.yaml"
+sudo find ./* -name "*-secret.yaml" | xargs tar -czf secrets.tar.gz
+tar -ztvf secrets.tar.gz # list contents of secrets.tar.gz
+```
+
+### Regenerate secrets
+```bash
+# cd mk8-argo project-root
+tar -ztvf secrets.tar.gz # list contents of secrets.tar.gz
+tar -zxvf secrets.tar.gz # extract contents of secrets.tar.gz
+#!/bin/sh
+for file in $(tar -ztvf secrets.tar.gz  | awk -F' ' '{ if($NF != "") print $NF }' | xargs ); do
+  if [ -e "$file" ]; then
+    newname=$(echo "$file" | sed 's/-secret/-sealedsecret/')
+    // cp "$file" "$newname"
+    kubeseal <$file -o yaml >$newname
+  fi
+done
+```
 
 ### Recovery
 
