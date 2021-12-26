@@ -297,10 +297,10 @@ velero:
     # kiam to provide IAM credentials for the Velero pod.
     useSecret: true
     # Name of the secret to create if `useSecret` is true and `existingSecret` is empty
-    name:
+    name: 
     # Name of a pre-existing secret (if any) in the Velero namespace
     # that should be used to get IAM account credentials. Optional.
-    existingSecret:
+    existingSecret: storej-accessgrant-secret
     # Data to be stored in the Velero secret, if `useSecret` is true and `existingSecret` is empty.
     # As of the current Velero release, Velero only uses one secret key/value at a time.
     # The key must be named `cloud`, and the value corresponds to the entire content of your IAM credentials file.
