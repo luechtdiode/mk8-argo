@@ -193,8 +193,8 @@ velero:
       default:
       # Additional provider-specific configuration. See link above
       # for details of required/optional fields for your provider.
-      config: #{}
-        accessGrant: $ACCESS
+      config: {}
+      #  accessGrant: $ACCESS
       #  region:
       #  s3ForcePathStyle:
       #  s3Url:
