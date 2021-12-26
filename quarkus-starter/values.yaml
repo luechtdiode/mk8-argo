@@ -22,7 +22,7 @@ quarkus-starter:
     limits:
       memory: 500Mi
   persistence:
-    enabled: false
+    enabled: true
     storageClass: openebs-zfspv
     accessModes: ReadWriteOnce
     name: test-data
