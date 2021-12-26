@@ -12,7 +12,7 @@ function volume_restore()
   TARGET=$1
 
   for d in ${TARGET}/*
-  do 
+  do
     echo "cleaning $d"
     sudo  rm -rf $d
   done
@@ -52,7 +52,7 @@ function ns_restore()
     volumename=$(kubectl get persistentvolumeclaims $pvcname -n $1 -o=jsonpath='{ ..volumeName }')
     storageClass=$(kubectl -n $1 get PersistentVolume $volumename -o jsonpath='{.spec.storageClassName}')
 
-    case $storageClass in 
+    case $storageClass in
       microk8s-hostpath)
         TARGET_DIR=$(kubectl -n $1 get PersistentVolume $volumename -o jsonpath='{.spec.hostPath.path}')
         echo "--------------------------------"
@@ -67,6 +67,7 @@ function ns_restore()
         ;;
       *)
         echo "Sorry, this pvc is note Filesystem-based: $pvcname"
+        echo $storageClass
     esac
     echo "restore finished. Path $BACKUP_DIR"
   done;
@@ -215,3 +216,4 @@ else
       ;;
   esac
 fi
+
