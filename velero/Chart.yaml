@@ -1,0 +1,8 @@
+name: velero
+apiVersion: v2
+version:  2.27.1
+dependencies:
+  - name: velero
+    version: "~2.27.1"
+    repository: https://vmware-tanzu.github.io/helm-charts
+

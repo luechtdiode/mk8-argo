@@ -5,6 +5,7 @@ bootstrap:
  - name: traefik
  - name: argocd
  - name: kubernetes-dashboard
+ - name: velero
  - name: pg-admin
  - name: keycloak
  - name: kmgetubs19
