@@ -178,6 +178,7 @@ function cloudsync()
     *)
       SOURCE="$(pwd)/volumes-backup"
       BACKUP_DIR="$(pwd)/cloud-backup"
+      DB_DIR="$(pwd)/db-backup"
       echo "--------------------------------"
       echo "cloud-backup from: $SOURCE ..."
       volume_backup $SOURCE $BACKUP_DIR
@@ -189,6 +190,56 @@ function cloudsync()
       # find from mk8-argo project-root
       sudo find ../* -name "*-secret.yaml" | xargs tar -czf secrets.tar.gz
       uplink cp secrets.tar.gz sj://sharevic/manualbackup/secrets.tar.gz
+
+      for file in $(find $DB_DIR/* -name "*.dump" | xargs ); do
+        uplink cp $file sj://sharevic/manualbackup/db/$(echo $file | awk -F/ '{ print $NF }')
+      done
+    ;;
+  esac
+}
+
+function dbbackup()
+{
+  mkdir -p $(pwd)/db-backup
+  NAMESPACE="$1"
+  PG_USER="${2:-$NAMESPACE}"
+  DB_NAME="${3:-$PG_USER}"
+  DUMPFILE="db-backup/$NAMESPACE-$DB_NAME-database.dump"
+  echo "taking backup from db $DB_NAME, user $PG_USER in $NAMESPACE to $DUMPFILE ..."
+  postgrespod=$(kubectl -n $NAMESPACE get pod -l component=postgres -o jsonpath='{.items[*].metadata.name}')
+  kubectl -n $NAMESPACE exec $postgrespod -- bash \
+    -c "pg_dump -U $PG_USER --no-password --format=c --blobs --section=pre-data --section=data --section=post-data --encoding 'UTF8' $DB_NAME" \
+    > $DUMPFILE
+  echo "backup finished"
+}
+
+# dbrestore <namespace> <pg-user> <db-name>
+function dbrestore()
+{
+  NAMESPACE="$1"
+  PG_USER="${2:-$NAMESPACE}"
+  DB_NAME="${3:-$PG_USER}"
+  DUMPFILE="db-backup/$NAMESPACE-$DB_NAME-database.dump"
+  echo "restoring backup from $DUMPFILE to db $DB_NAME, user $PG_USER in $NAMESPACE ..."
+  postgrespod=$(kubectl -n $NAMESPACE get pod -l component=postgres -o jsonpath='{.items[*].metadata.name}')
+  kubectl -n $NAMESPACE exec $postgrespod -- bash \
+    -c "dropdb -U $PG_USER --if-exists $DB_NAME && createdb -U $PG_USER -T template0 $DB_NAME"
+  cat $DUMPFILE | kubectl -n $NAMESPACE exec -i $postgrespod -- pg_restore -U $PG_USER --no-password --dbname $DB_NAME
+  echo "restore finished"
+}
+
+# ns_restore <namespace> <database>
+function ns_dbrestore()
+{
+  case $1 in
+    kmgetubs19)
+      dbrestore kmgetubs19 odoo ${2:-odoo}
+    ;;
+    kutuapp-test)
+      dbrestore kutuapp-test kutuapp ${2:-kutuapp}
+    ;;
+    kutuapp)
+      dbrestore kutuapp kutuapp ${2:-kutuapp}
     ;;
   esac
 }
@@ -203,6 +254,9 @@ function migrate()
 
 if [ -z "$1" ]
 then
+  dbbackup kutuapp kutuapp kutuapp
+  dbbackup kutuapp kutuapp-test kutuapp
+  dbbackup kmgetubs19 odoo
   ns_backup kmgetubs19
   ns_backup keycloak
   ns_backup kutuapp-test
@@ -213,6 +267,14 @@ else
   case $1 in
     cloudsync)
       cloudsync $2
+      ;;
+    dbbackup)
+      dbbackup kutuapp kutuapp kutuapp
+      dbbackup kutuapp kutuapp-test kutuapp
+      dbbackup kmgetubs19 odoo
+      ;;
+    dbrestore)
+      ns_dbrestore $2 $3
       ;;
     restore)
       ns_restore $2
@@ -232,7 +294,11 @@ else
       echo 'Usage:
          ./backup.sh (zero-args) => make incremental backup per month from all volumes of the registered namespaces
          backup <namespace>      => make incremental backup per month from all volumes of the specified namespace
+         dbbackup                => make zero-downtime db-backup or registered databases
          restore <namespace>     => restore the backed up volumes of the specified namespace
+         dbrestore <namespace>   => restore the database from its last stored backup
+         dbrestore <namespace> <dbname> => restore database to a dedicated database
+         cloudsync               => save all backups to storj bucket
          migrate <namespace> <plutobackup> <pvcname> => fe. 
            migrate kutuapp kutu-db-data-backup.tar.bz2 kutu-data
            migrate kutuapp kutuapp-backup.tar.bz2 kutuapp-data
