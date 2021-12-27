@@ -273,7 +273,7 @@ function migrate()
 if [ -z "$1" ]
 then
   dbbackup kutuapp kutuapp kutuapp
-  dbbackup kutuapp kutuapp-test kutuapp
+  dbbackup kutuapp-test kutuapp kutuapp
   dbbackup kmgetubs19 odoo
   ns_backup kmgetubs19
   ns_backup keycloak
@@ -292,7 +292,7 @@ else
       ;;
     dbbackup)
       dbbackup kutuapp kutuapp kutuapp
-      dbbackup kutuapp kutuapp-test kutuapp
+      dbbackup kutuapp-test kutuapp kutuapp
       dbbackup kmgetubs19 odoo
       ;;
     dbrestore)
