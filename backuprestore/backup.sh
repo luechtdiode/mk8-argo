@@ -187,8 +187,6 @@ function cloudsync()
         uplink cp $file sj://sharevic/manualbackup/$(echo $file | awk -F/ '{ print $NF }')
       done
 
-      # find from mk8-argo project-root
-      sudo find ../* -name "*-secret.yaml" | xargs tar -czf secrets.tar.gz
       uplink cp secrets.tar.gz sj://sharevic/manualbackup/secrets.tar.gz
 
       for file in $(find $DB_DIR/* -name "*.dump" | xargs ); do
@@ -244,6 +242,26 @@ function ns_dbrestore()
   esac
 }
 
+function secretbackup()
+{
+  # find from mk8-argo project-root
+  find ../* -name "*-secret.yaml" | xargs tar -czf secrets.tar.gz
+  echo "secrets collected and saved to secrets.tar.gz"
+}
+
+function secretrestore()
+{
+  tar -zxvf secrets.tar.gz -C .. # extract contents of secrets.tar.gz
+  for file in $(tar -ztvf secrets.tar.gz  | awk -F' ' '{ if($NF != "") print $NF }' | xargs ); do
+    if [ -e "../$file" ]; then
+      newname=$(echo "../$file" | sed 's/-secret/-sealedsecret/')
+      namespace=$(echo $newname | cut -d/ -f2 )
+      kubeseal <"../$file" -o yaml >$newname -n $namespace
+      echo "Secret $file restored and resealed as $newname in namespace $namespace"
+    fi
+  done
+}
+
 function migrate()
 {
   # migrate <namespace> <plutobackup> <pvcname> => fe. migrate kutuapp backup-kutu-db-data.tar.bz2 kutu-data
@@ -263,10 +281,14 @@ then
   ns_backup kutuapp
   ns_backup sharevic
   ns_backup pg-admin
+  secretbackup
 else
   case $1 in
     cloudsync)
       cloudsync $2
+      ;;
+    secrets)
+      secretbackup
       ;;
     dbbackup)
       dbbackup kutuapp kutuapp kutuapp
@@ -282,6 +304,9 @@ else
     backup)
       ns_backup $2
       ;;
+    secretrestore)
+      secretrestore
+      ;;
     migrate)
       migrate $2 $3 $4
       ;;
@@ -295,9 +320,11 @@ else
          ./backup.sh (zero-args) => make incremental backup per month from all volumes of the registered namespaces
          backup <namespace>      => make incremental backup per month from all volumes of the specified namespace
          dbbackup                => make zero-downtime db-backup or registered databases
+         secret                  => collects all *secret.yaml from the sibling-folders (namespaces)
          restore <namespace>     => restore the backed up volumes of the specified namespace
          dbrestore <namespace>   => restore the database from its last stored backup
          dbrestore <namespace> <dbname> => restore database to a dedicated database
+         secretrestore           => extracts secrets from backup and reseals the sealedsecrets
          cloudsync               => save all backups to storj bucket
          migrate <namespace> <plutobackup> <pvcname> => fe. 
            migrate kutuapp kutu-db-data-backup.tar.bz2 kutu-data
