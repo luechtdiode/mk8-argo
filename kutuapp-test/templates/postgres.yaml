@@ -35,11 +35,9 @@ spec:
             exec:
               command:
                 - /bin/sh
-                - '-i'
                 - '-c'
-                - >-
-                  psql -h 127.0.0.1 -U $POSTGRES_USER -q -d $POSTGRES_USER -c 'SELECT
-                  1'
+                - '-e'
+                - pg_isready -U $POSTGRES_USER -d $POSTGRES_USER -q && [ $? == 0 ]
             initialDelaySeconds: 15
             timeoutSeconds: 5
             periodSeconds: 10
