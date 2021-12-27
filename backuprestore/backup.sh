@@ -170,6 +170,29 @@ function install()
   # sudo cp crontabupdated.txt /etc/crontab
 }
 
+function cloudsync()
+{
+  case $1 in
+    down)
+    ;;
+    *)
+      SOURCE="$(pwd)/volumes-backup"
+      BACKUP_DIR="$(pwd)/cloud-backup"
+      echo "--------------------------------"
+      echo "cloud-backup from: $SOURCE ..."
+      volume_backup $SOURCE $BACKUP_DIR
+
+      for file in $(find $BACKUP_DIR/* -name "backup*.tar.gz" | xargs ); do
+        uplink cp $file sj://sharevic/manualbackup/$(echo $file | awk -F/ '{ print $NF }')
+      done
+
+      # find from mk8-argo project-root
+      sudo find ../* -name "*-secret.yaml" | xargs tar -czf secrets.tar.gz
+      uplink cp secrets.tar.gz sj://sharevic/manualbackup/secrets.tar.gz
+    ;;
+  esac
+}
+
 function migrate()
 {
   # migrate <namespace> <plutobackup> <pvcname> => fe. migrate kutuapp backup-kutu-db-data.tar.bz2 kutu-data
@@ -188,6 +211,9 @@ then
   ns_backup pg-admin
 else
   case $1 in
+    cloudsync)
+      cloudsync $2
+      ;;
     restore)
       ns_restore $2
       ;;

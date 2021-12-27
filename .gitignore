@@ -2,3 +2,4 @@
 *.lock
 *-secret.yaml
 **/private
+*.tar.gz
