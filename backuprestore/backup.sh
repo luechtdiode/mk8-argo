@@ -321,7 +321,7 @@ else
          ./backup.sh (zero-args) => make incremental backup per month from all volumes of the registered namespaces
          backup <namespace>      => make incremental backup per month from all volumes of the specified namespace
          dbbackup                => make zero-downtime db-backup or registered databases
-         secret                  => collects all *secret.yaml from the sibling-folders (namespaces)
+         secrets                 => collects all *secret.yaml from the sibling-folders (namespaces)
          restore <namespace>     => restore the backed up volumes of the specified namespace
          dbrestore <namespace>   => restore the database from its last stored backup
          dbrestore <namespace> <dbname> => restore database to a dedicated database
