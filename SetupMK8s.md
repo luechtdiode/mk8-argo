@@ -137,3 +137,6 @@ done
 Once each node has started, and the microk8s start command has finished running on the last node, verify each node once started successfully has finished replicating and starting up using microks8 status. After you start microk8s, it may take up to 5-10 minutes before the replication is up to date and all nodes are caught up and running, so please be aware of this, the status my show an error connecting during this time, but waiting will show the cluster has returned to full health. If you have to wait more than 10-15 minutes, validate the data files, and repeat this process as necessary.
 
 You should also be able to issue microk8s kubectl get all -A on each node and see all cluster resources once replication has recovered to validate microk8s is back to fully health.
+
+## Vault
+https://kubevault.com/docs/v2021.10.11/welcome/
