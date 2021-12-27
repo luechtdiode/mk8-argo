@@ -1,2 +1,4 @@
-volumes-backup
+volumes-backup*
+cloud-backup*
+*.gz
 *.txt
