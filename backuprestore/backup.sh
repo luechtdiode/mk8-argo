@@ -258,7 +258,7 @@ function ns_dbrestore()
       dbrestore kutuapp kutuapp ${2:-kutuapp}
     ;;
     keycloak)
-      dbrestore keycloak postgres ${2:-bitnami_keycloak}
+      dbrestore keycloak keycloak ${2:-keycloak}
   esac
 }
 
@@ -326,7 +326,7 @@ then
   dbbackup kutuapp kutuapp kutuapp
   dbbackup kutuapp-test kutuapp kutuapp
   dbbackup kmgetubs19 odoo
-  dbbackup keycloak bitnami_keycloak postgres
+  dbbackup keycloak keycloak keycloak
   ns_backup kmgetubs19
   ns_backup keycloak
   ns_backup kutuapp-test
@@ -349,7 +349,7 @@ else
       dbbackup kutuapp kutuapp kutuapp
       dbbackup kutuapp-test kutuapp kutuapp
       dbbackup kmgetubs19 odoo
-      dbbackup keycloak bitnami_keycloak postgres
+      dbbackup keycloak keycloak keycloak
       ;;
     dbrestore)
       ns_dbrestore $2 $3
