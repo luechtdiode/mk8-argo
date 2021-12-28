@@ -1,4 +1,4 @@
-source ./file-incremental-backup-restore.sh
+source ./scripts/file-incremental-backup-restore.sh
 
 # cloudsync [up | down] defaults to up
 function cloudsync() {
