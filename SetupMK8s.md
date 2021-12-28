@@ -43,7 +43,7 @@ Activate plugins
 ----------------
 (use the two ip-addresses of cni1/2 for metallb setup)
 ```bash
-  microk8s enable rbac dns storage ingress dashboard metallb helm3 fluentd
+  microk8s enable rbac dns storage openebs ingress dashboard metallb helm3 fluentd jaeger prometheus
   sudo snap install kustomize
 ```
 
@@ -86,6 +86,34 @@ systemctl status iscsid
 kubectl get blockdevice -n openebs
 ```
 
+Prepare Storj Cloud Storage
+---------------------------
+[See Storj Dashboard](https://eu1.storj.io/project-dashboard)
+
+*Download & Install*
+```bash
+curl -L https://github.com/storj/storj/releases/latest/download/uplink_linux_amd64.zip -o uplink_linux_amd64.zip
+unzip -o uplink_linux_amd64.zip && rm uplink_linux_amd64.zip
+chmod 755 uplink
+sudo mv uplink /usr/local/bin/uplink
+```
+*Setup*
+[take access-name, api-key generated from Storj Website](https://eu1.storj.io/access-grants)
+```bash
+uplink setup # 2 eu1.storj.io, access-name, api-key, passphrase, passphrase, n
+uplink mb sj://sharevic/ # ignore error if the bucket exists already
+uplink share sj://sharevic/ --readonly=false --export-to accessgrant.txt
+uplink cp sj://sharevic/manualbackup/secrets.tar.gz backuprestore/secrets.tar.gz
+```
+
+Prepare Velero
+--------------
+```bash
+curl -L https://github.com/vmware-tanzu/velero/releases/download/v1.7.1/velero-v1.7.1-linux-amd64.tar.gz -o velero.tar.gz
+tar -xvf velero.tar.gz && rm velero.tar.gz
+sudo mv velero-v1.7.1-linux-amd64/velero /usr/local/bin/
+```
+
 Install via Bootstrap-Setup
 ---------------------------
 ```
@@ -98,6 +126,14 @@ Backup/Restore microk8s cluster
 -------------------------------
 https://discuss.kubernetes.io/t/recovery-of-ha-microk8s-clusters/12931/1
 
+Actually, the script ./backuprestore/backup.sh manages all backup/restore stuff based on local pv locations (hostpath)
+coming with microk8s storage and microk8s openebs.
+
+```bash
+./backuprestore/backup.sh help
+```
+
+.. otherwise ..
 ### Backup secrets
 ```bash
 # cd mk8-argo project-root
@@ -111,14 +147,7 @@ tar -ztvf secrets.tar.gz # list contents of secrets.tar.gz
 # cd mk8-argo project-root
 tar -ztvf secrets.tar.gz # list contents of secrets.tar.gz
 tar -zxvf secrets.tar.gz # extract contents of secrets.tar.gz
-#!/bin/sh
-for file in $(tar -ztvf secrets.tar.gz  | awk -F' ' '{ if($NF != "") print $NF }' | xargs ); do
-  if [ -e "$file" ]; then
-    newname=$(echo "$file" | sed 's/-secret/-sealedsecret/')
-    // cp "$file" "$newname"
-    kubeseal <$file -o yaml >$newname
-  fi
-done
+./regen-secrets.sh
 ```
 
 ### Recovery
