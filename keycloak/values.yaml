@@ -21,7 +21,8 @@ idp:
   serviceMonitor:
     enabled: true
     namespace: "monitoring"
-  # postgresql:
+  postgresql:
+    enabled: false
   #   existingSecret: "keycloak-postgresql"
   ## External database configuration
   ##
