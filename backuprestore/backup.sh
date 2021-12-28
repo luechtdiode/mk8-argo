@@ -170,32 +170,49 @@ function install()
   # sudo cp crontabupdated.txt /etc/crontab
 }
 
+# cloudsync [up | down] defaults to up
 function cloudsync()
 {
   case $1 in
     down)
     ;;
     *)
+      uplink cp secrets.tar.gz sj://sharevic/manualbackup/secrets.tar.gz
+
+      CLUSTER_DIR="$(pwd)/cluster-backup"
+      for file in $(find $CLUSTER_DIR/* -name "*.tar.gz" | xargs ); do
+        uplink cp $file sj://sharevic/manualbackup/cluster/$(echo $file | awk -F/ '{ print $NF }')
+      done
+
+      DB_DIR="$(pwd)/db-backup"
+      for file in $(find $DB_DIR/* -name "*.dump" | xargs ); do
+        uplink cp $file sj://sharevic/manualbackup/db/$(echo $file | awk -F/ '{ print $NF }')
+      done
+
+      # collect all pvc incremental backups to one cloud-pvc incremental backup
       SOURCE="$(pwd)/volumes-backup"
       BACKUP_DIR="$(pwd)/cloud-backup"
-      DB_DIR="$(pwd)/db-backup"
       echo "--------------------------------"
       echo "cloud-backup from: $SOURCE ..."
       volume_backup $SOURCE $BACKUP_DIR
 
       for file in $(find $BACKUP_DIR/* -name "backup*.tar.gz" | xargs ); do
-        uplink cp $file sj://sharevic/manualbackup/$(echo $file | awk -F/ '{ print $NF }')
-      done
-
-      uplink cp secrets.tar.gz sj://sharevic/manualbackup/secrets.tar.gz
-
-      for file in $(find $DB_DIR/* -name "*.dump" | xargs ); do
-        uplink cp $file sj://sharevic/manualbackup/db/$(echo $file | awk -F/ '{ print $NF }')
+        uplink cp $file sj://sharevic/manualbackup/volumes/$(echo $file | awk -F/ '{ print $NF }')
       done
     ;;
   esac
 }
 
+# findPostgresPod <namespace>
+function findPostgresPod()
+{
+  NAMESPACE="$1"
+  postgrespod=$(kubectl -n $NAMESPACE get pod -l component=postgres -o jsonpath='{.items[*].metadata.name}')
+  [ -z $postgrespod ] && postgrespod=$(kubectl -n $NAMESPACE get pod -o jsonpath='{.items[*].metadata.name}' | tr ' ' '\n' | grep postgres)
+  echo $postgrespod  
+}
+
+# dbbackup <namespace> [<pg-user> [<db-name>]]
 function dbbackup()
 {
   mkdir -p $(pwd)/db-backup
@@ -204,14 +221,14 @@ function dbbackup()
   DB_NAME="${3:-$PG_USER}"
   DUMPFILE="db-backup/$NAMESPACE-$DB_NAME-database.dump"
   echo "taking backup from db $DB_NAME, user $PG_USER in $NAMESPACE to $DUMPFILE ..."
-  postgrespod=$(kubectl -n $NAMESPACE get pod -l component=postgres -o jsonpath='{.items[*].metadata.name}')
+  postgrespod=$(findPostgresPod $NAMESPACE)
   kubectl -n $NAMESPACE exec $postgrespod -- bash \
     -c "pg_dump -U $PG_USER --no-password --format=c --blobs --section=pre-data --section=data --section=post-data --encoding 'UTF8' $DB_NAME" \
     > $DUMPFILE
   echo "backup finished"
 }
 
-# dbrestore <namespace> <pg-user> <db-name>
+# dbrestore <namespace> [<pg-user> [<db-name>]]
 function dbrestore()
 {
   NAMESPACE="$1"
@@ -219,7 +236,7 @@ function dbrestore()
   DB_NAME="${3:-$PG_USER}"
   DUMPFILE="db-backup/$NAMESPACE-$DB_NAME-database.dump"
   echo "restoring backup from $DUMPFILE to db $DB_NAME, user $PG_USER in $NAMESPACE ..."
-  postgrespod=$(kubectl -n $NAMESPACE get pod -l component=postgres -o jsonpath='{.items[*].metadata.name}')
+  postgrespod=$(findPostgresPod $NAMESPACE)
   kubectl -n $NAMESPACE exec $postgrespod -- bash \
     -c "echo \"select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = '$DB_NAME' and pid <> pg_backend_pid();\" | psql -U kutuapp \
         && dropdb -U $PG_USER --if-exists $DB_NAME && createdb -U $PG_USER -T template0 $DB_NAME"
@@ -227,7 +244,7 @@ function dbrestore()
   echo "restore finished"
 }
 
-# ns_restore <namespace> <database>
+# ns_restore <namespace> [<target-databasename>]
 function ns_dbrestore()
 {
   case $1 in
@@ -240,6 +257,8 @@ function ns_dbrestore()
     kutuapp)
       dbrestore kutuapp kutuapp ${2:-kutuapp}
     ;;
+    keycloak)
+      dbrestore keycloak postgres ${2:-bitnami_keycloak}
   esac
 }
 
@@ -263,31 +282,66 @@ function secretrestore()
   done
 }
 
-function migrate()
+function clusterbackup()
 {
-  # migrate <namespace> <plutobackup> <pvcname> => fe. migrate kutuapp backup-kutu-db-data.tar.bz2 kutu-data
-  TARGET_DIR=volumes-backup/$1/$3
-  mkdir -p $TARGET_DIR
-  cp ~/pluto-roland/docker-apps/$2 $TARGET_DIR
+  mkdir -p ./cluster-backup
+  sudo microk8s stop
+  tar -c -v -z --exclude=*.yaml --exclude=metadata* -f ./cluster-backup/dqlite-data.tar.gz /var/snap/microk8s/current/var/kubernetes/backend
+  sudo microk8s start
+}
+
+function clusterretore()
+{
+  DQLITE_BACKUP=$(pwd)/cluster-backup/dqlite-data.tar.gz
+  cd /.
+  su $whoami
+    microk8s stop
+    tar zxfv DQLITE_BACKUP
+    microk8s start
+  exit
+  cd -
+}
+
+function usage() {
+  echo 'Usage:
+    ./backup.sh (zero-args) => make cluster-, secret-, db- and incremental pvc-backup per month from all volumes of the registered namespaces
+    backup <namespace>      => make incremental pvc-backup per month from all volumes of the specified namespace
+    dbbackup                => make zero-downtime db-backup or registered databases
+    secrets                 => collects all *secret.yaml from the sibling-folders (namespaces)
+    cluster                 => make backup of cluster resources (kubernetes dqlite-data)
+    restore <namespace>     => restore the backed up volumes of the specified namespace
+    dbrestore <namespace>   => restore the database from its last stored backup
+    dbrestore <namespace> <dbname> => restore database to a dedicated database
+    secretrestore           => extracts secrets from backup and reseals the sealedsecrets
+    cloudsync               => save all current backups to storj bucket
+    cloudsync up            => save all current backups to storj bucket
+    cloudsync down          => download all backups from storj bucket
+    help                    => print usage
+  '
 }
 
 if [ -z "$1" ]
 then
+  secretbackup
   dbbackup kutuapp kutuapp kutuapp
   dbbackup kutuapp-test kutuapp kutuapp
   dbbackup kmgetubs19 odoo
+  dbbackup keycloak bitnami_keycloak postgres
   ns_backup kmgetubs19
   ns_backup keycloak
   ns_backup kutuapp-test
   ns_backup kutuapp
   ns_backup sharevic
   ns_backup pg-admin
-  secretbackup
+  clusterbackup
 else
   case $1 in
     cloudsync)
       cloudsync $2
       ;;
+    cluster)
+      clusterbackup
+      ;;      
     secrets)
       secretbackup
       ;;
@@ -295,6 +349,7 @@ else
       dbbackup kutuapp kutuapp kutuapp
       dbbackup kutuapp-test kutuapp kutuapp
       dbbackup kmgetubs19 odoo
+      dbbackup keycloak bitnami_keycloak postgres
       ;;
     dbrestore)
       ns_dbrestore $2 $3
@@ -308,31 +363,19 @@ else
     secretrestore)
       secretrestore
       ;;
-    migrate)
-      migrate $2 $3 $4
+    clusterrestore)
+      clusterrestore
       ;;
     install)
       install
       echo "daily backup in crontab registered for backup-location $(pwd)"
       ;;
+    help)
+      usage
+      ;;
     *)
       echo "Sorry, I don't understand"
-      echo 'Usage:
-         ./backup.sh (zero-args) => make incremental backup per month from all volumes of the registered namespaces
-         backup <namespace>      => make incremental backup per month from all volumes of the specified namespace
-         dbbackup                => make zero-downtime db-backup or registered databases
-         secrets                 => collects all *secret.yaml from the sibling-folders (namespaces)
-         restore <namespace>     => restore the backed up volumes of the specified namespace
-         dbrestore <namespace>   => restore the database from its last stored backup
-         dbrestore <namespace> <dbname> => restore database to a dedicated database
-         secretrestore           => extracts secrets from backup and reseals the sealedsecrets
-         cloudsync               => save all backups to storj bucket
-         migrate <namespace> <plutobackup> <pvcname> => fe. 
-           migrate kutuapp kutu-db-data-backup.tar.bz2 kutu-data
-           migrate kutuapp kutuapp-backup.tar.bz2 kutuapp-data
-           migrate kutuapp-test kutu-test-db-data-backup.tar.bz2 kutu-data
-           migrate kutuapp-test kutuapp-test-backup.tar.bz2 kutuapp-data
-      '
+      usage
       ;;
   esac
 fi
