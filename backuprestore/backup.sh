@@ -203,6 +203,7 @@ function cloudsync()
     ;;
     *)
       uplink rb $BUCKET --force
+      uplink mb $BUCKET
       uplink cp secrets.tar.gz $CLOUD_PATH/secrets.tar.gz
 
       for file in $(find $CLUSTER_DIR/* -name "*.tar.gz" | xargs ); do
