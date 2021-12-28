@@ -51,7 +51,10 @@ spec:
             - name: POSTGRES_USER
               value: keycloak
             - name: POSTGRES_PASSWORD
-              value: keycloak
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-db-secret
+                  key: postgresql-password
           ports:
             - name: postgres
               containerPort: 5432
