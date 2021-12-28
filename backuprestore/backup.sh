@@ -186,7 +186,7 @@ function cloudsync()
       uplink cp $CLOUD_PATH/secrets.tar.gz secrets.tar.gz
 
       rm -rf $CLUSTER_DIR
-      mkdir -rf $CLUSTER_DIR
+      mkdir $CLUSTER_DIR
       for file in $(uplink ls $CLOUD_PATH/cluster | awk -F/ '{ print $NF }'); do
         uplink cp $CLOUD_PATH/cluster/$file $CLUSTER_DIR/$file
       done
