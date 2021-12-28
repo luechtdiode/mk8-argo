@@ -195,6 +195,7 @@ function cloudsync()
       done
 
       rm -rf $BACKUP_DIR
+      mkdir $BACKUP_DIR
       for file in $(uplink ls $CLOUD_PATH/volumes | awk -F/ '{ print $NF }'); do
         uplink cp $CLOUD_PATH/volumes/$file $BACKUP_DIR/$file
       done
