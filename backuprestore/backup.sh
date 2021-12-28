@@ -186,16 +186,16 @@ function cloudsync()
       uplink cp $CLOUD_PATH/secrets.tar.gz secrets.tar.gz
 
       rm -rf $CLUSTER_DIR
-      for file in $(uplink ls $CLOUD_PATH/cluster | xargs); do
+      for file in $(uplink ls $CLOUD_PATH/cluster | awk -F/ '{ print $NF }'); do
         uplink cp $CLOUD_PATH/cluster/$file $CLUSTER_DIR/$file
       done
 
-      for file in $(uplink ls $CLOUD_PATH/db | xargs); do
+      for file in $(uplink ls $CLOUD_PATH/db | awk -F/ '{ print $NF }'); do
         uplink cp $CLOUD_PATH/db/$file $DB_DIR/$file
       done
 
       rm -rf $BACKUP_DIR
-      for file in $(uplink ls $CLOUD_PATH/volumes | xargs); do
+      for file in $(uplink ls $CLOUD_PATH/volumes | awk -F/ '{ print $NF }'); do
         uplink cp $CLOUD_PATH/volumes/$file $BACKUP_DIR/$file
       done
 
