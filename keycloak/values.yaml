@@ -36,12 +36,9 @@ idp:
     ## @param externalDatabase.user non admin username for Keycloak Database
     ##
     user: keycloak
-    ## @param externalDatabase.password Database password
-    ##
-    password: "keycloak"
     ## @param externalDatabase.database Database name
     ##
     database: keycloak
     ## @param externalDatabase.existingSecret Use an existing secret file with the external PostgreSQL credentials
     ##
-    # existingSecret: "keycloak-postgresql"
+    existingSecret: "keycloak-db-secret"
