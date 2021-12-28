@@ -1,5 +1,5 @@
 
-function files_backcup() {
+function files_backup() {
   BACKUP_DIR=$2
   ROTATE_DIR="$2/rotate"
   TIMESTAMP="timestamp.dat"
