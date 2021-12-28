@@ -20,10 +20,10 @@ idp:
     existingSecret: "keycloak-idp"
   serviceMonitor:
     enabled: true
-    namespace: "monitoring"
+    namespace: "monitoring"  
   postgresql:
     enabled: false
-  #   existingSecret: "keycloak-postgresql"
+    # existingSecret: "keycloak-db-secret"
   ## External database configuration
   ##
   externalDatabase:
@@ -41,4 +41,4 @@ idp:
     database: keycloak
     ## @param externalDatabase.existingSecret Use an existing secret file with the external PostgreSQL credentials
     ##
-    existingSecret: "keycloak-db-secret"
+    # existingSecret: "keycloak-db-secret"
