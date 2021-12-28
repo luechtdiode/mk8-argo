@@ -39,7 +39,7 @@ function install()
   # sudo cp crontabupdated.txt /etc/crontab
 }
 
-function main() {
+# MAIN-Function
   if [ -z "$1" ]
   then
     secretbackup
@@ -99,6 +99,3 @@ function main() {
         ;;
     esac
   fi
-}
-
-main
