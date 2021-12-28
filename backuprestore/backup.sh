@@ -173,31 +173,53 @@ function install()
 # cloudsync [up | down] defaults to up
 function cloudsync()
 {
+  CLUSTER_DIR="$(pwd)/cluster-backup"
+  DB_DIR="$(pwd)/db-backup"
+  SOURCE="$(pwd)/volumes-backup"
+  BACKUP_DIR="$(pwd)/cloud-backup"
+  BUCKET="sj://mars/"
+  PREFIX="manualbackup"
+  CLOUD_PATH="$BUCKET$PREFIX"
+
   case $1 in
     down)
-    ;;
-    *)
-      uplink cp secrets.tar.gz sj://sharevic/manualbackup/secrets.tar.gz
+      uplink cp $CLOUD_PATH/secrets.tar.gz secrets.tar.gz
 
-      CLUSTER_DIR="$(pwd)/cluster-backup"
-      for file in $(find $CLUSTER_DIR/* -name "*.tar.gz" | xargs ); do
-        uplink cp $file sj://sharevic/manualbackup/cluster/$(echo $file | awk -F/ '{ print $NF }')
+      rm -rf $CLUSTER_DIR
+      for file in $(uplink ls $CLOUD_PATH/cluster | xargs); do
+        uplink cp $CLOUD_PATH/cluster/$file $CLUSTER_DIR/$file
       done
 
-      DB_DIR="$(pwd)/db-backup"
+      for file in $(uplink ls $CLOUD_PATH/db | xargs); do
+        uplink cp $CLOUD_PATH/db/$file $DB_DIR/$file
+      done
+
+      rm -rf $BACKUP_DIR
+      for file in $(uplink ls $CLOUD_PATH/volumes | xargs); do
+        uplink cp $CLOUD_PATH/volumes/$file $BACKUP_DIR/$file
+      done
+
+      volume_restore $SOURCE $BACKUP_DIR
+    ;;
+    *)
+      uplink rb $BUCKET --force
+      uplink cp secrets.tar.gz $CLOUD_PATH/secrets.tar.gz
+
+      for file in $(find $CLUSTER_DIR/* -name "*.tar.gz" | xargs ); do
+        uplink cp $file $CLOUD_PATH/cluster/$(echo $file | awk -F/ '{ print $NF }')
+      done
+
       for file in $(find $DB_DIR/* -name "*.dump" | xargs ); do
-        uplink cp $file sj://sharevic/manualbackup/db/$(echo $file | awk -F/ '{ print $NF }')
+        uplink cp $file $CLOUD_PATH/db/$(echo $file | awk -F/ '{ print $NF }')
       done
 
       # collect all pvc incremental backups to one cloud-pvc incremental backup
-      SOURCE="$(pwd)/volumes-backup"
-      BACKUP_DIR="$(pwd)/cloud-backup"
       echo "--------------------------------"
       echo "cloud-backup from: $SOURCE ..."
       volume_backup $SOURCE $BACKUP_DIR
 
       for file in $(find $BACKUP_DIR/* -name "backup*.tar.gz" | xargs ); do
-        uplink cp $file sj://sharevic/manualbackup/volumes/$(echo $file | awk -F/ '{ print $NF }')
+        uplink cp $file $CLOUD_PATH/volumes/$(echo $file | awk -F/ '{ print $NF }')
       done
     ;;
   esac
