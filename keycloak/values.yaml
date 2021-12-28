@@ -13,7 +13,7 @@ idp:
     - name: KEYCLOAK_PROXY_ADDRESS_FORWARDING
       value: "true"
     - name: KEYCLOAK_FRONTEND_URL
-      value: "https://keycloak.interpolar.ch:8443"
+      value: "https://keycloak.interpolar.ch"
   auth:
     adminUser: idp-admin
     managementUser: idp-manager
@@ -21,5 +21,26 @@ idp:
   serviceMonitor:
     enabled: true
     namespace: "monitoring"
-  postgresql:
-    existingSecret: "keycloak-postgresql"
+  # postgresql:
+  #   existingSecret: "keycloak-postgresql"
+  ## External database configuration
+  ##
+  externalDatabase:
+    ## @param externalDatabase.host Host of the external database
+    ##
+    host: "postgres"
+    ## @param externalDatabase.port Database port
+    ##
+    port: 5432
+    ## @param externalDatabase.user non admin username for Keycloak Database
+    ##
+    user: keycloak
+    ## @param externalDatabase.password Database password
+    ##
+    password: "keycloak"
+    ## @param externalDatabase.database Database name
+    ##
+    database: bitnami_keycloak
+    ## @param externalDatabase.existingSecret Use an existing secret file with the external PostgreSQL credentials
+    ##
+    # existingSecret: "keycloak-postgresql"

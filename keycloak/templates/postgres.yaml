@@ -1,0 +1,76 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: postgres
+  labels:
+    app: keycloak
+    component: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+      component: postgres
+  template:
+    metadata:
+      labels:
+        app: keycloak
+        component: postgres
+    spec:
+      volumes:
+        - name: keycloak-db-data
+          persistentVolumeClaim:
+            claimName: keycloak-db-data
+        - name: postgres-config
+          configMap:
+            name: postgres-config
+      containers:
+        - resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - '-c'
+                - '-e'
+                - pg_isready -U $POSTGRES_USER -d $POSTGRES_USER -q && [ $? == 0 ]
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 10
+          terminationMessagePath: /dev/termination-log
+          name: postgres
+          env:
+            - name: PGDATA
+              value: /var/lib/pgsql/data
+            - name: POSTGRES_USER
+              value: keycloak
+            - name: POSTGRES_PASSWORD
+              value: keycloak
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: keycloak-db-data
+              mountPath: /var/lib/pgsql/
+            - name: postgres-config
+              mountPath: /docker-entrypoint-initdb.d/  
+
+          terminationMessagePolicy: File
+          image: postgres:14.1-alpine
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
