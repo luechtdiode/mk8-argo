@@ -28,7 +28,7 @@ idp:
   externalDatabase:
     ## @param externalDatabase.host Host of the external database
     ##
-    host: "postgres"
+    host: "db"
     ## @param externalDatabase.port Database port
     ##
     port: 5432
@@ -40,7 +40,7 @@ idp:
     password: "keycloak"
     ## @param externalDatabase.database Database name
     ##
-    database: bitnami_keycloak
+    database: keycloak
     ## @param externalDatabase.existingSecret Use an existing secret file with the external PostgreSQL credentials
     ##
     # existingSecret: "keycloak-postgresql"
