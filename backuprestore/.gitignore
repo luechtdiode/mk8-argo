@@ -1,4 +1,5 @@
 volumes-backup*
 cloud-backup*
+db-backup*
 *.gz
 *.txt
