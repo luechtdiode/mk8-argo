@@ -35,3 +35,36 @@ quarkus-starter:
   - mountPath: /home/testdata
     subPath: data
     name: test-data      
+
+
+wildfly-starter:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/bcc2021-team-jee-to-mp-quarkus-etc/wf-starter
+    tag: e09f279d9125efde12cc75f2bccc33ae4344f605
+  network:
+    http:
+      servicePort: 8080
+      # ingress:
+      #   host: quarkus-starter.apps.okd.baloise.dev
+  service:
+    type: ClusterIP        
+  resources:
+    requests:
+      memory: 50Mi
+    limits:
+      memory: 500Mi
+  persistence:
+    enabled: true
+    storageClass: openebs-zfspv
+    accessModes: ReadWriteOnce
+    name: test-data
+    size: 1Gi
+    annotations:
+      pv.kubernetes.io/bound-by-controller: 'yes'
+  defaultAffinityRules:
+    enabled: false
+  volumeMounts:
+  - mountPath: /home/testdata
+    subPath: data
+    name: test-data          
