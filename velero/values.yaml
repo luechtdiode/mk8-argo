@@ -70,12 +70,12 @@ velero:
       terminationMessagePath: /dev/termination-log
       terminationMessagePolicy: File
       imagePullPolicy: IfNotPresent  
-    # - name: velero-plugin-for-csi
-    #   image: velero/velero-plugin-for-csi:v0.2.0
-    #   imagePullPolicy: IfNotPresent
-    #   volumeMounts:
-    #     - mountPath: /target
-    #       name: plugins
+    - name: velero-plugin-for-csi
+      image: velero/velero-plugin-for-csi:v0.2.0
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - mountPath: /target
+          name: plugins
     # - name: velero-plugin-for-aws
     #   image: velero/velero-plugin-for-aws:v1.3.0
     #   imagePullPolicy: IfNotPresent
@@ -328,7 +328,7 @@ velero:
   snapshotsEnabled: true
 
   # Whether to deploy the restic daemonset.
-  deployRestic: true
+  deployRestic: false
 
   restic:
     podVolumePath: /var/snap/microk8s/common/var/lib/kubelet/pods

@@ -9,11 +9,11 @@ velero install --provider tardigrade \
     --no-secret \
     --use-volume-snapshots=true --use-restic --default-volumes-to-restic  
 
-kubectl create secret generic storej-accessgrant-secret \
+kubectl create secret generic storj-accessgrant-secret \
   --from-file=accessGrant=./accessgrant.txt \
-  --dry-run=client -o yaml > storej-accessgrant-secret.yaml
-kubeseal < storej-accessgrant-secret.yaml -o yaml >storej-accessgrant-sealedsecret.yaml
+  --dry-run=client -o yaml > storj-accessgrant-secret.yaml
+kubeseal < storj-accessgrant-secret.yaml -o yaml >storj-accessgrant-sealedsecret.yaml
 
 velero plugin add openebs/velero-plugin:2.2.0
 
-velero backup create quarkus5 --wait --include-namespaces quarkus-starter --include-resources persistentvolumes
+velero backup create quarkus6 --wait --include-namespaces quarkus-starter --include-resources persistentvolumes
