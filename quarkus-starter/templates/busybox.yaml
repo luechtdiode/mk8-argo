@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    args:
+    - sleep
+    - "10000000"
+    volumeMounts:
+    - mountPath: /home/testdata
+      subPath: data
+      name: test-data   
