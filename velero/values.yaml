@@ -193,7 +193,8 @@ velero:
       default:
       # Additional provider-specific configuration. See link above
       # for details of required/optional fields for your provider.
-      config: {}
+      config:
+        accessGrant: $accessGrant
       #  accessGrant: $ACCESS
       #  region:
       #  s3ForcePathStyle:
@@ -254,10 +255,10 @@ velero:
 
     # Comma separated list of velero feature flags. default: empty
     # features: EnableCSI
-    features:
+    features: EnableCSI
 
     # Set log-level for Velero pod. Default: info. Other options: debug, warning, error, fatal, panic.
-    logLevel:
+    logLevel: debug
 
     # Set log-format for Velero pod. Default: text. Other option: json.
     logFormat:
