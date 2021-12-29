@@ -60,7 +60,7 @@ velero:
           mountPath: /target
       terminationMessagePath: /dev/termination-log
       terminationMessagePolicy: File
-      imagePullPolicy: Allways
+      imagePullPolicy: Always
     - name: openebs-velero-plugin
       image: openebs/velero-plugin:2.2.0
       resources: {}
