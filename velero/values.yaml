@@ -328,7 +328,7 @@ velero:
   snapshotsEnabled: true
 
   # Whether to deploy the restic daemonset.
-  deployRestic: true
+  deployRestic: false
 
   restic:
     podVolumePath: /var/snap/microk8s/common/var/lib/kubelet/pods
