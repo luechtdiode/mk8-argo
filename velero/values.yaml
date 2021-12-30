@@ -258,13 +258,13 @@ velero:
     features: EnableCSI
 
     # Set log-level for Velero pod. Default: info. Other options: debug, warning, error, fatal, panic.
-    logLevel: debug
+    logLevel: warning
 
     # Set log-format for Velero pod. Default: text. Other option: json.
     logFormat:
 
     # Set true for backup all pod volumes without having to apply annotation on the pod when used restic Default: false. Other option: false.
-    defaultVolumesToRestic: true
+    defaultVolumesToRestic: false
 
   ##
   ## End of backup/snapshot location settings.
@@ -328,7 +328,7 @@ velero:
   snapshotsEnabled: true
 
   # Whether to deploy the restic daemonset.
-  deployRestic: false
+  deployRestic: true
 
   restic:
     podVolumePath: /var/snap/microk8s/common/var/lib/kubelet/pods
