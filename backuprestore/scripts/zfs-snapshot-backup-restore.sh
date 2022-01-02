@@ -71,6 +71,33 @@ function zfs_backup() {
 
 # zfs_restore $namespace $pvcname $BACKUP_DIR
 function zfs_restore() {
+  namespace=$1
+  pvc=$2 #kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath='{.items[*].spec.source.persistentVolumeClaimName}'
+  BACKUP_DIR=$3
+  volumename=$(kubectl get persistentvolumeclaims $pvc -n $namespace -o=jsonpath='{ ..volumeName }')
+  echo "restoring $volumename from archived snapshots in $BACKUP_DIR:"
+
+  zfs list -H -o name -t snapshot | grep "${ZFS_POOL}/${volumename}" | xargs -n1 sudo zfs destroy
+
+  zfs_clean_snaphsots $namespace
+
+  number=1
+  echo "searching for .gz archives to restore..."
+  for backupfile in ${BACKUP_DIR}/*.gz
+  do
+    zfssnapshotname=$(echo $backupfile | sed "s/snapcontent-/snapshot-/g" | awk -F/ '{ if($NF != "") print $NF }' | sed "s/.gz//g")
+    echo "restoring zfs backup #$number"
+    echo "  for $pvc"
+    echo " from $backupfile"
+    echo "   to (${ZFS_POOL}/${volumename}@${zfssnapshotname}) ..."            
+    zcat $backupfile | sudo zfs receive -Fv "${ZFS_POOL}/${volumename}" # @${zfssnapshotname}
+    snap=($(sed -e "s/pvcname/$pvc/g" -e "s/zfspv-snapname/snap-$number/g" scripts/zfs-snapshot.yaml | kubectl -n $namespace apply -f -)[0])
+    let "number=number+1"
+  done
+}
+
+# zfs_restore $namespace $pvcname $BACKUP_DIR
+function zfs_restore_from_zfssnapshotvolume() {
     namespace=$1
     pvc=$2 #kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath='{.items[*].spec.source.persistentVolumeClaimName}'
     BACKUP_DIR=$3
@@ -108,6 +135,13 @@ function zfs_restore() {
         echo "         for ${ZFS_POOL}/${volumename}@${zfssnapshotname}!"    
       fi
     done
+}
+
+function zfs_clean_snapshot_archives() {
+  namespace=$1
+  BACKUP_DIR="$(pwd)/volumes-backup/$namespace/$pvcname"
+  # sudo find 
+  
 }
 
 function zfs_clean_snaphsots() {
