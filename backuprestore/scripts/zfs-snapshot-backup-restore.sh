@@ -22,13 +22,14 @@ function zfs_backup() {
   snap=($(sed -e "s/pvcname/$pvc/g" -e "s/zfspv-snapname/snap-$number/g" scripts/zfs-snapshot.yaml | kubectl -n $namespace apply -f -)[0])
   echo "Snapshot creation submitted: $snap"
 
+  kubectl -n $namespace $snap wait --for=condition=jsonpath="{.status.readyToUse}"
   ready=$(kubectl -n $namespace get $snap -o jsonpath="{.status.readyToUse}")
-
+  
   while [ $ready != "true" ]
   do
     echo "snapshot not ready yet, wait another 5 seconds ..."
     sleep 5
-    ready=$(kubectl -n $namespace get volumesnapshot.snapshot.storage.k8s.io/snap-5 -o jsonpath="{.status.readyToUse}")
+    ready=$(kubectl -n $namespace get $snap -o jsonpath="{.status.readyToUse}")
   done
   echo "Snapshot is ready: $ready"
 
@@ -54,11 +55,16 @@ function zfs_restore() {
 
     for volumesnapshot in $volumesnapshots
     do
-      zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
-      echo "restoring zfs backup for $volumesnapshot/$zfssnapshotname (${ZFS_POOL}/${volumename}@${zfssnapshotname})..."    
-      sudo zfs destroy "${ZFS_POOL}/${volumename}@${zfssnapshotname}"
-      zcat $BACKUP_DIR/$volumesnapshot | sudo zfs receive -Fv "${ZFS_POOL}/${volumename}@${zfssnapshotname}"
-      # zcat $BACKUP_DIR/$volumesnapshot | zfs receive -Fv "${ZFS_POOL}/${volumename}@${zfssnapshotname}"
+      backupfile=$BACKUP_DIR/${volumesnapshot}.gz
+      if [ -f "$backupfile" ]; then
+        zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
+        echo "restoring zfs backup for $pvc/$volumesnapshot from $backupfile  to (${ZFS_POOL}/${volumename}@${zfssnapshotname}) ..."    
+        sudo zfs destroy "${ZFS_POOL}/${volumename}@${zfssnapshotname}"
+        zcat $BACKUP_DIR/$volumesnapshot | sudo zfs receive -Fv "${ZFS_POOL}/${volumename}@${zfssnapshotname}"
+        # zcat $BACKUP_DIR/$volumesnapshot | zfs receive -Fv "${ZFS_POOL}/${volumename}@${zfssnapshotname}"
+      else
+        echo "WARNING: No backup-file $backupfile found for ${ZFS_POOL}/${volumename}@${zfssnapshotname}!"    
+      fi
     done
 }
 
