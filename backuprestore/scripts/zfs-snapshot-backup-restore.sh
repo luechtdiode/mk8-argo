@@ -44,9 +44,9 @@ function zfs_backup() {
     snapshotfullname="${ZFS_POOL}/${volumename}@${zfssnapshotname}"
     if [ ! -f "$backupfile" ]; then
       if [ -z $lastsnap ]; then
-        echo "  taking zfs backup
+        echo "  taking zfs backup"
         echo "     for $pvc/$volumesnapshot"
-        echo "    from ${ZFS_POOL}/${volumename}@${zfssnapshotname}) 
+        echo "    from ${ZFS_POOL}/${volumename}@${zfssnapshotname}" 
         echo "      to $backupfile ..."
         sudo zfs send -cv "$snapshotfullname" | gzip > $backupfile
       else
