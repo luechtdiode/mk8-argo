@@ -16,7 +16,7 @@ function zfs_backup() {
   number=$(echo $(expr "${#existingsnapshots[@]}" + 1))
   echo "next snapshot-number should be $number"
 
-  snap=($(sed -e "s/pvcname/$pvc/g" -e "s/zfspv-snapname/snap-$number/g" zfs-snapshot.yaml | kubectl -n $namespace apply -f -)[0])
+  snap=($(sed -e "s/pvcname/$pvc/g" -e "s/zfspv-snapname/snap-$number/g" scripts/zfs-snapshot.yaml | kubectl -n $namespace apply -f -)[0])
   echo "Snapshot creation submitted: $snap"
 
   ready=$(kubectl -n $namespace get $snap -o jsonpath="{.status.readyToUse}")
