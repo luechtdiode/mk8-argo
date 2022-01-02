@@ -57,8 +57,7 @@ function zfs_backup() {
         echo "    from $snapshotfullname"
         echo "     via $lastsnap"
         echo "      to $backupfile ..."
-        echo "sudo zfs send -iv $lastsnap $snapshotfullname | gzip > $backupfile"
-        sudo zfs send -iv $lastsnap $snapshotfullname | gzip > $backupfile
+        sudo zfs send -i $lastsnap $snapshotfullname | gzip > $backupfile
       fi
     else 
         echo "  zfs backup of snapshot $snapname already exists"
