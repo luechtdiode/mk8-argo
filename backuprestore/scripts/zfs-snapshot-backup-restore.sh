@@ -35,7 +35,7 @@ function zfs_backup() {
 
   volumesnapshots=$(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath="{.items[?(@.spec.source.persistentVolumeClaimName=='$pvc')].status.boundVolumeSnapshotContentName}")
 
-  let lastsnap = ""
+  lastsnap=""
   for i in "${!volumesnapshots[@]}"
   do
     volumesnapshot="${volumesnapshots[$i]}"
@@ -44,14 +44,21 @@ function zfs_backup() {
     snapshotfullname="${ZFS_POOL}/${volumename}@${zfssnapshotname}"
     if [ ! -f "$backupfile" ]; then
       if [ -z $lastsnap ]; then
-        echo "taking zfs backup for $pvc/$volumesnapshot from ${ZFS_POOL}/${volumename}@${zfssnapshotname}) to $backupfile ..."
+        echo "  taking zfs backup
+        echo "     for $pvc/$volumesnapshot"
+        echo "    from ${ZFS_POOL}/${volumename}@${zfssnapshotname}) 
+        echo "      to $backupfile ..."
         sudo zfs send -cv "$snapshotfullname" | gzip > $backupfile
       else
-        echo "taking incremental zfs backup for $pvc/$volumesnapshot from ${ZFS_POOL}/${volumename}@${zfssnapshotname}) to $backupfile ..."
+        echo "  taking incremental zfs backup"
+        echo "     for $pvc/$volumesnapshot"
+        echo "    from ${ZFS_POOL}/${volumename}@${zfssnapshotname})"
+        echo "      to $backupfile ..."
         sudo zfs send -iv "$lastsnap" "$snapshotfullname" | gzip > $backupfile
       fi
     else 
-      echo "zfs backup $backupfile already exists for $volumesnapshot/$zfssnapshotname (${ZFS_POOL}/${volumename}@${zfssnapshotname})..."
+      echo "zfs backup $backupfile already exists"
+      echo "       for $volumesnapshot/$zfssnapshotname (${ZFS_POOL}/${volumename}@${zfssnapshotname})..."
     fi
     lastsnap="$snapshotfullname"
   done
@@ -72,7 +79,9 @@ function zfs_restore() {
       if [ -f "$backupfile" ]; then
         snapname=$(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath="{.items[$i].metadata.name}")
         zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
-        echo "  - $snapname: $zfssnapshotname from ${volumesnapshot}.gz"
+        echo "  - $snapname:"
+        echo "    from ${volumesnapshot}.gz"
+        echo "      to $zfssnapshotname"
         sudo zfs destroy -r "${ZFS_POOL}/${volumename}@$zfssnapshotname"
       fi
     done
@@ -83,11 +92,15 @@ function zfs_restore() {
       backupfile=$BACKUP_DIR/${volumesnapshot}.gz
       if [ -f "$backupfile" ]; then
         zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
-        echo "restoring zfs backup for $pvc/$volumesnapshot from $backupfile  to (${ZFS_POOL}/${volumename}@${zfssnapshotname}) ..."            
+        echo "restoring zfs backup"
+        echo "  for $pvc/$volumesnapshot"
+        echo " from $backupfile"
+        echo "   to (${ZFS_POOL}/${volumename}@${zfssnapshotname}) ..."            
         zcat $BACKUP_DIR/$volumesnapshot | sudo zfs receive -Fv "${ZFS_POOL}/${volumename}@${zfssnapshotname}"
         # zcat $BACKUP_DIR/$volumesnapshot | zfs receive -Fv "${ZFS_POOL}/${volumename}@${zfssnapshotname}"
       else
-        echo "WARNING: No backup-file $backupfile found for ${ZFS_POOL}/${volumename}@${zfssnapshotname}!"    
+        echo "WARNING: No backup-file $backupfile found"
+        echo "         for ${ZFS_POOL}/${volumename}@${zfssnapshotname}!"    
       fi
     done
 }
