@@ -13,8 +13,10 @@ function zfs_backup() {
   sed 's/pvcname/$pvc/g' zfs-snapshot.yaml | kubectl -n $namespace wait --for=condition=readytouse=true VolumeSnapshot apply -f -
 
   kubectl -n $namespace get volumesnapshot.snapshot
-  snapshot=$(kubectl -n $namespace  get volumesnapshot.snapshot -o jsonpath='{.items[*].status.boundVolumeSnapshotContentName}')
-  zfs send -Rv "${ZFS_POOL}/${pvc}@${snapshot}" | gzip > $TARGET/$snapshot
+  snapshots=$(kubectl -n $namespace  get volumesnapshot.snapshot -o jsonpath='{.items[*].status.boundVolumeSnapshotContentName}')
+  for snapshot in $snapshots | xargs do;
+    zfs send -Rv "${ZFS_POOL}/${pvc}@${snapshot}" | gzip > $TARGET/$snapshot
+  done
 }
 
 function zfs_restore() {
