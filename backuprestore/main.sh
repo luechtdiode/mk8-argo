@@ -83,6 +83,7 @@ function ns_dbrestore()
         ;;
       clean_snapshots)
         clean_snapshots $1  
+        ;;
       cloudsync)
         cloudsync $2
         ;;
