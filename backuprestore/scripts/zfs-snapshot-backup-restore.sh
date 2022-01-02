@@ -57,17 +57,19 @@ function zfs_restore() {
     volumename=$(kubectl get persistentvolumeclaims $pvc -n $namespace -o=jsonpath='{ ..volumeName }')
     volumesnapshots=$(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath='{.items[*].status.boundVolumeSnapshotContentName}')
     echo "restoring $volumename with snapshots:"
-    for volumesnapshot in $volumesnapshots
+    for i in "${#volumesnapshots[@]}"
+    # for volumesnapshot in $volumesnapshots
     do
+      volumesnapshot="${volumesnapshots[$i]}"
       backupfile=$BACKUP_DIR/${volumesnapshot}.gz
       if [ -f "$backupfile" ]; then
-        echo "  - $volumesnapshot from $backupfile"
+        snapname=$(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath="{.items[$i].name}")
         zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
+        echo "  - $snapname: $zfssnapshotname from $backupfile"
         sudo zfs destroy -r "${ZFS_POOL}/${volumename}@$zfssnapshotname"
       fi
     done
-    
-    
+
     for volumesnapshot in $volumesnapshots
     do
       backupfile=$BACKUP_DIR/${volumesnapshot}.gz
