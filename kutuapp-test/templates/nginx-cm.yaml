@@ -107,6 +107,7 @@ data:
         
         # allows zip uploads
         BasicRule wl:13 "mz:$URL_X:/api/competition/|BODY";
+        BasicRule wl:1205 "mz:$BODY_VAR_X:comment|NAME";
         # BasicRule wl:11 "mz:$URL:/|BODY";
         client_body_buffer_size 512k;
         
