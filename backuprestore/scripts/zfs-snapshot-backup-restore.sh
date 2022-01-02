@@ -22,13 +22,13 @@ function zfs_backup() {
   snap=($(sed -e "s/pvcname/$pvc/g" -e "s/zfspv-snapname/snap-$number/g" scripts/zfs-snapshot.yaml | kubectl -n $namespace apply -f -)[0])
   echo "Snapshot creation submitted: $snap"
 
-  kubectl -n $namespace $snap wait --for=condition=jsonpath="{.status.readyToUse}"
+  # kubectl -n $namespace $snap wait --for=condition=jsonpath="{.status.readyToUse}"
   ready=$(kubectl -n $namespace get $snap -o jsonpath="{.status.readyToUse}")
   
   while [ $ready != "true" ]
   do
-    echo "snapshot not ready yet, wait another 5 seconds ..."
-    sleep 5
+    echo "snapshot not ready yet, wait another 1 seconds ..."
+    sleep 1
     ready=$(kubectl -n $namespace get $snap -o jsonpath="{.status.readyToUse}")
   done
   echo "Snapshot is ready: $ready"
