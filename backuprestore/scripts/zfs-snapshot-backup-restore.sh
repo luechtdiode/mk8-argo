@@ -142,9 +142,14 @@ function zfs_clean_snapshot_archives() {
   
 }
 
-function zfs_clean_snaphsots() {
+function zfs_clean_snapshots() {
   namespace=$1
   kubectl -n $namespace delete volumesnapshot.snapshot --all
   sleep 5
-  deleted=$(zfs list -H -o name -t snapshot | grep "${ZFS_POOL}/${volumename}" | xargs -n1 sudo zfs destroy)
+  othersnaps="$(zfs list -H -o name -t snapshot)"
+  if [ ! -z $othersnaps ]
+  then
+   echo "deleting other snapshots: $othersnaps"
+   zfs list -H -o name -t snapshot | grep "${ZFS_POOL}/${volumename}" | xargs -n1 sudo zfs destroy
+  fi
 }

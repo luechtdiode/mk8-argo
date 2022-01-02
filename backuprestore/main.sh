@@ -82,7 +82,7 @@ function ns_dbrestore()
         cloudsync up
         ;;
       clean_snapshots)
-        zfs_clean_snaphsots $2  
+        zfs_clean_snapshots $2  
         ;;
       cloudsync)
         cloudsync $2
