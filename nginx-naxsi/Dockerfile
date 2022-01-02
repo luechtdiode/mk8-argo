@@ -49,7 +49,7 @@ RUN apk add --no-cache --virtual .build-deps \
 WORKDIR /tmp
 
 # openssl
-RUN wget https://www.openssl.org/source/openssl${OPENSSL_VERSION}.tar.gz &&  tar -xzvf openssl-${OPENSSL_VERSION}.tar.gz && rm openssl-${OPENSSL_VERSION}.tar.gz
+RUN wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz &&  tar -xzvf openssl-${OPENSSL_VERSION}.tar.gz && rm openssl-${OPENSSL_VERSION}.tar.gz
     
 # Nginx
 RUN wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && tar xf nginx-${NGINX_VERSION}.tar.gz && rm -f nginx-${NGINX_VERSION}.tar.gz
