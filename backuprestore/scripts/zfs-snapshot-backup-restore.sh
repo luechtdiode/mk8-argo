@@ -56,15 +56,24 @@ function zfs_restore() {
     BACKUP_DIR=$3
     volumename=$(kubectl get persistentvolumeclaims $pvc -n $namespace -o=jsonpath='{ ..volumeName }')
     volumesnapshots=$(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath='{.items[*].status.boundVolumeSnapshotContentName}')
-    echo "restoring $volumename with snapshots: $volumesnapshots"
-
+    echo "restoring $volumename with snapshots:"
+    for volumesnapshot in $volumesnapshots
+    do
+      backupfile=$BACKUP_DIR/${volumesnapshot}.gz
+      if [ -f "$backupfile" ]; then
+        echo "  - $volumesnapshot from $backupfile"
+        zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
+        sudo zfs destroy -r "${ZFS_POOL}/${volumename}@$zfssnapshotname"
+      fi
+    done
+    
+    
     for volumesnapshot in $volumesnapshots
     do
       backupfile=$BACKUP_DIR/${volumesnapshot}.gz
       if [ -f "$backupfile" ]; then
         zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
-        echo "restoring zfs backup for $pvc/$volumesnapshot from $backupfile  to (${ZFS_POOL}/${volumename}@${zfssnapshotname}) ..."    
-        sudo zfs destroy "${ZFS_POOL}/${volumename}@${zfssnapshotname}"
+        echo "restoring zfs backup for $pvc/$volumesnapshot from $backupfile  to (${ZFS_POOL}/${volumename}@${zfssnapshotname}) ..."            
         zcat $BACKUP_DIR/$volumesnapshot | sudo zfs receive -Fv "${ZFS_POOL}/${volumename}@${zfssnapshotname}"
         # zcat $BACKUP_DIR/$volumesnapshot | zfs receive -Fv "${ZFS_POOL}/${volumename}@${zfssnapshotname}"
       else
