@@ -55,7 +55,7 @@ function zfs_restore() {
     pvc=$2 #kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath='{.items[*].spec.source.persistentVolumeClaimName}'
     BACKUP_DIR=$3
     volumename=$(kubectl get persistentvolumeclaims $pvc -n $namespace -o=jsonpath='{ ..volumeName }')
-    volumesnapshots=$(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath='{.items[*].status.boundVolumeSnapshotContentName}')
+    volumesnapshots=($(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath='{.items[*].status.boundVolumeSnapshotContentName}'))
     echo "restoring $volumename with ${#volumesnapshots[@]} snapshots:"
     for i in "${!volumesnapshots[@]}"
     # for volumesnapshot in $volumesnapshots
