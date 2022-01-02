@@ -35,17 +35,25 @@ function zfs_backup() {
 
   volumesnapshots=$(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath="{.items[?(@.spec.source.persistentVolumeClaimName=='$pvc')].status.boundVolumeSnapshotContentName}")
 
-  for volumesnapshot in $volumesnapshots
+  let lastsnap = ""
+  for i in "${!volumesnapshots[@]}"
   do
+    volumesnapshot="${volumesnapshots[$i]}"
     backupfile=$TARGET/${volumesnapshot}.gz
+    zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
+    snapshotfullname="${ZFS_POOL}/${volumename}@${zfssnapshotname}"
     if [ ! -f "$backupfile" ]; then
-      zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
-      echo "taking zfs backup for $pvc/$volumesnapshot from ${ZFS_POOL}/${volumename}@${zfssnapshotname}) to $backupfile ..."
-      sudo zfs send -cv "${ZFS_POOL}/${volumename}@${zfssnapshotname}" | gzip > $backupfile
-      #sudo zfs send -Rcv "${ZFS_POOL}/${volumename}@${zfssnapshotname}" | gzip > $backupfile
+      if [ -z $lastsnap ]; then
+        echo "taking zfs backup for $pvc/$volumesnapshot from ${ZFS_POOL}/${volumename}@${zfssnapshotname}) to $backupfile ..."
+        sudo zfs send -cv "$snapshotfullname" | gzip > $backupfile
+      else
+        echo "taking incremental zfs backup for $pvc/$volumesnapshot from ${ZFS_POOL}/${volumename}@${zfssnapshotname}) to $backupfile ..."
+        sudo zfs send -iv "$lastsnap" "$snapshotfullname" | gzip > $backupfile
+      fi
     else 
       echo "zfs backup $backupfile already exists for $volumesnapshot/$zfssnapshotname (${ZFS_POOL}/${volumename}@${zfssnapshotname})..."
     fi
+    lastsnap="$snapshotfullname"
   done
 }
 
@@ -58,20 +66,20 @@ function zfs_restore() {
     volumesnapshots=($(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath='{.items[*].status.boundVolumeSnapshotContentName}'))
     echo "restoring $volumename with ${#volumesnapshots[@]} snapshots:"
     for i in "${!volumesnapshots[@]}"
-    # for volumesnapshot in $volumesnapshots
     do
       volumesnapshot="${volumesnapshots[$i]}"
       backupfile=$BACKUP_DIR/${volumesnapshot}.gz
       if [ -f "$backupfile" ]; then
         snapname=$(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath="{.items[$i].metadata.name}")
         zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
-        echo "  - $snapname: $zfssnapshotname from $backupfile"
+        echo "  - $snapname: $zfssnapshotname from ${volumesnapshot}.gz"
         sudo zfs destroy -r "${ZFS_POOL}/${volumename}@$zfssnapshotname"
       fi
     done
 
-    for volumesnapshot in $volumesnapshots
+    for i in "${!volumesnapshots[@]}"
     do
+      volumesnapshot="${volumesnapshots[$i]}"
       backupfile=$BACKUP_DIR/${volumesnapshot}.gz
       if [ -f "$backupfile" ]; then
         zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
