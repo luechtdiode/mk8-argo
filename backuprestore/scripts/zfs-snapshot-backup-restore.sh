@@ -9,6 +9,9 @@ function zfs_backup() {
   namespace=$1
   pvc=$2
   TARGET=$3
+  
+  mkdir -p ${TARGET}
+
   volumename=$(kubectl get persistentvolumeclaims $pvc -n $namespace -o=jsonpath='{ ..volumeName }')
   echo "creating snapshot for namespace $namespace, pvc $pvc from volume $volumename"  
 
@@ -60,5 +63,6 @@ function zfs_restore() {
 }
 
 function zfs_clean_snaphsots() {
+  namespace=$1
   kubectl -n $namespace delete volumesnapshot.snapshot --all
 }

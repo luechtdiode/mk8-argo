@@ -27,6 +27,7 @@ function usage() {
     cloudsync               => save all current backups to storj bucket
     cloudsync up            => save all current backups to storj bucket
     cloudsync down          => download all backups from storj bucket
+    clean_snapshots <namespace> => clean zfs-snapshots
     help                    => print usage
   '
 }
@@ -80,6 +81,8 @@ function ns_dbrestore()
         cluster_backup
         cloudsync up
         ;;
+      clean_snapshots)
+        clean_snapshots $1  
       cloudsync)
         cloudsync $2
         ;;
