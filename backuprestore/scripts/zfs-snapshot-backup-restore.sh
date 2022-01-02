@@ -37,10 +37,15 @@ function zfs_backup() {
 
   for volumesnapshot in $volumesnapshots
   do
-    zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
-    echo "taking zfs backup for $volumesnapshot/$zfssnapshotname (${ZFS_POOL}/${volumename}@${zfssnapshotname})..."
-    sudo zfs send -cv "${ZFS_POOL}/${volumename}@${zfssnapshotname}" | gzip > $TARGET/${volumesnapshot}.gz
-    #sudo zfs send -Rcv "${ZFS_POOL}/${volumename}@${zfssnapshotname}" | gzip > $TARGET/${volumesnapshot}.gz
+    backupfile=$TARGET/${volumesnapshot}.gz
+    if [ ! -f "$backupfile" ]; then
+      zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
+      echo "taking zfs backup for $pvc/$volumesnapshot from ${ZFS_POOL}/${volumename}@${zfssnapshotname}) to $backupfile ..."
+      sudo zfs send -cv "${ZFS_POOL}/${volumename}@${zfssnapshotname}" | gzip > $backupfile
+      #sudo zfs send -Rcv "${ZFS_POOL}/${volumename}@${zfssnapshotname}" | gzip > $backupfile
+    else 
+      echo "zfs backup $backupfile already exists for $volumesnapshot/$zfssnapshotname (${ZFS_POOL}/${volumename}@${zfssnapshotname})..."
+    fi
   done
 }
 
