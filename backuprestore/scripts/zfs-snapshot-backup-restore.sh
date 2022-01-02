@@ -17,21 +17,21 @@ function zfs_backup() {
 
   existingsnapshots=($(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath='{.items[*].status.boundVolumeSnapshotContentName}'))
   number=$(echo $(expr "${#existingsnapshots[@]}" + 1))
-  echo "next snapshot-number should be $number"
+  echo "  next snapshot-number should be $number"
 
   snap=($(sed -e "s/pvcname/$pvc/g" -e "s/zfspv-snapname/snap-$number/g" scripts/zfs-snapshot.yaml | kubectl -n $namespace apply -f -)[0])
-  echo "Snapshot creation submitted: $snap"
+  echo "  Snapshot creation submitted: $snap"
 
   # kubectl -n $namespace $snap wait --for=condition=jsonpath="{.status.readyToUse}"
   ready=$(kubectl -n $namespace get $snap -o jsonpath="{.status.readyToUse}")
   
   while [ $ready != "true" ]
   do
-    echo "snapshot not ready yet, wait another 1 seconds ..."
+    echo "  snapshot not ready yet, wait another 1 seconds ..."
     sleep 1
     ready=$(kubectl -n $namespace get $snap -o jsonpath="{.status.readyToUse}")
   done
-  echo "Snapshot is ready: $ready"
+  echo "  Snapshot is ready: $ready"
 
   volumesnapshots=$(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath="{.items[?(@.spec.source.persistentVolumeClaimName=='$pvc')].status.boundVolumeSnapshotContentName}")
 
@@ -48,19 +48,19 @@ function zfs_backup() {
         echo "     for $pvc/$volumesnapshot"
         echo "    from ${ZFS_POOL}/${volumename}@${zfssnapshotname}" 
         echo "      to $backupfile ..."
-        sudo zfs send -cv "$snapshotfullname" | gzip > $backupfile
+        sudo zfs send -cv $snapshotfullname | gzip > $backupfile
       else
         echo "  taking incremental zfs backup"
         echo "     for $pvc/$volumesnapshot"
         echo "    from ${ZFS_POOL}/${volumename}@${zfssnapshotname})"
         echo "      to $backupfile ..."
-        sudo zfs send -iv "$lastsnap" "$snapshotfullname" | gzip > $backupfile
+        sudo zfs send -iv $lastsnap $snapshotfullname | gzip > $backupfile
       fi
     else 
-      echo "zfs backup $backupfile already exists"
+      echo "  zfs backup $backupfile already exists"
       echo "       for $volumesnapshot/$zfssnapshotname (${ZFS_POOL}/${volumename}@${zfssnapshotname})..."
     fi
-    lastsnap="$snapshotfullname"
+    lastsnap=$snapshotfullname
   done
 }
 
