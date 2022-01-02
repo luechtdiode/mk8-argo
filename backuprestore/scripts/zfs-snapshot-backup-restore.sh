@@ -11,7 +11,8 @@ function zfs_backup() {
   TARGET=$3
   
   mkdir -p ${TARGET}
-
+  zfs_clean_snapshot_archives $namespace
+  
   volumename=$(kubectl get persistentvolumeclaims $pvc -n $namespace -o=jsonpath='{ ..volumeName }')
   echo "creating snapshot for namespace $namespace, pvc $pvc from volume $volumename"  
 
@@ -138,8 +139,10 @@ function zfs_restore_from_zfssnapshotvolume() {
 function zfs_clean_snapshot_archives() {
   namespace=$1
   BACKUP_DIR="$(pwd)/volumes-backup/$namespace/$pvcname"
-  # sudo find 
-  
+  for backupfile in ${BACKUP_DIR}/*.gz
+  do
+    sudo rm $backupfile
+  done
 }
 
 function zfs_clean_snapshots() {
