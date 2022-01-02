@@ -36,6 +36,7 @@ function zfs_backup() {
   volumesnapshots=($(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath="{.items[?(@.spec.source.persistentVolumeClaimName=='$pvc')].status.boundVolumeSnapshotContentName}"))
 
   lastsnap=""
+  lastsnapname=""
   for i in "${!volumesnapshots[@]}"
   do
     volumesnapshot="${volumesnapshots[$i]}"
@@ -51,7 +52,7 @@ function zfs_backup() {
         echo "      to $backupfile ..."
         sudo zfs send -cv $snapshotfullname | gzip > $backupfile
       else
-        echo "  taking incremental zfs backup of snapshot $snapname"
+        echo "  taking incremental zfs backup of snapshot $lastsnapname - $snapname"
         echo "     pvc $pvc / volumesnapshot $volumesnapshot"
         echo "    from ${ZFS_POOL}/${volumename}@${zfssnapshotname})"
         echo "      to $backupfile ..."
@@ -63,6 +64,7 @@ function zfs_backup() {
         echo "     for $volumesnapshot/$zfssnapshotname (${ZFS_POOL}/${volumename}@${zfssnapshotname})..."
     fi
     lastsnap=$snapshotfullname
+    lastsnapname=$snapname
   done
 }
 
