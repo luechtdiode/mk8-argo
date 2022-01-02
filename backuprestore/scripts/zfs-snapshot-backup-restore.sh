@@ -77,8 +77,6 @@ function zfs_restore() {
   volumename=$(kubectl get persistentvolumeclaims $pvc -n $namespace -o=jsonpath='{ ..volumeName }')
   echo "restoring $volumename from archived snapshots in $BACKUP_DIR:"
 
-  zfs list -H -o name -t snapshot | grep "${ZFS_POOL}/${volumename}" | xargs -n1 sudo zfs destroy
-
   zfs_clean_snaphsots $namespace
 
   number=1
@@ -147,4 +145,6 @@ function zfs_clean_snapshot_archives() {
 function zfs_clean_snaphsots() {
   namespace=$1
   kubectl -n $namespace delete volumesnapshot.snapshot --all
+  sleep 5
+  deleted=$(zfs list -H -o name -t snapshot | grep "${ZFS_POOL}/${volumename}" | xargs -n1 sudo zfs destroy)
 }
