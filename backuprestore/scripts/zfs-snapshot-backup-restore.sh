@@ -33,32 +33,34 @@ function zfs_backup() {
   done
   echo "  Snapshot is ready: $ready"
 
-  volumesnapshots=$(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath="{.items[?(@.spec.source.persistentVolumeClaimName=='$pvc')].status.boundVolumeSnapshotContentName}")
+  volumesnapshots=($(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath="{.items[?(@.spec.source.persistentVolumeClaimName=='$pvc')].status.boundVolumeSnapshotContentName}"))
 
   lastsnap=""
   for i in "${!volumesnapshots[@]}"
   do
     volumesnapshot="${volumesnapshots[$i]}"
+    snapname="${existingsnapshots[$i]}"
     backupfile=$TARGET/${volumesnapshot}.gz
     zfssnapshotname=$(echo $volumesnapshot | sed "s/snapcontent-/snapshot-/g")
     snapshotfullname="${ZFS_POOL}/${volumename}@${zfssnapshotname}"
     if [ ! -f "$backupfile" ]; then
       if [ -z $lastsnap ]; then
-        echo "  taking zfs backup"
-        echo "     for $pvc/$volumesnapshot"
+        echo "  taking zfs backup of snapshot $snapname"
+        echo "     pvc $pvc / volumesnapshot $volumesnapshot"
         echo "    from ${ZFS_POOL}/${volumename}@${zfssnapshotname}" 
         echo "      to $backupfile ..."
         sudo zfs send -cv $snapshotfullname | gzip > $backupfile
       else
-        echo "  taking incremental zfs backup"
-        echo "     for $pvc/$volumesnapshot"
+        echo "  taking incremental zfs backup of snapshot $snapname"
+        echo "     pvc $pvc / volumesnapshot $volumesnapshot"
         echo "    from ${ZFS_POOL}/${volumename}@${zfssnapshotname})"
         echo "      to $backupfile ..."
         sudo zfs send -iv $lastsnap $snapshotfullname | gzip > $backupfile
       fi
     else 
-      echo "  zfs backup $backupfile already exists"
-      echo "       for $volumesnapshot/$zfssnapshotname (${ZFS_POOL}/${volumename}@${zfssnapshotname})..."
+        echo "  zfs backup of snapshot $snapname already exists"
+        echo "     pvc $pvc / volumesnapshot $volumesnapshot"
+        echo "     for $volumesnapshot/$zfssnapshotname (${ZFS_POOL}/${volumename}@${zfssnapshotname})..."
     fi
     lastsnap=$snapshotfullname
   done
