@@ -2,7 +2,7 @@ source ./scripts/file-incremental-backup-restore.sh
 
 function pvc_backup()
 {
-  namespace=$namespace
+  namespace=$1
   echo "backup for namespace $namespace, disable argo-autosync ..."
   kubectl patch application $namespace -n argocd --type merge --patch "$(cat scripts/disable-sync-patch.yaml)"
 
@@ -54,6 +54,7 @@ function pvc_backup()
 
 function pvc_restore()
 {
+  namespace=$1
   echo "restore for namespace $namespace, disable argo-autosync ..."
   kubectl patch application $namespace -n argocd --type merge --patch "$(cat scripts/disable-sync-patch.yaml)"
 
