@@ -90,7 +90,6 @@ function pvc_restore()
         echo "restore for namespace $namespace, pvc-name: $pvcname, volume: $volumename to: zfs-pool ..."
         zfs_restore $namespace $pvcname $BACKUP_DIR
         ;;
-        ;;
       *)
         echo "Sorry, this pvc is note Filesystem-based: $pvcname"
         echo $storageClass
