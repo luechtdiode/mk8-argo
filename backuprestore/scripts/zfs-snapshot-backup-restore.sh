@@ -48,14 +48,16 @@ function zfs_backup() {
       if [ -z $lastsnap ]; then
         echo "  taking zfs backup of snapshot $snapname"
         echo "     pvc $pvc / volumesnapshot $volumesnapshot"
-        echo "    from ${ZFS_POOL}/${volumename}@${zfssnapshotname}" 
+        echo "    from $snapshotfullname"
         echo "      to $backupfile ..."
         sudo zfs send -cv $snapshotfullname | gzip > $backupfile
       else
         echo "  taking incremental zfs backup of snapshot $lastsnapname - $snapname"
         echo "     pvc $pvc / volumesnapshot $volumesnapshot"
-        echo "    from ${ZFS_POOL}/${volumename}@${zfssnapshotname})"
+        echo "    from $snapshotfullname"
+        echo "     via $lastsnap"
         echo "      to $backupfile ..."
+        echo "sudo zfs send -iv $lastsnap $snapshotfullname | gzip > $backupfile"
         sudo zfs send -iv $lastsnap $snapshotfullname | gzip > $backupfile
       fi
     else 
