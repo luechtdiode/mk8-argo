@@ -41,7 +41,6 @@ function pvc_backup()
         echo "backup for namespace $namespace, pvc-name: $pvcname, volume: $volumename from: $SOURCE ..."
         zfs_backup $namespace $pvcname $BACKUP_DIR
         ;;
-        ;;
       *)
         echo "Sorry, this pvc is note Filesystem-based: $pvcname"
     esac
