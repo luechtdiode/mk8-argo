@@ -78,7 +78,7 @@ function zfs_restore() {
   volumename=$(kubectl get persistentvolumeclaims $pvc -n $namespace -o=jsonpath='{ ..volumeName }')
   echo "restoring $volumename from archived snapshots in $BACKUP_DIR:"
 
-  zfs_clean_snaphsots $namespace
+  zfs_clean_snapshots $namespace
 
   number=1
   echo "searching for .gz archives to restore..."
