@@ -34,7 +34,7 @@ function zfs_backup() {
   done
   echo "  Snapshot is ready: $ready"
 
-  existingsnapshots=($(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath='{.items[?(@.spec.source.persistentVolumeClaimName=='$pvc')].metadata.name}'))
+  existingsnapshots=($(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath="{.items[?(@.spec.source.persistentVolumeClaimName=='$pvc')].metadata.name}"))
   volumesnapshots=(  $(kubectl -n $namespace get volumesnapshot.snapshot -o jsonpath="{.items[?(@.spec.source.persistentVolumeClaimName=='$pvc')].status.boundVolumeSnapshotContentName}"))
 
   lastsnap=""
