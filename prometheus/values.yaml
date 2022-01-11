@@ -1,0 +1,53 @@
+prometheus-community:
+  namespaceOverride: "prometheus"
+  defaultRules:
+    ## Disabled PrometheusRule alerts
+    disabled:
+      # KubeAPIDown: true
+      NodeRAIDDegraded: true
+  
+  global:
+    rbac:
+      create: true
+      pspEnabled: true
+
+  ## Configuration for alertmanager
+  ## ref: https://prometheus.io/docs/alerting/alertmanager/
+  ##
+  alertmanager:
+    ingress:
+      enabled: true
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
+      hosts: 
+        - alertmanager.interpolar.ch
+
+  ## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+  ##
+  grafana:
+    enabled: true
+    namespaceOverride: ""
+
+    ## Timezone for the default dashboards
+    ## Other options are: browser or a specific timezone, i.e. Europe/Luxembourg
+    ##
+    defaultDashboardsTimezone: Europe/Zurich
+
+    rbac:
+      ## If true, Grafana PSPs will be created
+      ##
+      pspEnabled: false
+
+    ingress:
+      enabled: true
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
+      hosts: 
+        - grafana.interpolar.ch
+  prometheusSpec:
+    ## How long to retain metrics
+    retention: 365d
