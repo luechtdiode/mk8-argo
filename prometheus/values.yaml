@@ -1,4 +1,4 @@
-prometheus-community:
+monitoring:
   namespaceOverride: "prometheus"
   defaultRules:
     ## Disabled PrometheusRule alerts
