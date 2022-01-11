@@ -9,7 +9,6 @@ monitoring:
   global:
     rbac:
       create: true
-      pspEnabled: true
 
   ## Configuration for alertmanager
   ## ref: https://prometheus.io/docs/alerting/alertmanager/
