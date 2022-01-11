@@ -4,7 +4,7 @@ bootstrap:
  - name: openebs
  - name: traefik
  - name: argocd
- - name: prometheus
+ # - name: prometheus
  - name: kubernetes-dashboard
  - name: velero
  - name: pg-admin
