@@ -8,12 +8,14 @@ source ./scripts/secret-backup-restore.sh
 source ./scripts/db-backup-restore.sh
 source ./scripts/file-incremental-backup-restore.sh
 source ./scripts/pvc-backup-restore.sh
+source ./scripts/zfs-snapshot-backup-restore.sh
 source ./scripts/cluster-backup-restore.sh
 source ./scripts/cloudsync.sh
 
 function usage() {
   echo 'Usage:
-    ./backup.sh (zero-args) => make cluster-, secret-, db- and incremental pvc-backup per month from all volumes of the registered namespaces
+    ./backup.sh args
+    backup all              => make cluster-, secret-, db- and incremental pvc-backup per month from all volumes of the registered namespaces
     backup <namespace>      => make incremental pvc-backup per month from all volumes of the specified namespace
     dbbackup                => make zero-downtime db-backup or registered databases
     secrets                 => collects all *secret.yaml from the sibling-folders (namespaces)
@@ -25,6 +27,7 @@ function usage() {
     cloudsync               => save all current backups to storj bucket
     cloudsync up            => save all current backups to storj bucket
     cloudsync down          => download all backups from storj bucket
+    clean_snapshots <namespace> => clean zfs-snapshots
     help                    => print usage
   '
 }
@@ -60,20 +63,27 @@ function ns_dbrestore()
 # MAIN-Function
   if [ -z "$1" ]
   then
-    secretbackup
-    db_backup kutuapp kutuapp kutuapp
-    db_backup kutuapp-test kutuapp kutuapp
-    db_backup kmgetubs19 odoo
-    db_backup keycloak keycloak keycloak
-    pvc_backup kmgetubs19
-    pvc_backup keycloak
-    pvc_backup kutuapp-test
-    pvc_backup kutuapp
-    pvc_backup sharevic
-    pvc_backup pg-admin
-    cluster_backup
+    usage
   else
     case $1 in
+      all)
+        secretbackup
+        db_backup kutuapp kutuapp kutuapp
+        db_backup kutuapp-test kutuapp kutuapp
+        db_backup kmgetubs19 odoo
+        db_backup keycloak keycloak keycloak
+        pvc_backup kmgetubs19
+        pvc_backup keycloak
+        pvc_backup kutuapp-test
+        pvc_backup kutuapp
+        pvc_backup sharevic
+        pvc_backup pg-admin
+        cluster_backup
+        cloudsync up
+        ;;
+      clean_snapshots)
+        zfs_clean_snapshots $2  
+        ;;
       cloudsync)
         cloudsync $2
         ;;

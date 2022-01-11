@@ -1,4 +1,4 @@
-FROM alpine:3.14.2 AS nginx-naxsi-build
+FROM alpine:3.15.0 AS nginx-naxsi-build
 
 #Config files and some ideas taken from
 # https://github.com/Epheo/docker-naxsi-proxy-waf/
@@ -6,14 +6,17 @@ FROM alpine:3.14.2 AS nginx-naxsi-build
 RUN apk update && apk upgrade
 
 #Software versions  
-#nginx
-ENV NGINX_VERSION 1.21.3
+#nginx - see latest tags on http://nginx.org/en/download.html
+ENV NGINX_VERSION 1.21.5
 
-# naxsi
+# naxsi - see latest tags on https://github.com/nbs-system/naxsi/releases
 ENV NAXSI_VERSION 1.3
 
 # see latest tags on https://github.com/openresty/headers-more-nginx-module/tags
 ENV NGX_VERSION 0.33
+
+# see latest tags on https://www.openssl.org
+ENV OPENSSL_VERSION 3.0.1
 
 RUN set -ex && \
     addgroup -S nginx && \
@@ -46,7 +49,7 @@ RUN apk add --no-cache --virtual .build-deps \
 WORKDIR /tmp
 
 # openssl
-RUN wget https://www.openssl.org/source/openssl-3.0.0.tar.gz &&  tar -xzvf openssl-3.0.0.tar.gz && rm openssl-3.0.0.tar.gz
+RUN wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz &&  tar -xzvf openssl-${OPENSSL_VERSION}.tar.gz && rm openssl-${OPENSSL_VERSION}.tar.gz
     
 # Nginx
 RUN wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && tar xf nginx-${NGINX_VERSION}.tar.gz && rm -f nginx-${NGINX_VERSION}.tar.gz
@@ -81,7 +84,7 @@ RUN cd nginx-${NGINX_VERSION} && CC=clang CFLAGS="-pipe -O" ./configure \
         --add-module=../naxsi-${NAXSI_VERSION}/naxsi_src/ \
         --add-module=../nginx_cookie_flag_module-1.1.0 \
         --add-module=../headers-more-nginx-module-${NGX_VERSION} \
-        --with-openssl=../openssl-3.0.0 \
+        --with-openssl=../openssl-${OPENSSL_VERSION} \
         --with-http_ssl_module \
         --with-http_v2_module \
         --with-http_gzip_static_module \

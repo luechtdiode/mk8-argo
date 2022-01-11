@@ -2,36 +2,44 @@ source ./scripts/file-incremental-backup-restore.sh
 
 function pvc_backup()
 {
-  echo "backup for namespace $1, disable argo-autosync ..."
-  kubectl patch application $1 -n argocd --type merge --patch "$(cat scripts/disable-sync-patch.yaml)"
+  namespace=$1
+  echo "backup for namespace $namespace, disable argo-autosync ..."
+  kubectl patch application $namespace -n argocd --type merge --patch "$(cat scripts/disable-sync-patch.yaml)"
 
-  deployments=$(kubectl get deployments -n $1 -o jsonpath='{ .items[*].metadata.name }')
+  deployments=$(kubectl get deployments -n $namespace -o jsonpath='{ .items[*].metadata.name }')
   for deployment in $deployments
   do
-    echo "backup for namespace $1, stopping deployment $deployment ..."
-    kubectl scale --replicas=0 --timeout=3m deployment/$deployment -n $1
+    echo "backup for namespace $namespace, stopping deployment $deployment ..."
+    kubectl scale --replicas=0 --timeout=3m deployment/$deployment -n $namespace
   done;
 
-  pvcnames=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..name }')
+  pvcnames=$(kubectl get persistentvolumeclaims -n $namespace -o=jsonpath='{ .items[*]..name }')
   for pvcname in $pvcnames
   do
-    volumename=$(kubectl get persistentvolumeclaims $pvcname -n $1 -o=jsonpath='{ ..volumeName }')
-    storageClass=$(kubectl -n $1 get PersistentVolume $volumename -o jsonpath='{.spec.storageClassName}')
+    volumename=$(kubectl get persistentvolumeclaims $pvcname -n $namespace -o=jsonpath='{ ..volumeName }')
+    storageClass=$(kubectl -n $namespace get PersistentVolume $volumename -o jsonpath='{.spec.storageClassName}')
 
     case $storageClass in 
       microk8s-hostpath)
-        SOURCE=$(kubectl -n $1 get PersistentVolume $volumename -o jsonpath='{.spec.hostPath.path}')
-        BACKUP_DIR="$(pwd)/volumes-backup/$1/$pvcname"
+        SOURCE=$(kubectl -n $namespace get PersistentVolume $volumename -o jsonpath='{.spec.hostPath.path}')
+        BACKUP_DIR="$(pwd)/volumes-backup/$namespace/$pvcname"
         echo "--------------------------------"
-        echo "backup for namespace $1, pvc-name: $pvcname, volume: $volumename from: $SOURCE ..."
+        echo "backup for namespace $namespace, pvc-name: $pvcname, volume: $volumename from: $SOURCE ..."
         files_backup $SOURCE $BACKUP_DIR
         ;;
       openebs-hostpath)
         SOURCE="$PVCROOT/$volumename"
-        BACKUP_DIR="$(pwd)/volumes-backup/$1/$pvcname"
+        BACKUP_DIR="$(pwd)/volumes-backup/$namespace/$pvcname"
         echo "--------------------------------"
-        echo "backup for namespace $1, pvc-name: $pvcname, volume: $volumename from: $SOURCE ..."
+        echo "backup for namespace $namespace, pvc-name: $pvcname, volume: $volumename from: $SOURCE ..."
         files_backup $SOURCE $BACKUP_DIR
+        ;;
+      openebs-zfspv)
+        SOURCE="$PVCROOT/$volumename"
+        BACKUP_DIR="$(pwd)/volumes-backup/$namespace/$pvcname"
+        echo "--------------------------------"
+        echo "backup for namespace $namespace, pvc-name: $pvcname, volume: $volumename from: $SOURCE ..."
+        zfs_backup $namespace $pvcname $BACKUP_DIR
         ;;
       *)
         echo "Sorry, this pvc is note Filesystem-based: $pvcname"
@@ -40,41 +48,48 @@ function pvc_backup()
   done;
 
   echo "--------------------------------"
-  kubectl patch application $1 -n argocd --type merge --patch "$(cat scripts/enable-sync-patch.yaml)"
+  kubectl patch application $namespace -n argocd --type merge --patch "$(cat scripts/enable-sync-patch.yaml)"
   echo "================================"
 }
 
 function pvc_restore()
 {
-  echo "restore for namespace $1, disable argo-autosync ..."
-  kubectl patch application $1 -n argocd --type merge --patch "$(cat scripts/disable-sync-patch.yaml)"
+  namespace=$1
+  echo "restore for namespace $namespace, disable argo-autosync ..."
+  kubectl patch application $namespace -n argocd --type merge --patch "$(cat scripts/disable-sync-patch.yaml)"
 
-  deployments=$(kubectl get deployments -n $1 -o jsonpath='{ .items[*].metadata.name }')
+  deployments=$(kubectl get deployments -n $namespace -o jsonpath='{ .items[*].metadata.name }')
   for deployment in $deployments
   do
-    echo "restore for namespace $1, stopping deployment $deployment ..."
-    kubectl scale --replicas=0 --timeout=3m deployment/$deployment -n $1
+    echo "restore for namespace $namespace, stopping deployment $deployment ..."
+    kubectl scale --replicas=0 --timeout=3m deployment/$deployment -n $namespace
   done;
 
-  pvcnames=$(kubectl get persistentvolumeclaims -n $1 -o=jsonpath='{ .items[*]..name }')
+  pvcnames=$(kubectl get persistentvolumeclaims -n $namespace -o=jsonpath='{ .items[*]..name }')
   for pvcname in $pvcnames
   do
-    BACKUP_DIR="$(pwd)/volumes-backup/$1/$pvcname"
-    volumename=$(kubectl get persistentvolumeclaims $pvcname -n $1 -o=jsonpath='{ ..volumeName }')
-    storageClass=$(kubectl -n $1 get PersistentVolume $volumename -o jsonpath='{.spec.storageClassName}')
+    BACKUP_DIR="$(pwd)/volumes-backup/$namespace/$pvcname"
+    volumename=$(kubectl get persistentvolumeclaims $pvcname -n $namespace -o=jsonpath='{ ..volumeName }')
+    storageClass=$(kubectl -n $namespace get PersistentVolume $volumename -o jsonpath='{.spec.storageClassName}')
 
     case $storageClass in
       microk8s-hostpath)
-        TARGET_DIR=$(kubectl -n $1 get PersistentVolume $volumename -o jsonpath='{.spec.hostPath.path}')
+        TARGET_DIR=$(kubectl -n $namespace get PersistentVolume $volumename -o jsonpath='{.spec.hostPath.path}')
         echo "--------------------------------"
-        echo "restore for namespace $1, pvc-name: $pvcname, volume: $volumename to: $TARGET_DIR ..."
+        echo "restore for namespace $namespace, pvc-name: $pvcname, volume: $volumename to: $TARGET_DIR ..."
         files_restore $TARGET_DIR $BACKUP_DIR
         ;;
       openebs-hostpath)
         TARGET_DIR="$PVCROOT/$volumename"
         echo "--------------------------------"
-        echo "restore for namespace $1, pvc-name: $pvcname, volume: $volumename to: $TARGET_DIR ..."
+        echo "restore for namespace $namespace, pvc-name: $pvcname, volume: $volumename to: $TARGET_DIR ..."
         files_restore $TARGET_DIR $BACKUP_DIR
+        ;;
+      openebs-zfspv)
+        SOURCE="$PVCROOT/$volumename"
+        echo "--------------------------------"
+        echo "restore for namespace $namespace, pvc-name: $pvcname, volume: $volumename to: zfs-pool ..."
+        zfs_restore $namespace $pvcname $BACKUP_DIR
         ;;
       *)
         echo "Sorry, this pvc is note Filesystem-based: $pvcname"
@@ -84,6 +99,6 @@ function pvc_restore()
   done;
 
   echo "--------------------------------"
-  kubectl patch application $1 -n argocd --type merge --patch "$(cat scripts/enable-sync-patch.yaml)"
+  kubectl patch application $namespace -n argocd --type merge --patch "$(cat scripts/enable-sync-patch.yaml)"
   echo "================================"
 }
