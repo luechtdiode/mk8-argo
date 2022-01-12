@@ -38,6 +38,7 @@ add DNS for NodeName
 ```bash
 nano /var/snap/microk8s/current/certs/csr.conf.template
 ```
+https://theorangeone.net/posts/lan-only-applications-with-tls/
 
 Activate plugins
 ----------------
@@ -79,11 +80,21 @@ https://computingforgeeks.com/deploy-and-use-openebs-container-storage-on-kubern
 https://vitobotta.com/2019/07/03/openebs-tips/
 
 ```
+https://www.thomas-krenn.com/de/wiki/ISCSI_unter_Linux_mounten
+https://manjaro.site/how-to-connect-to-iscsi-volume-from-ubuntu-20-04/
+
 sudo apt-get update
 sudo apt-get install open-iscsi
 sudo systemctl enable --now iscsid
 systemctl status iscsid
 kubectl get blockdevice -n openebs
+
+# connect iscsi-target as blcokdevice
+sudo iscsiadm -m node -T <iqn> -p <target-ip>:3260 --login -d3
+# find the new disk
+sudo fdisk -l 
+# logout
+sudo iscsiadm -m node -u
 ```
 
 Prepare Storj Cloud Storage
