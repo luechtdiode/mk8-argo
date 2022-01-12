@@ -13,7 +13,7 @@ function cluster_restore()
   cd /.
   su $whoami
     microk8s stop
-    tar zxfv DQLITE_BACKUP
+    tar zxfv $DQLITE_BACKUP
     microk8s start
   exit
   cd -

@@ -24,6 +24,7 @@ function usage() {
     dbrestore <namespace>   => restore the database from its last stored backup
     dbrestore <namespace> <dbname> => restore database to a dedicated database
     secretrestore           => extracts secrets from backup and reseals the sealedsecrets
+    clusterrestore          => restores cluster resouces (kubernetes dqlite-data)
     cloudsync               => save all current backups to storj bucket
     cloudsync up            => save all current backups to storj bucket
     cloudsync down          => download all backups from storj bucket
