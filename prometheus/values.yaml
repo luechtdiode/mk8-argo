@@ -16,7 +16,7 @@ monitoring:
   alertmanager:
     ingress:
       enabled: true
-      ingressClassName: traefik
+      ingressClassName: "traefik"
       annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
         traefik.ingress.kubernetes.io/router.tls: "true"
@@ -42,9 +42,9 @@ monitoring:
 
     ingress:
       enabled: true
-      ingressClassName: traefik
+      ingressClassName: "traefik"
       annotations:
-        kubernetes.io/ingress.class: traefik
+        # kubernetes.io/ingress.class: traefik
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.tls: "true"
         traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
