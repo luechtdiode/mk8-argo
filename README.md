@@ -12,4 +12,3 @@
 |kutuapp-test|[![App Status](https://argo.interpolar.ch/api/badge?name=kutuapp-test&revision=true)](https://argo.interpolar.ch/applications/kutuapp-test)|[KuTu App Test](https://kutuapp-test.sharevic.net/)|
 |kutuapp|[![App Status](https://argo.interpolar.ch/api/badge?name=kutuapp&revision=true)](https://argo.interpolar.ch/applications/kutuapp)|[KuTu App](https://kutuapp.sharevic.net/)|
 |kmgetubs19|[![App Status](https://argo.interpolar.ch/api/badge?name=kmgetubs19&revision=true)](https://argo.interpolar.ch/applications/kmgetubs19)|[KmGeTuBS19 Homepage](https://kmgetubs19.sharevic.net/)|
-
