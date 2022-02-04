@@ -25,7 +25,7 @@ monitoring:
         - alertmanager.interpolar.ch
 
   ## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
-  ##
+  ## grafana.serviceMonitor.enabled
   grafana:
     enabled: true
     namespaceOverride: ""
@@ -53,3 +53,19 @@ monitoring:
   prometheusSpec:
     ## How long to retain metrics
     retention: 365d
+    retentionSize: 45GB
+    resources:
+      limits:
+        cpu: 250m
+        memory: 1000Mi
+      requests:
+        cpu: 250m
+        memory: 1000Mi
+    # storageSpec:
+    #   volumeClaimTemplate:
+    #     spec:
+    #       storageClassName: 
+    #       accessModes: ["ReadWriteOnce"]
+    #       resources:
+    #         requests:
+    #           storage: 50Gi
