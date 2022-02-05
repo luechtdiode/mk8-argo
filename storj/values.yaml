@@ -1,0 +1,24 @@
+storj-s3-gateway:
+  replicaCount: 1
+  image:
+    repository: storjlabs/gateway
+    tag: latest
+  network:
+    http:
+      servicePort: 7777
+  service:
+    type: NodePort        
+  resources:
+    requests:
+      memory: 50Mi
+    limits:
+      memory: 500Mi
+  defaultAffinityRules:
+    enabled: false
+  volumeMounts:
+  - mountPath: /root/.local/share/storj/gateway/
+    name: storj-config
+  volumes:
+  - name: storj-config
+    secret:
+      secretName: storj-config
