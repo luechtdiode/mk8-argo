@@ -3,7 +3,8 @@ storj-s3-gateway:
   image:
     repository: storjlabs/gateway
     tag: latest
-  command: ["run"]
+  command: ["gateway"]
+  args: ["run"]
   network:
     http:
       servicePort: 7777
