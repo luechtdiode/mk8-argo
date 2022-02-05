@@ -3,7 +3,7 @@ storj-s3-gateway:
   image:
     repository: storjlabs/gateway
     tag: latest
-  command: ["gateway"]
+  command: ["storjlabs/gateway"]
   args: ["run"]
   network:
     http:
