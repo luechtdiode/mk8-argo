@@ -3,7 +3,7 @@ storj-s3-gateway:
   image:
     repository: storjlabs/gateway
     tag: latest
-  args: [ "run", "--config-dir", "/config" ]
+  args: [ "run" ]
   network:
     http:
       servicePort: 7777
@@ -17,7 +17,7 @@ storj-s3-gateway:
   defaultAffinityRules:
     enabled: false
   volumeMounts:
-  - mountPath: /config/
+  - mountPath: /root/.local/share/storj/gateway/
     name: storj-config
   volumes:
   - name: storj-config
