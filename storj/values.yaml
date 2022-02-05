@@ -14,7 +14,7 @@ storj-s3-gateway:
       memory: 10Gi
     limits:
       memory: 10Gi
-      cpu: 6.0
+      cpu: 5.0
   defaultAffinityRules:
     enabled: false
   persistence:
