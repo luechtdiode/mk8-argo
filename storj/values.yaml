@@ -16,9 +16,19 @@ storj-s3-gateway:
       memory: 500Mi
   defaultAffinityRules:
     enabled: false
+  persistence:
+    enabled: true
+    storageClass: openebs-zfspv
+    accessModes: ReadWriteOnce
+    name: storj-data
+    size: 1Gi
+    annotations:
+      pv.kubernetes.io/bound-by-controller: 'yes'
   volumeMounts:
   - mountPath: /root/.local/share/storj/gateway/
     name: storj-config
+  - mountPath: /root/.local/share/storj/gateway/minio/
+    name: storj-data
   volumes:
   - name: storj-config
     secret:
