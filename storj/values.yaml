@@ -1,5 +1,5 @@
 storj-s3-gateway:
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: storjlabs/gateway
     tag: latest
@@ -14,7 +14,6 @@ storj-s3-gateway:
       memory: 10Gi
     limits:
       memory: 10Gi
-      cpu: 4.0
   defaultAffinityRules:
     enabled: false
   persistence:
