@@ -1,5 +1,5 @@
 storj-s3-gateway:
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: storjlabs/gateway
     tag: latest
@@ -12,7 +12,6 @@ storj-s3-gateway:
   resources:
     requests:
       memory: 10Gi
-      cpu: 2.5
     limits:
       memory: 10Gi
   #podSecurityContext:    
