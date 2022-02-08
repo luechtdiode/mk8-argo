@@ -14,9 +14,9 @@ storj-s3-gateway:
       memory: 10Gi
     limits:
       memory: 10Gi
-  podSecurityContext:    
-    runAsUser: 77777
-    runAsGroup: 7777
+  #podSecurityContext:    
+  #  runAsUser: 77777
+  #  runAsGroup: 7777
   #securityContext:
   #  runAsUser: 77777
   #  runAsGroup: 7777
