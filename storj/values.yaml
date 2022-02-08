@@ -12,6 +12,7 @@ storj-s3-gateway:
   resources:
     requests:
       memory: 10Gi
+      cpu: 2.5
     limits:
       memory: 10Gi
   #podSecurityContext:    
