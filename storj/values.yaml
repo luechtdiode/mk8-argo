@@ -14,6 +14,12 @@ storj-s3-gateway:
       memory: 10Gi
     limits:
       memory: 10Gi
+  podSecurityContext:    
+    runAsUser: 77777
+    runAsGroup: 7777
+  securityContext:
+    runAsUser: 77777
+    runAsGroup: 7777
   defaultAffinityRules:
     enabled: false
   persistence:
@@ -21,7 +27,7 @@ storj-s3-gateway:
     storageClass: openebs-zfspv
     accessModes: ReadWriteOnce
     name: storj-data
-    size: 1Gi
+    size: 5Gi
     annotations:
       pv.kubernetes.io/bound-by-controller: 'yes'
   volumeMounts:
