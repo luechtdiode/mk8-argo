@@ -17,9 +17,9 @@ storj-s3-gateway:
   podSecurityContext:    
     runAsUser: 77777
     runAsGroup: 7777
-  securityContext:
-    runAsUser: 77777
-    runAsGroup: 7777
+  #securityContext:
+  #  runAsUser: 77777
+  #  runAsGroup: 7777
   defaultAffinityRules:
     enabled: false
   persistence:
