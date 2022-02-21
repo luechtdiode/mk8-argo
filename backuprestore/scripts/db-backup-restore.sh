@@ -12,6 +12,16 @@ function findPostgresPod()
 function db_backup()
 {
   mkdir -p $(pwd)/db-backup
+  mkdir -p $(pwd)/db-backup/v-1
+  mkdir -p $(pwd)/db-backup/v-2
+  echo "move db-dumps gen1 to gen2"
+  rm -rf $(pwd)/db-backup/v-2/*
+  cp $(pwd)/db-backup/v-1/*database.dump $(pwd)/db-backup/v-2/
+  echo "move db-dumps actual-gen to gen1"
+  rm -rf $(pwd)/db-backup/v-1/*
+  cp $(pwd)/db-backup/*database.dump $(pwd)/db-backup/v-1/
+  rm -f $(pwd)/db-backup/*database.dump
+
   NAMESPACE="$1"
   PG_USER="${2:-$NAMESPACE}"
   DB_NAME="${3:-$PG_USER}"

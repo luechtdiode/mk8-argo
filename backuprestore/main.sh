@@ -16,6 +16,7 @@ function usage() {
   echo 'Usage:
     ./backup.sh args
     backup all              => make cluster-, secret-, db- and incremental pvc-backup per month from all volumes of the registered namespaces
+    backup short            => make backup of secrets and db of the registered namespaces and push new bucked with cloudsync up
     backup <namespace>      => make incremental pvc-backup per month from all volumes of the specified namespace
     dbbackup                => make zero-downtime db-backup or registered databases
     secrets                 => collects all *secret.yaml from the sibling-folders (namespaces)
@@ -26,6 +27,7 @@ function usage() {
     secretrestore           => extracts secrets from backup and reseals the sealedsecrets
     clusterrestore          => restores cluster resouces (kubernetes dqlite-data)
     cloudsync               => save all current backups to storj bucket
+                               [[up | down] bucket-qualifier] defaults to up today 
     cloudsync up            => save all current backups to storj bucket
     cloudsync down          => download all backups from storj bucket
     clean_snapshots <namespace> => clean zfs-snapshots
@@ -67,6 +69,14 @@ function ns_dbrestore()
     usage
   else
     case $1 in
+      short)
+        secretbackup
+        db_backup kutuapp kutuapp kutuapp
+        db_backup kutuapp-test kutuapp kutuapp
+        db_backup kmgetubs19 odoo
+        db_backup keycloak keycloak keycloak
+        cloudsync up
+        ;;
       all)
         secretbackup
         db_backup kutuapp kutuapp kutuapp
