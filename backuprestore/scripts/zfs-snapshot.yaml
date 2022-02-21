@@ -1,7 +1,7 @@
 apiVersion: snapshot.storage.k8s.io/v1beta1
 kind: VolumeSnapshot
 metadata:
-  name: zfspv-snap
+  name: zfspv-snapname
 spec:
   volumeSnapshotClassName: zfspv-snapclass
   source:

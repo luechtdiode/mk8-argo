@@ -2,13 +2,14 @@ source ./scripts/file-incremental-backup-restore.sh
 
 # cloudsync [[up | down] bucket-qualifier] defaults to up today
 function cloudsync() {
-  printf -v BUCKET_DATE '%(%Y-%m-%d)T\n' -1 
+  printf -v BUCKET_DATE '%(%Y-%m-%d)T' -1
   BUCKET_DATE=${2:-$BUCKET_DATE}
+  BUCKET_DATE=$BUCKET_DATE | awk '{$1=$1};1'
   CLUSTER_DIR="$(pwd)/cluster-backup"
   DB_DIR="$(pwd)/db-backup"
   SOURCE="$(pwd)/volumes-backup"
-  BACKUP_DIR="$(pwd)/cloud-backup"
-  BUCKET="sj://mars${BUCKET_DATE}/"
+  BACKUP_DIR="$(pwd)/cloud-backup-${BUCKET_DATE}"
+  BUCKET="sj://mars-${BUCKET_DATE}/"
   PREFIX="manualbackup"
   CLOUD_PATH="$BUCKET$PREFIX"
 
