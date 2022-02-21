@@ -71,6 +71,7 @@ function ns_dbrestore()
     case $1 in
       short)
         secretbackup
+        db_backup_rotate
         db_backup kutuapp kutuapp kutuapp
         db_backup kutuapp-test kutuapp kutuapp
         db_backup kmgetubs19 odoo
@@ -79,6 +80,7 @@ function ns_dbrestore()
         ;;
       all)
         secretbackup
+        db_backup_rotate
         db_backup kutuapp kutuapp kutuapp
         db_backup kutuapp-test kutuapp kutuapp
         db_backup kmgetubs19 odoo

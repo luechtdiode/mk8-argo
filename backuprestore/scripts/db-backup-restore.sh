@@ -8,8 +8,7 @@ function findPostgresPod()
   echo $postgrespod  
 }
 
-# db_backup <namespace> [<pg-user> [<db-name>]]
-function db_backup()
+function db_backup_rotate()
 {
   mkdir -p $(pwd)/db-backup
   mkdir -p $(pwd)/db-backup/v-1
@@ -21,7 +20,11 @@ function db_backup()
   rm -rf $(pwd)/db-backup/v-1/*
   cp $(pwd)/db-backup/*database.dump $(pwd)/db-backup/v-1/
   rm -f $(pwd)/db-backup/*database.dump
+}
 
+# db_backup <namespace> [<pg-user> [<db-name>]]
+function db_backup()
+{
   NAMESPACE="$1"
   PG_USER="${2:-$NAMESPACE}"
   DB_NAME="${3:-$PG_USER}"
