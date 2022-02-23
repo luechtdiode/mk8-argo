@@ -5,7 +5,7 @@ function findPostgresPod()
   NAMESPACE="$1"
   postgrespod=$(kubectl -n $NAMESPACE get pod -l component=postgres -o jsonpath='{.items[*].metadata.name}')
   [ -z $postgrespod ] && postgrespod=$(kubectl -n $NAMESPACE get pod -o jsonpath='{.items[*].metadata.name}' | tr ' ' '\n' | grep postgres)
-  echo $postgrespod  
+  echo $postgrespod
 }
 
 function db_backup_rotate()

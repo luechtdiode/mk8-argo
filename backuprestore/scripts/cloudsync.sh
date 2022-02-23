@@ -45,7 +45,8 @@ function cloudsync() {
       done
 
       for file in $(find $DB_DIR/* -name "*.dump" | xargs ); do
-        uplink cp $file $CLOUD_PATH/db/$(echo $file | awk -F/ '{ print $NF }')
+        echo  $file | awk -F"$DB_DIR" '{ print $NF }'
+        uplink cp $file $CLOUD_PATH/db$(echo $file | awk -F"$DB_DIR" '{ print $NF }')
       done
 
       # collect all pvc incremental backups to one cloud-pvc incremental backup
