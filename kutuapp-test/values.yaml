@@ -48,6 +48,8 @@ kutuapp:
   image:
     repository: luechtdiode/kutuapp
     tag: feature.provide_prometheus_metrics-fdff45a
+  labels:
+    monitoring: enabled
   network:
     http:
       servicePort: 5757
