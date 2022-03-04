@@ -24,8 +24,8 @@ metadata:
   name: monitoring-sa
   namespace: kutuapp-test
 ---
-kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
 metadata:
   name: monitoring-stack-kutuapp-test-rb
 subjects:
