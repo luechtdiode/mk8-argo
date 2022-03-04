@@ -82,9 +82,8 @@ monitoring:
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.tls: "true"
         traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
-      tls: 
-        - hosts: 
-          - prometheus.interpolar.ch
+      hosts: 
+        - prometheus.interpolar.ch
   alertmanagerSpec:
     externalUrl: https://alertmanager.interpolar.ch/
     ## Example which selects all namespaces with label "alertmanagerconfig" set to "enabled"
