@@ -24,7 +24,7 @@ metadata:
   name: monitoring-stack-kutuapp-test-rb
 subjects:
   - kind: ServiceAccount
-    name: default
+    name: prometheus-monitoring-prometheus
     namespace: prometheus
 roleRef:
   apiGroup: rbac.authorization.k8s.io
