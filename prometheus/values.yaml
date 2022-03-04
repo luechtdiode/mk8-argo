@@ -1,10 +1,32 @@
 monitoring:
   namespaceOverride: "prometheus"
   defaultRules:
-    ## Disabled PrometheusRule alerts
-    disabled:
-      # KubeAPIDown: true
-      NodeRAIDDegraded: true
+    create: true
+    rules:
+      alertmanager: true
+      etcd: true
+      configReloaders: true
+      general: true
+      k8s: true
+      kubeApiserver: true
+      kubeApiserverAvailability: true
+      kubeApiserverSlos: true
+      kubelet: true
+      kubeProxy: false
+      kubePrometheusGeneral: true
+      kubePrometheusNodeRecording: true
+      kubernetesApps: true
+      kubernetesResources: true
+      kubernetesStorage: true
+      kubernetesSystem: true
+      kubeScheduler: false
+      kubeStateMetrics: true
+      network: true
+      node: true
+      nodeExporterAlerting: true
+      nodeExporterRecording: true
+      prometheus: true
+      prometheusOperator: true
   
   global:
     rbac:
@@ -62,8 +84,15 @@ monitoring:
         traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
       hosts: 
         - prometheus.interpolar.ch
+  alertmanagerSpec:
+    externalUrl: https://alertmanager.interpolar.ch/
+    ## Example which selects all namespaces with label "alertmanagerconfig" set to "enabled"
+    alertmanagerConfigNamespaceSelector:
+      matchLabels:
+        alertmanagerconfig: enabled
   prometheusSpec:
     ## How long to retain metrics
+    externalUrl: https://prometheus.interpolar.ch/
     retention: 365d
     retentionSize: 45GB
     resources:
