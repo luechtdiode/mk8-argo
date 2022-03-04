@@ -39,7 +39,8 @@ monitoring:
       ## If true, Grafana PSPs will be created
       ##
       pspEnabled: false
-
+    admin:
+      existingSecret: "prometheus-grafana"
     ingress:
       enabled: true
       ingressClassName: "traefik"
@@ -50,6 +51,17 @@ monitoring:
         traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
       hosts: 
         - grafana.interpolar.ch
+  prometheus:
+    ingress:
+      enabled: true
+      ingressClassName: "traefik"
+      annotations:
+        # kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
+      hosts: 
+        - prometheus.interpolar.ch
   prometheusSpec:
     ## How long to retain metrics
     retention: 365d
