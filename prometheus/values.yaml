@@ -89,7 +89,7 @@ monitoring:
     ## Example which selects all namespaces with label "alertmanagerconfig" set to "enabled"
     alertmanagerConfigNamespaceSelector:
       matchLabels:
-        alertmanagerconfig: enabled
+        monitoring: enabled
   prometheusSpec:
     ## How long to retain metrics
     externalUrl: https://prometheus.interpolar.ch/
@@ -110,3 +110,28 @@ monitoring:
     #       resources:
     #         requests:
     #           storage: 50Gi
+    
+    ## If true, a nil or {} value for prometheus.prometheusSpec.serviceMonitorSelector will cause the
+    ## prometheus resource to be created with selectors based on values in the helm deployment,
+    ## which will also match the servicemonitors created
+    ##
+    serviceMonitorSelectorNilUsesHelmValues: false
+
+    ## ServiceMonitors to be selected for target discovery.
+    ## If {}, select all ServiceMonitors
+    ##
+    serviceMonitorSelector: {}
+    ## Example which selects ServiceMonitors with label "prometheus" set to "somelabel"
+    # serviceMonitorSelector:
+    #   matchLabels:
+    #     prometheus: somelabel
+
+    ## Namespaces to be selected for ServiceMonitor discovery.
+    ##
+    serviceMonitorNamespaceSelector:
+    ## Example which selects ServiceMonitors in namespaces with label "prometheus" set to "somelabel"
+    # serviceMonitorNamespaceSelector:
+    #   matchLabels:
+    #     prometheus: somelabel
+      matchLabels:
+        monitoring: enabled
