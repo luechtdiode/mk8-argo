@@ -35,8 +35,6 @@ metadata:
   namespace: {{ default "argocd" $.Values.argocdNamespace }}
   labels:
     name: {{ .name | quote }}
-    app: {{ .app | quote default .name | quote }}
-    owner: {{ .name | quote }}
     {{- if eq  "enabled" .monitoring -}}
     monitoring: {{ .monitoring | quote default "disabled" }}
     {{- end -}}
