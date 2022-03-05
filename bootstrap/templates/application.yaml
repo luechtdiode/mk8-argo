@@ -39,7 +39,7 @@ metadata:
     monitoring: "enabled"
     {{- end -}}
 ---
-{{- if eq  "enabled" .monitoring -}}
+{{- if .monitoring -}}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
