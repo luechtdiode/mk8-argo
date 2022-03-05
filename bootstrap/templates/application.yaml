@@ -33,7 +33,7 @@ kind: Namespace
 metadata:
   name: {{ .name }}
   labels:
-    {{- if .monitoring -}}
+    {{- if .monitoring }}
     monitoring: "enabled"
-    {{- end -}}
+    {{- end }}
 {{ end }}
