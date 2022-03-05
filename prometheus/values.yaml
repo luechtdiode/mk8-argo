@@ -40,7 +40,7 @@ monitoring:
       enabled: true
       ingressClassName: "traefik"
       annotations:
-        traefik.ingress.kubernetes.io/router.middlewares: secure@kubernetescrd
+        traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
         traefik.ingress.kubernetes.io/router.tls: "true"
         traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
@@ -69,7 +69,7 @@ monitoring:
       ingressClassName: "traefik"
       annotations:
         # kubernetes.io/ingress.class: traefik
-        traefik.ingress.kubernetes.io/router.middlewares: secure@kubernetescrd
+        traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.tls: "true"
         traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
@@ -81,7 +81,7 @@ monitoring:
       ingressClassName: "traefik"
       annotations:
         # kubernetes.io/ingress.class: traefik
-        traefik.ingress.kubernetes.io/router.middlewares: secure@kubernetescrd
+        traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.tls: "true"
         traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
