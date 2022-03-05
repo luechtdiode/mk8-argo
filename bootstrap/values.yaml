@@ -12,7 +12,10 @@ bootstrap:
  - name: keycloak
  - name: kmgetubs19
  - name: kutuapp-test
+   app: kutuapp
+   monitoring: enabled
  - name: kutuapp
+   app: kutuapp
  - name: sharevic
  - name: mbq
  - name: quarkus-starter

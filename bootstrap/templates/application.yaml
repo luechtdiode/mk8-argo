@@ -5,6 +5,8 @@ kind: Application
 metadata:
   name: {{ .name }}
   namespace: {{ default "argocd" $.Values.argocdNamespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   destination:
     namespace: {{ .name }}
@@ -22,6 +24,39 @@ spec:
         prune: true
         selfHeal: true        
       syncOptions:
-        - CreateNamespace=true
+        - ApplyOutOfSyncOnly=true
+        # - CreateNamespace=true
         # - Replace=true
+---        
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .name }}
+  namespace: {{ default "argocd" $.Values.argocdNamespace }}
+  labels:
+    name: {{ .name | quote }}
+    app: {{ .app default .name | quote }}
+    owner: {{ .name | quote }}
+    {{- if eq  "enabled" .monitoring -}}
+    monitoring: {{ .monitoring default disabled | quote }}
+    {{- end -}}
+---
+{{- if eq  "enabled" .monitoring -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: servicemonitor-{{ .name }}    
+  namespace: prometheus
+spec:
+  endpoints:
+    - interval: 30s
+      port: metrics
+      scheme: http
+  namespaceSelector:
+    matchNames:
+      - {{ .name }}
+  selector:
+    matchLabels:
+      monitoring: enabled
+{{- end -}}    
 {{ end }}
