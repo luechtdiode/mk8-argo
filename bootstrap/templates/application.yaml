@@ -27,5 +27,13 @@ spec:
         - ApplyOutOfSyncOnly=true
         # - CreateNamespace=true
         # - Replace=true
-
+---        
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- if .monitoring -}}
+    monitoring: "enabled"
+    {{- end -}}
 {{ end }}
