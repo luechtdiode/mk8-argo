@@ -51,6 +51,9 @@ kutuapp:
   labels:
     monitoring: enabled
   network:
+    metrics:
+      servicePort: 3000
+      containerPort: 5757
     http:
       servicePort: 5757
       # ingress:
