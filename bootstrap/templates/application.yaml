@@ -36,4 +36,24 @@ metadata:
     {{- if .monitoring }}
     monitoring: "enabled"
     {{- end }}
+{{- if .monitoring -}}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: servicemonitor-{{ .name }}    
+  namespace: prometheus
+spec:
+  endpoints:
+    - interval: 30s
+      port: metrics
+      scheme: http
+  namespaceSelector:
+    matchNames:
+      - {{ .name }}
+  selector:
+    matchLabels:
+      monitoring: enabled
+{{- end -}}    
+
 {{ end }}
