@@ -133,3 +133,6 @@ monitoring:
     # serviceMonitorNamespaceSelector:
     #   matchLabels:
     #     prometheus: somelabel
+    serviceMonitorNamespaceSelector:
+      matchLabels:
+        monitoring: enabled
