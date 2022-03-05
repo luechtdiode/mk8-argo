@@ -13,7 +13,7 @@ bootstrap:
  - name: kmgetubs19
  - name: kutuapp-test
    app: kutuapp
-   monitoring: enabled
+   monitoring: true
  - name: kutuapp
    app: kutuapp
  - name: sharevic

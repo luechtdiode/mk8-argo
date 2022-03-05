@@ -35,8 +35,8 @@ metadata:
   namespace: {{ default "argocd" $.Values.argocdNamespace }}
   labels:
     name: {{ .name | quote }}
-    {{- if eq  "enabled" .monitoring -}}
-    monitoring: {{ .monitoring | quote default "disabled" }}
+    {{- if .monitoring -}}
+    monitoring: "enabled"
     {{- end -}}
 ---
 {{- if eq  "enabled" .monitoring -}}
