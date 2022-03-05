@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: servicemonitor-kutuapp-test2
+  namespace: prometheus
+spec:
+  endpoints:
+    - interval: 30s
+      path: /metrics
+      port: metrics
+      scheme: http
+  namespaceSelector:
+    matchNames:
+      - kutuapp-test
+  selector:
+    matchLabels:
+      app: kutuapp
