@@ -70,7 +70,8 @@ kutuapp:
   env:
     - name: NAMESPACE
       valueFrom:
-        fieldRef: metadata.labels['release']
+        fieldRef:
+          fieldPath: metadata.namespace
     - name: X_KUTU_SECRET
       valueFrom:
         secretKeyRef:
