@@ -47,7 +47,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: feature.provide_prometheus_metrics-fdff45a
+    tag: feature.provide_prometheus_metrics-87d967c
   labels:
     monitoring: enabled
   network:
