@@ -49,7 +49,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: monitoring-{{ .name }}
-  namespace: kutuapp-test
+  namespace: {{ .name }}
 subjects:
   - kind: ServiceAccount
     name: prometheus-monitoring-prometheus
