@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: servicemonitor-kutuapp-test
-  namespace: prometheus
+  namespace: kutuapp-test
 spec:
   # jobLabel: app
   endpoints:
