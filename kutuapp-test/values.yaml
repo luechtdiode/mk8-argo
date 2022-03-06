@@ -59,7 +59,7 @@ kutuapp:
       # ingress:
       #  host: competition.sharevic.net
   service:
-    type: NodePort
+    type: ClusterIP
   resources:
     requests:
       cpu: 0.125
