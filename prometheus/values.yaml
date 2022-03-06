@@ -64,7 +64,7 @@ monitoring:
       ##
       pspEnabled: false
     admin:
-      existingSecret: "prometheus-grafana"
+      existingSecret: "prometheus-grafana-secret"
     ingress:
       enabled: true
       ingressClassName: "traefik"
