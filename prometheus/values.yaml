@@ -27,11 +27,19 @@ monitoring:
       nodeExporterRecording: true
       prometheus: true
       prometheusOperator: true
-  
+      
+  ## Disabled PrometheusRule alerts
+  disabled:
+    KubeAPIDown: true
+    NodeRAIDDegraded: true
+
   global:
     rbac:
       pspEnabled: true
       create: true
+  
+  kubeControllerManager:
+    enabled: false
 
   ## Configuration for alertmanager
   ## ref: https://prometheus.io/docs/alerting/alertmanager/
