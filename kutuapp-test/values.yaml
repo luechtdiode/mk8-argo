@@ -68,6 +68,9 @@ kutuapp:
       cpu: 0.5
       memory: 2.0Gi
   env:
+    - name: NAMESPACE
+      valueFrom:
+        fieldPath: metadata.namespace
     - name: X_KUTU_SECRET
       valueFrom:
         secretKeyRef:
