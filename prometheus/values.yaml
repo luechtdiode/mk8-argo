@@ -30,6 +30,7 @@ monitoring:
   
   global:
     rbac:
+      pspEnabled: true
       create: true
 
   ## Configuration for alertmanager
@@ -76,6 +77,7 @@ monitoring:
       hosts: 
         - grafana.interpolar.ch
   prometheus:
+    namespaces: []
     ingress:
       enabled: true
       ingressClassName: "traefik"
