@@ -56,6 +56,13 @@ monitoring:
       hosts: 
         - alertmanager.interpolar.ch
 
+    alertmanagerSpec:
+      externalUrl: https://alertmanager.interpolar.ch/
+      ## Example which selects all namespaces with label "alertmanagerconfig" set to "enabled"
+      alertmanagerConfigNamespaceSelector:
+        matchLabels:
+          monitoring: enabled
+
   ## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
   ## grafana.serviceMonitor.enabled
   grafana:
@@ -85,7 +92,6 @@ monitoring:
       hosts: 
         - grafana.interpolar.ch
   prometheus:
-    namespaces: []
     ingress:
       enabled: true
       ingressClassName: "traefik"
@@ -97,58 +103,52 @@ monitoring:
         traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
       hosts: 
         - prometheus.interpolar.ch
-  alertmanagerSpec:
-    externalUrl: https://alertmanager.interpolar.ch/
-    ## Example which selects all namespaces with label "alertmanagerconfig" set to "enabled"
-    alertmanagerConfigNamespaceSelector:
-      matchLabels:
-        monitoring: enabled
-  prometheusSpec:
-    ## How long to retain metrics
-    externalUrl: https://prometheus.interpolar.ch/
-    retention: 365d
-    retentionSize: 45GB
-    resources:
-      limits:
-        cpu: 250m
-        memory: 1000Mi
-      requests:
-        cpu: 250m
-        memory: 1000Mi
-    # storageSpec:
-    #   volumeClaimTemplate:
-    #     spec:
-    #       storageClassName: 
-    #       accessModes: ["ReadWriteOnce"]
-    #       resources:
-    #         requests:
-    #           storage: 50Gi
-    
-    ## If true, a nil or {} value for prometheus.prometheusSpec.serviceMonitorSelector will cause the
-    ## prometheus resource to be created with selectors based on values in the helm deployment,
-    ## which will also match the servicemonitors created
-    ##
-    serviceMonitorSelectorNilUsesHelmValues: false
+    prometheusSpec:
+      ## How long to retain metrics
+      externalUrl: https://prometheus.interpolar.ch/
+      retention: 365d
+      retentionSize: 45GB
+      resources:
+        limits:
+          cpu: 250m
+          memory: 1000Mi
+        requests:
+          cpu: 250m
+          memory: 1000Mi
+      # storageSpec:
+      #   volumeClaimTemplate:
+      #     spec:
+      #       storageClassName: 
+      #       accessModes: ["ReadWriteOnce"]
+      #       resources:
+      #         requests:
+      #           storage: 50Gi
+      
+      ## If true, a nil or {} value for prometheus.prometheusSpec.serviceMonitorSelector will cause the
+      ## prometheus resource to be created with selectors based on values in the helm deployment,
+      ## which will also match the servicemonitors created
+      ##
+      serviceMonitorSelectorNilUsesHelmValues: false
 
-    ## ServiceMonitors to be selected for target discovery.
-    ## If {}, select all ServiceMonitors
-    ##
-    serviceMonitorSelector: {}
-    ## Example which selects ServiceMonitors with label "prometheus" set to "somelabel"
-    # serviceMonitorSelector:
-    #   matchLabels:
-    #     prometheus: somelabel
+      ## ServiceMonitors to be selected for target discovery.
+      ## If {}, select all ServiceMonitors
+      ##
+      serviceMonitorSelector: {}
+      ## Example which selects ServiceMonitors with label "prometheus" set to "somelabel"
+      # serviceMonitorSelector:
+      #   matchLabels:
+      #     prometheus: somelabel
 
-    ## Namespaces to be selected for ServiceMonitor discovery.
-    ##
-    # serviceMonitorNamespaceSelector: {}
-    ## Example which selects ServiceMonitors in namespaces with label "prometheus" set to "somelabel"
-    # serviceMonitorNamespaceSelector:
-    #   matchLabels:
-    #     prometheus: somelabel
-    serviceMonitorNamespaceSelector:
-      matchLabels:
-        monitoring: enabled
+      ## Namespaces to be selected for ServiceMonitor discovery.
+      ##
+      # serviceMonitorNamespaceSelector: {}
+      ## Example which selects ServiceMonitors in namespaces with label "prometheus" set to "somelabel"
+      # serviceMonitorNamespaceSelector:
+      #   matchLabels:
+      #     prometheus: somelabel
+      serviceMonitorNamespaceSelector:
+        matchLabels:
+          monitoring: enabled
 
-    # podMonitorSelectorNilUsesHelmValues: false
-    # podMonitorSelector: {}    
+      # podMonitorSelectorNilUsesHelmValues: false
+      # podMonitorSelector: {}    
