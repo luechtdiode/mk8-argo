@@ -107,14 +107,14 @@ monitoring:
       ## How long to retain metrics
       externalUrl: https://prometheus.interpolar.ch/
       retention: 365d
-      retentionSize: 45GB
-      resources:
-        limits:
-          cpu: 250m
-          memory: 1000Mi
-        requests:
-          cpu: 250m
-          memory: 1000Mi
+      retentionSize: 100GB
+      # resources:
+      #   limits:
+      #     cpu: 250m
+      #     memory: 1000Mi
+      #   requests:
+      #     cpu: 250m
+      #     memory: 1000Mi
       # storageSpec:
       #   volumeClaimTemplate:
       #     spec:
