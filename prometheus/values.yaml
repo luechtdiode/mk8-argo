@@ -35,7 +35,7 @@ monitoring:
 
   global:
     rbac:
-      pspEnabled: true
+      pspEnabled: false
       create: true
   
   kubeControllerManager:
