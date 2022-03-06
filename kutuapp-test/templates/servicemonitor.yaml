@@ -1,10 +1,8 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: servicemonitor-kutuapp-test
-  namespace: kutuapp-test
+  name: servicemonitor
 spec:
-  # jobLabel: app
   endpoints:
     - interval: 30s
       path: /metrics
