@@ -129,7 +129,6 @@ monitoring:
     ## which will also match the servicemonitors created
     ##
     serviceMonitorSelectorNilUsesHelmValues: false
-    podMonitorSelectorNilUsesHelmValues: false
 
     ## ServiceMonitors to be selected for target discovery.
     ## If {}, select all ServiceMonitors
@@ -150,3 +149,6 @@ monitoring:
     serviceMonitorNamespaceSelector:
       matchLabels:
         monitoring: enabled
+
+    # podMonitorSelectorNilUsesHelmValues: false
+    # podMonitorSelector: {}    
