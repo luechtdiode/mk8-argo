@@ -1,28 +1,28 @@
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: servicemonitor-kutuapp-test2
-  namespace: kutuapp-test
-spec:
-  jobLabel: app
-  endpoints:
-    - interval: 30s
-      path: /metrics
-      port: metrics
-  selector:
-    matchLabels:
-      app: kutuapp
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: prometheus-k8s
-  namespace: kutuapp-test
-subjects:
-  - kind: ServiceAccount
-    name: prometheus-monitoring-prometheus
-    namespace: prometheus
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: prometheus-monitoring-prometheus
+# apiVersion: monitoring.coreos.com/v1
+# kind: ServiceMonitor
+# metadata:
+#   name: servicemonitor-kutuapp-test2
+#   namespace: kutuapp-test
+# spec:
+#   jobLabel: app
+#   endpoints:
+#     - interval: 30s
+#       path: /metrics
+#       port: metrics
+#   selector:
+#     matchLabels:
+#       app: kutuapp
+# ---
+# kind: RoleBinding
+# apiVersion: rbac.authorization.k8s.io/v1
+# metadata:
+#   name: prometheus-k8s
+#   namespace: kutuapp-test
+# subjects:
+#   - kind: ServiceAccount
+#     name: prometheus-monitoring-prometheus
+#     namespace: prometheus
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: ClusterRole
+#   name: prometheus-monitoring-promethes
