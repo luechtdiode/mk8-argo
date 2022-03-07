@@ -6,8 +6,8 @@ metadata:
   labels:
     grafana_dashboard: "1"
 data:
-  kutuapp-test-grafana-dashboard.json: |
-    {
+  kutuapp-test-grafana-dashboard.json: |-
+    {{`{
       "annotations": {
         "list": [
           {
@@ -494,3 +494,4 @@ data:
       "version": 30,
       "weekStart": ""
     }
+    `}}
