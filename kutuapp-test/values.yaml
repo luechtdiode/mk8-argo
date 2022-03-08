@@ -47,7 +47,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: feature.provide_prometheus_metrics-401a24f
+    tag: feature.provide_prometheus_metrics-bd91ba7
   labels:
     monitoring: enabled
   network:
@@ -68,7 +68,7 @@ kutuapp:
       cpu: 0.5
       memory: 2.0Gi
   env:
-    - name: NAMESPACE
+    - name: _NAMESPACE
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace

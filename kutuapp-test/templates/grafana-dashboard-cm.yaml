@@ -92,7 +92,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "avg by (status, method)(irate(kutuapp_test_responses_duration_seconds_count{status=~\"2xx|other\"}[$__rate_interval])) > 0",
+              "expr": "avg by (status, method)(irate(kutuapp_responses_duration_seconds_count{status=~\"2xx|other\"}[$__rate_interval])) > 0",
               "interval": "",
               "legendFormat": "{{ status }} {{ method }}",
               "refId": "A"
@@ -155,7 +155,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": " sum by (namespace) (kutuapp_test_competitions_active)",
+              "expr": " sum by (namespace) (kutuapp_competitions_active)",
               "hide": false,
               "instant": false,
               "interval": "",
@@ -168,7 +168,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "sum by (namespace) (kutuapp_test_competition_websockets_active)",
+              "expr": "sum by (namespace) (kutuapp_competition_websockets_active)",
               "hide": false,
               "instant": false,
               "interval": "",
@@ -181,7 +181,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "sum by (namespace) (kutuapp_test_connections_active)",
+              "expr": "sum by (namespace) (kutuapp_connections_active)",
               "hide": false,
               "instant": false,
               "interval": "",
@@ -194,7 +194,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "max(irate(kutuapp_test_responses_duration_seconds_sum[$__rate_interval]) * 1000 / irate(kutuapp_test_responses_duration_seconds_count[$__rate_interval]))",
+              "expr": "max(irate(kutuapp_responses_duration_seconds_sum[$__rate_interval]) * 1000 / irate(kutuapp_responses_duration_seconds_count[$__rate_interval]))",
               "hide": false,
               "instant": false,
               "interval": "",
@@ -208,7 +208,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "sum(irate(kutuapp_test_responses_duration_seconds_count[$__rate_interval]))",
+              "expr": "sum(irate(kutuapp_responses_duration_seconds_count[$__rate_interval]))",
               "hide": false,
               "instant": false,
               "interval": "",
@@ -368,7 +368,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "sum by (status, method)(irate(kutuapp_test_responses_duration_seconds_count{status=~\"4xx|5xx\"}[$__rate_interval])) > 0",
+              "expr": "sum by (status, method)(irate(kutuapp_responses_duration_seconds_count{status=~\"4xx|5xx\"}[$__rate_interval])) > 0",
               "interval": "",
               "legendFormat": "{{ status }} {{ method}}",
               "refId": "A"
@@ -383,7 +383,7 @@ data:
               "color": {
                 "mode": "thresholds"
               },
-              "decimals": 4,
+              "decimals": 3,
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -394,18 +394,19 @@ data:
                   },
                   {
                     "color": "light-green",
-                    "value": 0.1
+                    "value": 30
                   },
                   {
                     "color": "#EAB839",
-                    "value": 0.6
+                    "value": 300
                   },
                   {
                     "color": "red",
-                    "value": 1.5
+                    "value": 1000
                   }
                 ]
-              }
+              },
+              "unit": "ms"
             },
             "overrides": []
           },
@@ -438,14 +439,14 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "(rate(kutuapp_test_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) / rate(kutuapp_test_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0",
+              "expr": "(rate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) * 1000 / rate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0",
               "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "{{ path }}",
+              "legendFormat": "{{ path }} {{ method }}",
               "refId": "A"
             }
           ],
-          "title": "Top 3 Antwortzeit / Pfad",
+          "title": "Antwortzeit in ms / Pfad und Methode",
           "transformations": [],
           "type": "stat"
         },
@@ -511,7 +512,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "kutuapp_test_competition_websockets_active",
+              "expr": "kutuapp_competition_websockets_active",
               "interval": "",
               "intervalFactor": 1,
               "legendFormat": "{{ comp }} / {{ dg }}",
@@ -523,7 +524,7 @@ data:
           "type": "stat"
         }
       ],
-      "refresh": "30s",
+      "refresh": "5s",
       "schemaVersion": 34,
       "style": "dark",
       "tags": [],
@@ -531,14 +532,14 @@ data:
         "list": []
       },
       "time": {
-        "from": "now-5m",
+        "from": "now-1h",
         "to": "now"
       },
       "timepicker": {},
       "timezone": "browser",
       "title": "Kutuapp-Test",
       "uid": "8MnNpxY7z",
-      "version": 32,
+      "version": 33,
       "weekStart": ""
     }
     `}}
