@@ -47,6 +47,7 @@ data:
               "viz": false
             }
           },
+          "decimals": 2,
           "mappings": []
         },
         "overrides": []
@@ -91,8 +92,7 @@ data:
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum by(method, status)(irate(kutuapp_test_responses_duration_seconds_count{status=~\"2xx|other\"}[$__rate_interval]))",
-          "instant": false,
+          "expr": "avg by (status, method)(irate(kutuapp_test_responses_duration_seconds_count{status=~\"2xx|other\"}[$__rate_interval])) > 0",
           "interval": "",
           "legendFormat": "{{ status }} {{ method }}",
           "refId": "A"
@@ -107,25 +107,18 @@ data:
           "color": {
             "mode": "thresholds"
           },
+          "decimals": 0,
           "mappings": [],
           "thresholds": {
             "mode": "percentage",
             "steps": [
               {
-                "color": "blue",
+                "color": "green",
                 "value": null
               },
               {
-                "color": "green",
-                "value": 10
-              },
-              {
-                "color": "#EAB839",
-                "value": 80
-              },
-              {
                 "color": "red",
-                "value": 90
+                "value": 80
               }
             ]
           },
@@ -152,7 +145,6 @@ data:
           "fields": "",
           "values": false
         },
-        "text": {},
         "textMode": "auto"
       },
       "pluginVersion": "8.3.6",
@@ -202,11 +194,12 @@ data:
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "avg(kutuapp_test_responses_duration_seconds_sum)",
+          "expr": "max(irate(kutuapp_test_responses_duration_seconds_sum[$__rate_interval]) * 1000 / irate(kutuapp_test_responses_duration_seconds_count[$__rate_interval]))",
           "hide": false,
           "instant": false,
           "interval": "",
-          "legendFormat": "Ø Antwortzeit in s",
+          "intervalFactor": 1,
+          "legendFormat": "Antwortzeit in ms",
           "refId": "D"
         },
         {
@@ -215,9 +208,11 @@ data:
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum by (namespace) (irate(kutuapp_test_responses_total[$__rate_interval]))",
+          "expr": "sum(irate(kutuapp_test_responses_duration_seconds_count[$__rate_interval]))",
           "hide": false,
+          "instant": false,
           "interval": "",
+          "intervalFactor": 1,
           "legendFormat": "Antworten/s",
           "refId": "C"
         }
@@ -300,6 +295,36 @@ data:
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "4xx GET"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "4xx OPTIONS"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -343,9 +368,9 @@ data:
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum by(method, status)(rate(kutuapp_test_responses_duration_seconds_count{status=~\"4xx|5xx\"}[$__rate_interval]))",
+          "expr": "sum by (status, method)(irate(kutuapp_test_responses_duration_seconds_count{status=~\"4xx|5xx\"}[$__rate_interval])) > 0",
           "interval": "",
-          "legendFormat": "{{ status }} {{ method }}",
+          "legendFormat": "{{ status }} {{ method}}",
           "refId": "A"
         }
       ],
@@ -353,36 +378,31 @@ data:
       "type": "piechart"
     },
     {
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-GrYlRd"
+            "mode": "thresholds"
           },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto",
-            "filterable": false
-          },
+          "decimals": 4,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue",
+                "color": "dark-green",
                 "value": null
               },
               {
-                "color": "green",
-                "value": 15
+                "color": "light-green",
+                "value": 0.1
               },
               {
-                "color": "orange",
-                "value": 30
+                "color": "#EAB839",
+                "value": 0.6
               },
               {
                 "color": "red",
-                "value": 50
+                "value": 1.5
               }
             ]
           }
@@ -390,22 +410,25 @@ data:
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 24,
+        "h": 14,
+        "w": 12,
         "x": 0,
         "y": 6
       },
-      "id": 9,
+      "id": 4,
       "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
           ],
-          "show": true
+          "fields": "",
+          "values": false
         },
-        "showHeader": true,
-        "sortBy": []
+        "textMode": "value_and_name"
       },
       "pluginVersion": "8.3.6",
       "targets": [
@@ -414,35 +437,17 @@ data:
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "exemplar": false,
-          "expr": "sum by(comp, dg) (kutuapp_test_competition_websockets_active)",
-          "format": "table",
-          "instant": true,
+          "exemplar": true,
+          "expr": "(rate(kutuapp_test_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) / rate(kutuapp_test_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{ comp }} / {{ dg }}",
-          "refId": "Clients per Wettkampf / Durchgang"
+          "legendFormat": "{{ path }}",
+          "refId": "A"
         }
       ],
-      "title": "Connections per Comp / DG",
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true
-            },
-            "indexByName": {},
-            "renameByName": {
-              "Value": "Anzahl Clients",
-              "comp": "Wettkampf",
-              "dg": "Durchgang"
-            }
-          }
-        }
-      ],
-      "transparent": true,
-      "type": "table"
+      "title": "Top 3 Antwortzeit / Pfad",
+      "transformations": [],
+      "type": "stat"
     },
     {
       "description": "",
@@ -478,10 +483,10 @@ data:
         "overrides": []
       },
       "gridPos": {
-        "h": 16,
+        "h": 14,
         "w": 12,
-        "x": 0,
-        "y": 16
+        "x": 12,
+        "y": 6
       },
       "id": 5,
       "options": {
@@ -506,9 +511,7 @@ data:
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sort(kutuapp_test_competition_websockets_active) > 0",
-          "format": "time_series",
-          "instant": false,
+          "expr": "kutuapp_test_competition_websockets_active",
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{ comp }} / {{ dg }}",
@@ -516,78 +519,6 @@ data:
         }
       ],
       "title": "Connections per Comp / DG",
-      "transformations": [],
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 4,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "dark-green",
-                "value": null
-              },
-              {
-                "color": "light-green",
-                "value": 0.1
-              },
-              {
-                "color": "#EAB839",
-                "value": 0.6
-              },
-              {
-                "color": "red",
-                "value": 1.5
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 16,
-        "w": 12,
-        "x": 12,
-        "y": 16
-      },
-      "id": 4,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "exemplar": true,
-          "expr": "irate(kutuapp_test_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) > 0.001",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{ path }} {{ method }}",
-          "refId": "A"
-        }
-      ],
-      "title": "Top 3 Antwortzeit / Pfad",
       "transformations": [],
       "type": "stat"
     }
@@ -600,7 +531,7 @@ data:
     "list": []
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
