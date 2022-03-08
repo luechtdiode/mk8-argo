@@ -31,7 +31,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "iteration": 1646772928711,
+      "iteration": 1646773416021,
       "links": [],
       "liveNow": true,
       "panels": [
@@ -503,7 +503,7 @@ data:
               "fields": "",
               "values": false
             },
-            "textMode": "auto"
+            "textMode": "value_and_name"
           },
           "pluginVersion": "8.3.6",
           "targets": [
@@ -587,7 +587,7 @@ data:
       "timezone": "browser",
       "title": "Kutuapp-Test",
       "uid": "8MnNpxY7z",
-      "version": 34,
+      "version": 35,
       "weekStart": ""
     }
     `}}
