@@ -824,14 +824,14 @@ data:
         ]
       },
       "time": {
-        "from": "now-1h",
+        "from": "now-3h",
         "to": "now"
       },
       "timepicker": {},
       "timezone": "browser",
-      "title": "Kutuapp-Test",
-      "uid": "8MnNpxY7z",
-      "version": 37,
+      "title": "Kutuapp",
+      "uid": "kutuapp1",
+      "version": 1,
       "weekStart": ""
     }
     `}}
