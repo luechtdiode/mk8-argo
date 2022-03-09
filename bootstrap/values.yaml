@@ -13,10 +13,9 @@ bootstrap:
  - name: keycloak
  - name: kmgetubs19
  - name: kutuapp-test
-   app: kutuapp
    monitoring: true
  - name: kutuapp
-   app: kutuapp
+   monitoring: true
  - name: sharevic
  - name: mbq
  - name: quarkus-starter
