@@ -31,7 +31,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "iteration": 1646777637578,
+      "iteration": 1646781450993,
       "links": [],
       "liveNow": true,
       "panels": [
@@ -108,6 +108,86 @@ data:
               "color": {
                 "mode": "thresholds"
               },
+              "decimals": 2,
+              "mappings": [],
+              "thresholds": {
+                "mode": "percentage",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 6,
+            "y": 0
+          },
+          "id": 11,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.3.6",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "max(irate(kutuapp_responses_duration_seconds_sum[$__rate_interval]) * 1000 / irate(kutuapp_responses_duration_seconds_count[$__rate_interval]))",
+              "hide": false,
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "Zeit in ms",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum(irate(kutuapp_responses_duration_seconds_count[$__rate_interval]))",
+              "hide": false,
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "Antw/s",
+              "refId": "C"
+            }
+          ],
+          "title": "Antwortverhalten",
+          "type": "stat"
+        },
+        {
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
               "decimals": 0,
               "mappings": [],
               "thresholds": {
@@ -129,8 +209,8 @@ data:
           },
           "gridPos": {
             "h": 6,
-            "w": 12,
-            "x": 6,
+            "w": 6,
+            "x": 12,
             "y": 0
           },
           "id": 2,
@@ -160,7 +240,7 @@ data:
               "hide": false,
               "instant": false,
               "interval": "",
-              "legendFormat": "Aktive Wettkämpfe",
+              "legendFormat": "# Wettkämpfe",
               "refId": "B"
             },
             {
@@ -173,7 +253,7 @@ data:
               "hide": false,
               "instant": false,
               "interval": "",
-              "legendFormat": "Anzahl Clients",
+              "legendFormat": "# wss",
               "refId": "CurrentClientCount"
             },
             {
@@ -182,43 +262,15 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "sum by (namespace) (kutuapp_connections_active)",
+              "expr": "avg(irate(kutuapp_connections_total[$__rate_interval]))",
               "hide": false,
               "instant": false,
               "interval": "",
-              "legendFormat": "Aktive Verbindungen",
+              "legendFormat": "# https",
               "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "exemplar": true,
-              "expr": "max(irate(kutuapp_responses_duration_seconds_sum[$__rate_interval]) * 1000 / irate(kutuapp_responses_duration_seconds_count[$__rate_interval]))",
-              "hide": false,
-              "instant": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "Antwortzeit in ms",
-              "refId": "D"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "exemplar": true,
-              "expr": "sum(irate(kutuapp_responses_duration_seconds_count[$__rate_interval]))",
-              "hide": false,
-              "instant": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "Antworten/s",
-              "refId": "C"
             }
           ],
-          "title": "Kennzahlen",
+          "title": "Verbindungen",
           "type": "stat"
         },
         {
@@ -427,7 +479,7 @@ data:
                 "properties": [
                   {
                     "id": "custom.width",
-                    "value": 256
+                    "value": 414
                   }
                 ]
               },
@@ -446,7 +498,7 @@ data:
             ]
           },
           "gridPos": {
-            "h": 5,
+            "h": 11,
             "w": 24,
             "x": 0,
             "y": 6
@@ -461,7 +513,12 @@ data:
               "show": false
             },
             "showHeader": true,
-            "sortBy": []
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "Zeit (min)"
+              }
+            ]
           },
           "pluginVersion": "8.3.6",
           "targets": [
@@ -479,7 +536,7 @@ data:
               "refId": "A"
             }
           ],
-          "title": "Antwortzeiten in ms / Pfad",
+          "title": "Antwortzeiten pro Methode, Pfad und Status",
           "transformations": [
             {
               "id": "sortBy",
@@ -602,7 +659,7 @@ data:
             "h": 28,
             "w": 12,
             "x": 0,
-            "y": 11
+            "y": 17
           },
           "id": 4,
           "options": {
@@ -634,7 +691,7 @@ data:
               "refId": "A"
             }
           ],
-          "title": "Antwortzeit in ms / Pfad und Methode",
+          "title": "Verlauf der Antwortzeiten",
           "transformations": [],
           "type": "stat"
         },
@@ -675,7 +732,7 @@ data:
             "h": 28,
             "w": 12,
             "x": 12,
-            "y": 11
+            "y": 17
           },
           "id": 5,
           "options": {
@@ -707,12 +764,12 @@ data:
               "refId": "A"
             }
           ],
-          "title": "Connections per Comp / DG",
+          "title": "Verlauf der Verbindungen",
           "transformations": [],
           "type": "stat"
         }
       ],
-      "refresh": "30s",
+      "refresh": "5s",
       "schemaVersion": 34,
       "style": "dark",
       "tags": [],
@@ -767,14 +824,14 @@ data:
         ]
       },
       "time": {
-        "from": "now-3h",
+        "from": "now-1h",
         "to": "now"
       },
       "timepicker": {},
       "timezone": "browser",
       "title": "Kutuapp-Test",
       "uid": "8MnNpxY7z",
-      "version": 36,
+      "version": 37,
       "weekStart": ""
     }
     `}}
