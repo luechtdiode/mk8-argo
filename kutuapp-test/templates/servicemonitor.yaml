@@ -28,5 +28,5 @@ spec:
     staticConfig:
       static:
       {{ range .Values.routes }}    
-      - "{{ trimPrefix "https://" .domain }}"
+      - "https://{{ trimPrefix "https://" .domain }}"
       {{ end }}
