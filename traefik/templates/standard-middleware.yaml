@@ -22,6 +22,7 @@ spec:
     #- name: http-redirect 
     - name: standard
     - name: more-security-response-header
+    - name: x-fwd-proto-https
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
@@ -31,6 +32,15 @@ spec:
   redirectScheme:
     scheme: https
     permanent: true
+---    
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: x-fwd-proto-https
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: "https"    
 ---
 # Enable gzip compression
 apiVersion: traefik.containo.us/v1alpha1
