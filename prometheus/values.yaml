@@ -156,7 +156,6 @@ monitoring:
         matchLabels:
           monitoring: enabled
 
-
       probeSelectorNilUsesHelmValues: false 
 blackbox-exporter:
   ## An Ingress resource can provide name-based virtual hosting and TLS
