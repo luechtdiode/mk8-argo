@@ -19,7 +19,7 @@ metadata:
 spec:
   jobName: http-get
   interval: 60s
-  module: http_2xx
+  module: http_4xx
   prober:
     url: prometheus-blackbox-exporter.prometheus:9115
   targets:
