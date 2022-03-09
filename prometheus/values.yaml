@@ -152,3 +152,25 @@ monitoring:
 
       # podMonitorSelectorNilUsesHelmValues: false
       # podMonitorSelector: {}    
+blackbox-exporter:
+  ## An Ingress resource can provide name-based virtual hosting and TLS
+  ## termination among other things for CouchDB deployments which are accessed
+  ## from outside the Kubernetes cluster.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
+  ingress:
+    enabled: true
+    className: "traefik"
+    annotations:
+      # kubernetes.io/ingress.class: traefik
+      traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+      traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
+    hosts: 
+      - blackbox.interpolar.ch
+
+  serviceMonitor:
+    ## If true, a ServiceMonitor CRD is created for a prometheus operator
+    ## https://github.com/coreos/prometheus-operator
+    ##
+    enabled: true

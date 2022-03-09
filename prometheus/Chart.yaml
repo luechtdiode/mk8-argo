@@ -6,3 +6,7 @@ dependencies:
     version: 33.1.0
     repository: https://prometheus-community.github.io/helm-charts
     alias: monitoring
+  - name: prometheus-blackbox-exporter
+    version: 5.4.1
+    repository: https://prometheus-community.github.io/helm-charts
+    alias: blackbox-exporter

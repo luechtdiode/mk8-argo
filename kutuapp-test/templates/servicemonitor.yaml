@@ -12,4 +12,21 @@ spec:
       app: kutuapp
   namespaceSelector:
     matchNames:
-      - kutuapp-test
+      - kutuapp-test  
+---
+kind: Probe
+apiVersion: monitoring.coreos.com/v1
+metadata:
+  name: https-probes
+  namespace: prometheus
+spec:
+  interval: 60s
+  module: http_2xx
+  prober:
+    url: blackbox-exporter.monitoring.svc.cluster.local:19115
+  targets:
+    staticConfig:
+      static:
+      {{ range .Values.routes }}    
+      - {{ trimPrefix "https://" .domain }}
+      {{ end }}
