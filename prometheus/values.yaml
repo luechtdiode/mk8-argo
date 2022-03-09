@@ -167,7 +167,10 @@ blackbox-exporter:
       traefik.ingress.kubernetes.io/router.tls: "true"
       traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
     hosts: 
-      - blackbox.interpolar.ch
+      - host: blackbox.interpolar.ch
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
 
   serviceMonitor:
     ## If true, a ServiceMonitor CRD is created for a prometheus operator
