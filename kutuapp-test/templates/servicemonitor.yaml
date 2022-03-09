@@ -19,13 +19,14 @@ apiVersion: monitoring.coreos.com/v1
 metadata:
   name: https-probes
 spec:
+  jobName: http-get
   interval: 60s
   module: http_2xx
   prober:
-    url: prometheus-blackbox-exporter.prometheus.svc.cluster.local:9115 
+    url: prometheus-blackbox-exporter.prometheus:9115
   targets:
     staticConfig:
       static:
       {{ range .Values.routes }}    
-      - {{ trimPrefix "https://" .domain }}
+      - "{{ trimPrefix "https://" .domain }}"
       {{ end }}
