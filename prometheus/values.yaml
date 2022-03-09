@@ -151,7 +151,9 @@ monitoring:
           monitoring: enabled
 
       # podMonitorSelectorNilUsesHelmValues: false
-      # podMonitorSelector: {}    
+      # podMonitorSelector: {}   
+
+      probeSelectorNilUsesHelmValues: false 
 blackbox-exporter:
   ## An Ingress resource can provide name-based virtual hosting and TLS
   ## termination among other things for CouchDB deployments which are accessed
