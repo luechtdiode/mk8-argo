@@ -3,6 +3,7 @@ bootstrap:
  - name: sealed-secrets
  - name: openebs
  - name: traefik
+   monitoring: true
  - name: argocd
  - name: prometheus
    monitoring: true

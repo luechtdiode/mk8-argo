@@ -1,0 +1,30 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: servicemonitor
+spec:
+  endpoints:
+    - interval: 30s
+      path: /metrics
+      port: metrics
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  namespaceSelector:
+    matchNames:
+      - traefik  
+---
+kind: Probe
+apiVersion: monitoring.coreos.com/v1
+metadata:
+  name: https-probes
+spec:
+  jobName: http-get
+  interval: 60s
+  module: http_2xx
+  prober:
+    url: prometheus-blackbox-exporter.prometheus:9115
+  targets:
+    staticConfig:
+      static:
+      - "https://traefik.interpolar.ch"

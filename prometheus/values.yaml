@@ -150,8 +150,12 @@ monitoring:
         matchLabels:
           monitoring: enabled
 
-      # podMonitorSelectorNilUsesHelmValues: false
-      # podMonitorSelector: {}   
+      podMonitorSelectorNilUsesHelmValues: false
+      podMonitorSelector: {}
+      podMonitorNamespaceSelector:
+        matchLabels:
+          monitoring: enabled
+
 
       probeSelectorNilUsesHelmValues: false 
 blackbox-exporter:
