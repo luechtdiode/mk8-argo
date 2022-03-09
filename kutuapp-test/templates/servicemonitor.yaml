@@ -18,7 +18,6 @@ kind: Probe
 apiVersion: monitoring.coreos.com/v1
 metadata:
   name: https-probes
-  namespace: prometheus
 spec:
   interval: 60s
   module: http_2xx
