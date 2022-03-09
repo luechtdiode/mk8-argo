@@ -160,7 +160,7 @@ blackbox-exporter:
   ## from outside the Kubernetes cluster.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ingress:
-    enabled: true
+    enabled: false
     className: "traefik"
     annotations:
       # kubernetes.io/ingress.class: traefik
@@ -173,7 +173,8 @@ blackbox-exporter:
         paths:
           - path: /
             pathType: ImplementationSpecific
-
+  extraArgs:
+    - --history.limit=100
   serviceMonitor:
     ## If true, a ServiceMonitor CRD is created for a prometheus operator
     ## https://github.com/coreos/prometheus-operator
