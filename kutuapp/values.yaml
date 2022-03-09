@@ -37,7 +37,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r2b10
+    tag: v2r2b11
   network:
     http:
       servicePort: 5757
@@ -48,7 +48,7 @@ kutuapp:
       cpu: 0.50
       memory: 1.5Gi
     limits:
-      cpu: 1.00
+      cpu: 3.00
       memory: 2.0Gi
   envFrom:
     - secretRef:
