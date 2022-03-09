@@ -23,7 +23,7 @@ spec:
   interval: 60s
   module: http_2xx
   prober:
-    url: blackbox-exporter.monitoring.svc.cluster.local:19115
+    url: prometheus-blackbox-exporter.prometheus.svc.cluster.local:9115 
   targets:
     staticConfig:
       static:
