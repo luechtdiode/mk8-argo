@@ -1,18 +1,16 @@
 apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+kind: PodMonitor
 metadata:
-  name: servicemonitor
+  name: podmonitor
 spec:
-  endpoints:
-    - interval: 30s
-      path: /metrics
-      port: metrics
   selector:
     matchLabels:
       app.kubernetes.io/name: traefik
   namespaceSelector:
     matchNames:
-      - traefik  
+      - traefik
+  podMetricsEndpoints:
+    - port: metrics
 ---
 kind: Probe
 apiVersion: monitoring.coreos.com/v1
