@@ -39,10 +39,13 @@ kutuapp:
     repository: luechtdiode/kutuapp
     tag: v2r2b11
   network:
+    metrics:
+      servicePort: 3000
+      targetPort: http
     http:
       servicePort: 5757
   service:
-    type: NodePort
+    type: ClusterIP
   resources:
     requests:
       cpu: 0.50
