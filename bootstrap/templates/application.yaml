@@ -20,23 +20,21 @@ spec:
     repoURL: {{ $.Values.repository }}
     targetRevision: HEAD
   syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true        
-      syncOptions:
-        - ApplyOutOfSyncOnly=true
-        # - CreateNamespace=true
-        # - Replace=true
+    automated:
+      prune: true
+      selfHeal: true        
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      # - CreateNamespace=true
+      # - Replace=true
 ---        
 apiVersion: v1
 kind: Namespace
 metadata:
   name: {{ .name }}
-  labels:
-    {{- if .monitoring }}
-    monitoring: "enabled"
-    {{- end }}
 {{- if .monitoring }}
+  labels:
+    monitoring: "enabled"
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
