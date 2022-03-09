@@ -57,3 +57,4 @@ roleRef:
   kind: Role
   name: monitoring
 {{- end }}
+{{ end }}
