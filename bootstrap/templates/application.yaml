@@ -52,6 +52,9 @@ subjects:
   - kind: ServiceAccount
     name: prometheus-monitoring-prometheus
     namespace: prometheus
+  - kind: ServiceAccount
+    name: prometheus-blackbox-exporter
+    namespace: prometheus    
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
