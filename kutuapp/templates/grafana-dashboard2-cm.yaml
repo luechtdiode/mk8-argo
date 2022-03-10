@@ -31,7 +31,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "iteration": 1646932193199,
+      "iteration": 1646933959922,
       "links": [],
       "liveNow": true,
       "panels": [
@@ -521,11 +521,11 @@ data:
               ],
               "displayMode": "table",
               "placement": "bottom",
-              "sortBy": "Mean",
+              "sortBy": "Distinct Count",
               "sortDesc": true
             },
             "tooltip": {
-              "mode": "single"
+              "mode": "multi"
             }
           },
           "pluginVersion": "8.3.6",
@@ -557,7 +557,6 @@ data:
               "custom": {
                 "axisLabel": "",
                 "axisPlacement": "auto",
-                "axisSoftMin": 1,
                 "barAlignment": 0,
                 "drawStyle": "line",
                 "fillOpacity": 25,
@@ -583,7 +582,6 @@ data:
                   "mode": "area"
                 }
               },
-              "decimals": 0,
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -594,19 +592,19 @@ data:
                   },
                   {
                     "color": "green",
-                    "value": 80
+                    "value": 1
                   },
                   {
                     "color": "orange",
-                    "value": 100
+                    "value": 200
                   },
                   {
                     "color": "red",
-                    "value": 150
+                    "value": 250
                   }
                 ]
               },
-              "unit": "Clients"
+              "unit": "none"
             },
             "overrides": []
           },
@@ -630,7 +628,7 @@ data:
               "sortDesc": true
             },
             "tooltip": {
-              "mode": "single"
+              "mode": "multi"
             }
           },
           "pluginVersion": "8.3.6",
@@ -641,7 +639,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "  irate(kutuapp_connections_total[$__rate_interval])",
+              "expr": "irate(kutuapp_connections_total[$__rate_interval])",
               "format": "time_series",
               "hide": false,
               "instant": false,
@@ -947,7 +945,7 @@ data:
       "timezone": "browser",
       "title": "Kutuapp-Graph",
       "uid": "kutuapp2",
-      "version": 4,
+      "version": 5,
       "weekStart": ""
     }
     `}}
