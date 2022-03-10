@@ -31,7 +31,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "iteration": 1646897760174,
+      "iteration": 1646898717448,
       "links": [],
       "liveNow": true,
       "panels": [
@@ -431,196 +431,17 @@ data:
           "type": "piechart"
         },
         {
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "custom": {
-                "align": "auto",
-                "displayMode": "auto"
-              },
-              "decimals": 3,
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "ms"
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Status"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 72
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Pfad"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 414
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Methode"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 76
-                  }
-                ]
-              }
-            ]
-          },
+          "collapsed": false,
           "gridPos": {
-            "h": 11,
+            "h": 1,
             "w": 24,
             "x": 0,
             "y": 6
           },
-          "id": 10,
-          "options": {
-            "footer": {
-              "fields": "",
-              "reducer": [
-                "diffperc"
-              ],
-              "show": false
-            },
-            "showHeader": true,
-            "sortBy": [
-              {
-                "desc": true,
-                "displayName": "Zeit (min)"
-              }
-            ]
-          },
-          "pluginVersion": "8.3.6",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "exemplar": true,
-              "expr": "avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\"}[$__rate_interval])) * 1000 / avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\"}[$__rate_interval]))>0",
-              "format": "table",
-              "instant": false,
-              "interval": "",
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "title": "Antwortzeiten pro Methode, Pfad und Status",
-          "transformations": [
-            {
-              "id": "sortBy",
-              "options": {
-                "fields": {},
-                "sort": [
-                  {
-                    "desc": false,
-                    "field": "path"
-                  }
-                ]
-              }
-            },
-            {
-              "id": "organize",
-              "options": {
-                "excludeByName": {
-                  "Time": true,
-                  "method": false,
-                  "path": false,
-                  "status": false
-                },
-                "indexByName": {
-                  "Time": 0,
-                  "Value": 4,
-                  "method": 1,
-                  "path": 2,
-                  "status": 3
-                },
-                "renameByName": {
-                  "Value": "Zeit",
-                  "method": "Methode",
-                  "path": "Pfad",
-                  "status": "Status"
-                }
-              }
-            },
-            {
-              "id": "groupBy",
-              "options": {
-                "fields": {
-                  "Antwortzeit": {
-                    "aggregations": [
-                      "min",
-                      "max",
-                      "mean",
-                      "lastNotNull"
-                    ],
-                    "operation": "aggregate"
-                  },
-                  "Methode": {
-                    "aggregations": [],
-                    "operation": "groupby"
-                  },
-                  "Pfad": {
-                    "aggregations": [],
-                    "operation": "groupby"
-                  },
-                  "Req/s": {
-                    "aggregations": [
-                      "min",
-                      "max",
-                      "lastNotNull"
-                    ],
-                    "operation": "aggregate"
-                  },
-                  "Status": {
-                    "aggregations": [],
-                    "operation": "groupby"
-                  },
-                  "Zeit": {
-                    "aggregations": [
-                      "min",
-                      "max",
-                      "mean",
-                      "lastNotNull"
-                    ],
-                    "operation": "aggregate"
-                  }
-                }
-              }
-            }
-          ],
-          "type": "table"
+          "id": 15,
+          "panels": [],
+          "title": "Verlauf",
+          "type": "row"
         },
         {
           "fieldConfig": {
@@ -674,10 +495,10 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 28,
+            "h": 14,
             "w": 12,
             "x": 0,
-            "y": 17
+            "y": 7
           },
           "id": 4,
           "options": {
@@ -770,10 +591,10 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 28,
+            "h": 14,
             "w": 12,
             "x": 12,
-            "y": 17
+            "y": 7
           },
           "id": 5,
           "options": {
@@ -809,6 +630,212 @@ data:
           "title": "Verlauf der Verbindungen",
           "transformations": [],
           "type": "timeseries"
+        },
+        {
+          "collapsed": true,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 21
+          },
+          "id": 13,
+          "panels": [
+            {
+              "description": "",
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "displayMode": "auto"
+                  },
+                  "decimals": 3,
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "ms"
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Status"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 72
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Pfad"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 414
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Methode"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 76
+                      }
+                    ]
+                  }
+                ]
+              },
+              "gridPos": {
+                "h": 11,
+                "w": 24,
+                "x": 0,
+                "y": 8
+              },
+              "id": 10,
+              "options": {
+                "footer": {
+                  "fields": "",
+                  "reducer": [
+                    "diffperc"
+                  ],
+                  "show": false
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "Zeit (min)"
+                  }
+                ]
+              },
+              "pluginVersion": "8.3.6",
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "PBFA97CFB590B2093"
+                  },
+                  "exemplar": true,
+                  "expr": "avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\"}[$__rate_interval])) * 1000 / avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\"}[$__rate_interval]))>0",
+                  "format": "table",
+                  "instant": false,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "title": "Antwortzeiten pro Methode, Pfad und Status",
+              "transformations": [
+                {
+                  "id": "sortBy",
+                  "options": {
+                    "fields": {},
+                    "sort": [
+                      {
+                        "desc": false,
+                        "field": "path"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "organize",
+                  "options": {
+                    "excludeByName": {
+                      "Time": true,
+                      "method": false,
+                      "path": false,
+                      "status": false
+                    },
+                    "indexByName": {
+                      "Time": 0,
+                      "Value": 4,
+                      "method": 1,
+                      "path": 2,
+                      "status": 3
+                    },
+                    "renameByName": {
+                      "Value": "Zeit",
+                      "method": "Methode",
+                      "path": "Pfad",
+                      "status": "Status"
+                    }
+                  }
+                },
+                {
+                  "id": "groupBy",
+                  "options": {
+                    "fields": {
+                      "Antwortzeit": {
+                        "aggregations": [
+                          "min",
+                          "max",
+                          "mean",
+                          "lastNotNull"
+                        ],
+                        "operation": "aggregate"
+                      },
+                      "Methode": {
+                        "aggregations": [],
+                        "operation": "groupby"
+                      },
+                      "Pfad": {
+                        "aggregations": [],
+                        "operation": "groupby"
+                      },
+                      "Req/s": {
+                        "aggregations": [
+                          "min",
+                          "max",
+                          "lastNotNull"
+                        ],
+                        "operation": "aggregate"
+                      },
+                      "Status": {
+                        "aggregations": [],
+                        "operation": "groupby"
+                      },
+                      "Zeit": {
+                        "aggregations": [
+                          "min",
+                          "max",
+                          "mean",
+                          "lastNotNull"
+                        ],
+                        "operation": "aggregate"
+                      }
+                    }
+                  }
+                }
+              ],
+              "type": "table"
+            }
+          ],
+          "title": "API / Status",
+          "type": "row"
         }
       ],
       "refresh": false,
@@ -866,8 +893,8 @@ data:
         ]
       },
       "time": {
-        "from": "2022-03-09T16:45:33.631Z",
-        "to": "2022-03-09T18:00:07.243Z"
+        "from": "now-1h",
+        "to": "now"
       },
       "timepicker": {},
       "timezone": "browser",
