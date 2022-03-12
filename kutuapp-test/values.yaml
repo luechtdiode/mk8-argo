@@ -1,9 +1,9 @@
 routes:
-  - name: kutuapp-waf
+  - name: kutuapp
     domain: kutuapp-test.interpolar.ch
     dns_resolver: "cf-production"
-    port: 5858
-    portSecure: 5858
+    port: 5757
+    portSecure: 5757
   - name: kutuapp-waf
     domain: kutuapp-test.sharevic.net
     dns_resolver: "cf-production"
