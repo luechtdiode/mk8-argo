@@ -47,7 +47,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: feature.share-button-4cb080f
+    tag: feature.share-button-f15880e
   labels:
     monitoring: enabled
   network:
