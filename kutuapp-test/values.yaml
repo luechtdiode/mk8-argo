@@ -1,5 +1,5 @@
 routes:
-  - name: kutuapp
+  - name: kutuapp-waf
     domain: kutuapp-test.interpolar.ch
     dns_resolver: "cf-production"
     port: 5858
