@@ -31,7 +31,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "iteration": 1647637152102,
+      "iteration": 1647715369266,
       "links": [],
       "liveNow": true,
       "panels": [
@@ -537,7 +537,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "(rate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) * 1000 / rate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0",
+              "expr": "sum by(namespace) ((rate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) * 1000 / rate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0)",
               "interval": "",
               "intervalFactor": 2,
               "legendFormat": "{{ path }} {{ method }}",
@@ -640,7 +640,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "floor(rate(kutuapp_connections_total[$__rate_interval]) * 100 / 3)",
+              "expr": "sum by(namespace) (floor(rate(kutuapp_connections_total[$__rate_interval]) * 100 / 3))",
               "format": "time_series",
               "hide": false,
               "instant": false,
@@ -655,7 +655,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "sum(kutuapp_competition_websockets_active)",
+              "expr": "sum by(namespace) (sum(kutuapp_competition_websockets_active))",
               "hide": false,
               "interval": "",
               "legendFormat": "WSS Alle",
@@ -667,7 +667,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "kutuapp_competition_websockets_active",
+              "expr": "sum by(namespace) (kutuapp_competition_websockets_active)",
               "interval": "",
               "intervalFactor": 1,
               "legendFormat": "WSS {{ comp }} / {{ dg }}",
@@ -946,7 +946,7 @@ data:
       "timezone": "browser",
       "title": "Kutuapp-Graph",
       "uid": "kutuapp2",
-      "version": 8,
+      "version": 9,
       "weekStart": ""
     }
     `}}
