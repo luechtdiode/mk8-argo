@@ -537,7 +537,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "sum by(namespace) ((rate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) * 1000 / rate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0)",
+              "expr": "sum by(path, method) ((rate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) * 1000 / rate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0)",
               "interval": "",
               "intervalFactor": 2,
               "legendFormat": "{{ path }} {{ method }}",
@@ -667,7 +667,7 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "sum by(namespace) (kutuapp_competition_websockets_active)",
+              "expr": "sum by(comp, dg) (kutuapp_competition_websockets_active)",
               "interval": "",
               "intervalFactor": 1,
               "legendFormat": "WSS {{ comp }} / {{ dg }}",
@@ -939,7 +939,7 @@ data:
         ]
       },
       "time": {
-        "from": "now-30m",
+        "from": "now-3h",
         "to": "now"
       },
       "timepicker": {},
