@@ -3,3 +3,4 @@
 *-secret.yaml
 **/private
 *.tar.gz
+admin.config
