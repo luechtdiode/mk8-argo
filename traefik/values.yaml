@@ -7,8 +7,6 @@ templates:
     dns_resolver: "cf-production"
 
 traefik:
-    image:
-      tag: 2.6.3
     # Removing to allow IP setting
     #ports:
     #    udp53:
