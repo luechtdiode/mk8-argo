@@ -46,6 +46,11 @@ kubernetes-dashboard:
   #   - --enable-skip-login
   #   - --enable-insecure-login
   #   - --system-banner="Welcome to Kubernetes"
+  extraArgs:
+    - --auto-generate-certificates
+    - --namespace=kubernetes-dashboard
+    - --token-ttl=3600
+    - --sidecar-host=http://dashboard-metrics-scraper:8000
 
   ## Additional container environment variables
   ##
@@ -246,7 +251,7 @@ kubernetes-dashboard:
   #  args:
   #    - --log-level=info
   #    - --logtostderr=true
-
+      
   ## Optional Metrics Server sub-chart
   ## Enable this if you don't already have metrics-server enabled on your cluster and
   ## want to use it with dashboard metrics-scraper
@@ -254,7 +259,7 @@ kubernetes-dashboard:
   ##  - https://hub.helm.sh/charts/stable/metrics-server
   ##  - https://github.com/kubernetes-sigs/metrics-server
   metrics-server:
-    enabled: true
+    enabled: false
     ## Example for additional args
     # args:
     #  - --kubelet-preferred-address-types=InternalIP
