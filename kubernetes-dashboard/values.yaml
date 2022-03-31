@@ -232,7 +232,7 @@ kubernetes-dashboard:
   ## refs: https://github.com/kubernetes-sigs/dashboard-metrics-scraper
   metricsScraper:
     ## Wether to enable dashboard-metrics-scraper
-    enabled: false
+    enabled: true
     image:
       repository: kubernetesui/metrics-scraper
       tag: v1.0.7
@@ -254,7 +254,7 @@ kubernetes-dashboard:
   ##  - https://hub.helm.sh/charts/stable/metrics-server
   ##  - https://github.com/kubernetes-sigs/metrics-server
   metrics-server:
-    enabled: false
+    enabled: true
     ## Example for additional args
     # args:
     #  - --kubelet-preferred-address-types=InternalIP
