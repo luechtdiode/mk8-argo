@@ -233,9 +233,9 @@ kubernetes-dashboard:
   metricsScraper:
     ## Wether to enable dashboard-metrics-scraper
     enabled: true
-    image:
-      repository: kubernetesui/metrics-scraper
-      tag: v1.0.7
+    #image:
+    #  repository: kubernetesui/metrics-scraper
+    #  tag: v1.0.7
     resources: {}
     ## SecurityContext for the kubernetes dashboard metrics scraper container
     containerSecurityContext:
