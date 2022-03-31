@@ -121,7 +121,7 @@ kubernetes-dashboard:
   service:
     type: NodePort
     # Dashboard service port
-    externalPort: 8080
+    externalPort: 443
 
     ## LoadBalancerSourcesRange is a list of allowed CIDR values, which are combined with ServicePort to
     ## set allowed inbound rules on the security group assigned to the master load balancer
