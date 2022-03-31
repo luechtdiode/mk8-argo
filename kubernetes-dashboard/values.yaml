@@ -253,6 +253,7 @@ kubernetes-dashboard:
   ## refs:
   ##  - https://hub.helm.sh/charts/stable/metrics-server
   ##  - https://github.com/kubernetes-sigs/metrics-server
+  ##  - https://github.com/kubernetes-sigs/metrics-server/issues/588
   metrics-server:
     enabled: false
     ## Example for additional args
