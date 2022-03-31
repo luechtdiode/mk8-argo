@@ -46,11 +46,6 @@ kubernetes-dashboard:
   #   - --enable-skip-login
   #   - --enable-insecure-login
   #   - --system-banner="Welcome to Kubernetes"
-  extraArgs:
-    - --auto-generate-certificates
-    - --namespace=kubernetes-dashboard
-    - --token-ttl=3600
-    - --sidecar-host=http://dashboard-metrics-scraper.kubernetes-dashboard:8000
 
   ## Additional container environment variables
   ##
