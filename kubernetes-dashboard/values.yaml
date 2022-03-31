@@ -50,7 +50,7 @@ kubernetes-dashboard:
     - --auto-generate-certificates
     - --namespace=kubernetes-dashboard
     - --token-ttl=3600
-    - --sidecar-host=http://dashboard-metrics-scraper:8000
+    - --sidecar-host=http://dashboard-metrics-scraper.kubernetes-dashboard:8000
 
   ## Additional container environment variables
   ##
@@ -238,9 +238,9 @@ kubernetes-dashboard:
   metricsScraper:
     ## Wether to enable dashboard-metrics-scraper
     enabled: true
-    #image:
-    #  repository: kubernetesui/metrics-scraper
-    #  tag: v1.0.7
+    image:
+      repository: kubernetesui/metrics-scraper
+      tag: v1.0.7
     resources: {}
     ## SecurityContext for the kubernetes dashboard metrics scraper container
     containerSecurityContext:
