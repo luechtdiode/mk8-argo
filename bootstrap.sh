@@ -3,8 +3,8 @@
 alias kubectl='microk8s kubectl'
 alias helm='microk8s helm3'
 
-sudo microk8s config > $(pwd)/.kube/admin.config
-export KUBECONFIG=$(pwd)/.kube/admin.config
+sudo microk8s config > $(pwd)/../.kube/admin.config
+export KUBECONFIG=$(pwd)/../.kube/admin.config
 
 kubectl apply -f admin-user-sa.yaml
 kubectl apply -f admin-cluster-rolebinding.yaml
@@ -18,7 +18,7 @@ helm repo update
 helm dependencies update
 kubectl create namespace sealed-secrets
 # kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
-helm install sealed-secrets -n sealed-secrets -f values.yaml sealed-secrets/sealed-secrets
+helm install -n sealed-secrets sealed-secrets . -f values.yaml
 
 # kubeseal --fetch-cert \
 # --controller-name=sealed-secrets \

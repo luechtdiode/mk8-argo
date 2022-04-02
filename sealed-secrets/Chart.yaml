@@ -1,4 +1,4 @@
-name: sealed-secrets
+name: sealed-secrets-argo
 apiVersion: v2
 version: 1.0.0
 dependencies:
