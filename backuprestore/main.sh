@@ -29,7 +29,7 @@ function usage() {
     cloudsync               => save all current backups to storj bucket
                                [[up | down] bucket-qualifier] defaults to up today 
     cloudsync up            => save all current backups to storj bucket
-    cloudsync down <bucket-date> => download all backups from storj bucket
+    cloudsync down          => download all backups from storj bucket
     clean_snapshots <namespace> => clean zfs-snapshots
     help                    => print usage
   '
