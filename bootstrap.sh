@@ -35,9 +35,10 @@ sudo install -m 755 kubeseal /usr/local/bin/kubeseal
 helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
 helm repo update
 helm dependencies update
-helm install -n sealed-secrets . -f values.yaml
+helm install sealed-secrets sealed-secrets/sealed-secrets
 cd ..
 
+sudo apt install unzip
 curl -L https://github.com/storj/storj/releases/latest/download/uplink_linux_amd64.zip -o uplink_linux_amd64.zip
 unzip -o uplink_linux_amd64.zip && rm uplink_linux_amd64.zip
 sudo install -m 755 uplink /usr/local/bin/uplink
