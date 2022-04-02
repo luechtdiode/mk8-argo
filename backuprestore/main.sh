@@ -122,7 +122,7 @@ function ns_dbrestore()
         pvc_backup $2
         ;;
       secretrestore)
-        secret_restore
+        secretrestore
         ;;
       clusterrestore)
         cluster_restore
