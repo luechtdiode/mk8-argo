@@ -1,6 +1,7 @@
 **/charts
 *.lock
 *-secret.yaml
+*-secret-content.yaml
 **/private
 *.tar.gz
 admin.config
