@@ -6,12 +6,18 @@ rm -rf $(pwd)/.kube
 mkdir $(pwd)/.kube
 sudo chown -f -R $USER $(pwd)/.kube
 
+sudo apt-get update
+sudo apt-get install open-iscsi
+sudo systemctl enable --now iscsid
+sudo cat /etc/iscsi/initiatorname.iscsi
+systemctl status iscsid
+
 snap info microk8s
 sudo snap install microk8s --classic --channel=latest/stable
 sudo usermod -a -G microk8s $USER
-su - $USER
-microk8s status --wait-ready
-microk8s enable helm3 host-access ingress metrics-server dns openebs rbac storage
+# su - $USER
+sudo microk8s status --wait-ready
+sudo microk8s enable helm3 host-access ingress metrics-server dns openebs rbac storage
 sudo iptables -P FORWARD ACCEPT
 
 alias kubectl='microk8s kubectl'
