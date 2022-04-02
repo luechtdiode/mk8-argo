@@ -18,7 +18,7 @@ helm repo update
 helm dependencies update
 kubectl create namespace sealed-secrets
 # kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
-helm install -n sealed-secrets sealed-secrets . -f values.yaml
+helm install -n kube-system sealed-secrets . -f values.yaml
 
 # kubeseal --fetch-cert \
 # --controller-name=sealed-secrets \
