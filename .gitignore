@@ -2,6 +2,7 @@
 *.lock
 *-secret.yaml
 *-secret-content.yaml
+*-secret-private.yaml
 **/private
 *.tar.gz
 admin.config

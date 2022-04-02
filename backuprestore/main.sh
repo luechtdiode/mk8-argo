@@ -25,6 +25,7 @@ function usage() {
     dbrestore <namespace>   => restore the database from its last stored backup
     dbrestore <namespace> <dbname> => restore database to a dedicated database
     secretrestore           => extracts secrets from backup and reseals the sealedsecrets
+    privatesecretrestore    => extracts private secrets from backup and applies in the namespaces
     clusterrestore          => restores cluster resouces (kubernetes dqlite-data)
     cloudsync               => save all current backups to storj bucket
                                [[up | down] bucket-qualifier] defaults to up today 
@@ -123,6 +124,9 @@ function ns_dbrestore()
         ;;
       secretrestore)
         secretrestore
+        ;;
+      privatesecretrestore)
+        sealed-private-secretrestore
         ;;
       clusterrestore)
         cluster_restore
