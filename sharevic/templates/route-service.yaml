@@ -23,8 +23,8 @@ spec:
       #- name: secure
       #  namespace: traefik
       #- name: app-passthrough-{{ .name }}-header
-      tls:
-        certResolver: {{ $resolver }}
+  tls:
+    certResolver: {{ $resolver }}
     {{ end }}
 {{ end }}
 

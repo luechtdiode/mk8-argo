@@ -22,8 +22,8 @@ spec:
       middlewares:
       - name: secure
         namespace: traefik
-      tls:
-        certResolver: {{ $resolver }}
+  tls:
+    certResolver: {{ $resolver }}
     {{ end }}
 {{ end }}
 

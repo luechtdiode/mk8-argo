@@ -17,8 +17,8 @@ spec:
       services:
       - name: api@internal
         kind: TraefikService
-      tls:
-        certResolver: {{ .Values.templates.dns_resolver }}
+  tls:
+    certResolver: {{ .Values.templates.dns_resolver }}
 {{- end }}
 {{- if .Values.templates.http_redirect.enable }}
 ---
