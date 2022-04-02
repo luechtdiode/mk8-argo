@@ -15,6 +15,7 @@ systemctl status iscsid
 snap info microk8s
 sudo snap install microk8s --classic --channel=latest/stable
 sudo usermod -a -G microk8s $USER
+newgrp microk8s
 # su - $USER
 sudo microk8s status --wait-ready
 sudo microk8s enable helm3 host-access ingress metrics-server dns openebs rbac storage
@@ -23,19 +24,32 @@ sudo iptables -P FORWARD ACCEPT
 alias kubectl='microk8s kubectl'
 alias helm='microk8s helm3'
 
-microk8s config > $(pwd)/.kube/admin.config
+sudo microk8s config > $(pwd)/.kube/admin.config
 export KUBECONFIG=$(pwd)/.kube/admin.config
+
+kubectl apply -f admin-user-sa.yaml
+kubectl apply -f admin-cluster-rolebinding.yaml
+kubectl -n kube-system get secret $(kubectl -n kube-system get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
 
 # prepare pre-requisites needed to apply gitops via argocd
 
 cd sealed-secrets
-wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.16.0/kubeseal-linux-amd64 -O kubeseal
-sudo install -m 755 kubeseal /usr/local/bin/kubeseal
+mkdir tmp
+wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/kubeseal-0.17.4-linux-amd64.tar.gz -O - | tar xz -C $(pwd)/tmp
+sudo install -m 755 tmp/kubeseal /usr/local/bin/kubeseal
+rm -rf tmp
 
 helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
 helm repo update
 helm dependencies update
-helm install sealed-secrets sealed-secrets/sealed-secrets
+kubectl create namespace sealed-secrets
+# kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
+helm install sealed-secrets -n sealed-secrets -f values.yaml sealed-secrets/sealed-secrets
+
+# kubeseal --fetch-cert \
+# --controller-name=sealed-secrets \
+# --controller-namespace=sealed-secrets \
+# > pub-cert.pem
 cd ..
 
 sudo apt install unzip
