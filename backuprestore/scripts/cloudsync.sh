@@ -17,7 +17,7 @@ function cloudsync() {
     down)
       if [ -z $2 ]
       then
-        LATEST_BACKUP="sj://$(uplink ls | grep mars  | tail -n +2 | awk '{ print $NF }' | sort -r | head -n 1)"
+        LATEST_BACKUP="sj://$(uplink ls | grep mars  | tail -n +2 | awk '{ print $NF }' | sort -r | head -n 1)/"
         CLOUD_PATH="$LATEST_BACKUP$PREFIX"
       fi
       uplink cp $CLOUD_PATH/secrets.tar.gz secrets.tar.gz
