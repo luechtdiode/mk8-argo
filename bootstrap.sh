@@ -12,6 +12,7 @@ sudo usermod -a -G microk8s $USER
 su - $USER
 microk8s status --wait-ready
 microk8s enable helm3 host-access ingress metrics-server dns openebs rbac storage
+sudo iptables -P FORWARD ACCEPT
 
 alias kubectl='microk8s kubectl'
 alias helm='microk8s helm3'
