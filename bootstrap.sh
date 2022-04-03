@@ -29,6 +29,7 @@ cd ..
 cd backuprestore
 ./main.sh cloudsync down
 ./main.sh secretrestore
+./main.sh privatesecretrestore
 cd ..
 
 cd traefik
@@ -46,12 +47,14 @@ helm repo update
 helm dependencies update
 
 kubectl create namespace argocd
-helm install -n argocd argocd . -f values.yaml
+helm install -n argocd argocd . -f values.yaml --set install-route=false
 cd ..
 
 kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -n argocd
 
 echo "argocd working now"
+
+helm template bootstrap-infra/ | kubectl apply -f -
 
 helm template bootstrap/ | kubectl apply -f -
 

@@ -1,3 +1,4 @@
+{{- if .Values.install-route }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -30,6 +31,4 @@ spec:
         namespace: traefik
       - name: more-security-response-header
         namespace: traefik
-  tls:
-    certResolver: cf-production
-
+{{- end}}

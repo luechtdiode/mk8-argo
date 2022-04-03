@@ -1,0 +1,10 @@
+repository: https://github.com/luechtdiode/mk8-argo.git
+bootstrap:
+ - name: sealed-secrets
+ - name: openebs
+ - name: prometheus
+   monitoring: true
+ - name: traefik
+   monitoring: true
+ - name: argocd
+ - name: kubernetes-dashboard

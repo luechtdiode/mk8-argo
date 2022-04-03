@@ -1,0 +1,4 @@
+apiVersion: v2
+name: bootstrap-infra
+description: Bootstrap Infra Chart for Argo CD
+version: 1.0.0
