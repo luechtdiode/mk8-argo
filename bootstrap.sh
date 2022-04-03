@@ -47,7 +47,7 @@ helm repo update
 helm dependencies update
 
 kubectl create namespace argocd
-helm install -n argocd argocd . -f values.yaml --set install-route=false
+helm install -n argocd argocd . -f values.yaml --set installroute=false
 cd ..
 
 kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -n argocd

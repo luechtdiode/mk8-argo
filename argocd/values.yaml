@@ -1,4 +1,4 @@
-install-route: true
+installroute: true
 
 argo-cd:
   installCRDs: false
