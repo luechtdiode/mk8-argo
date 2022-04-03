@@ -31,4 +31,4 @@ spec:
         namespace: traefik
       - name: more-security-response-header
         namespace: traefik
-{{- end}}
+{{- end }}

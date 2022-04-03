@@ -28,8 +28,8 @@ cd ..
 
 cd backuprestore
 ./main.sh cloudsync down
-./main.sh secretrestore
 ./main.sh privatesecretrestore
+./main.sh secretrestore
 cd ..
 
 cd traefik
