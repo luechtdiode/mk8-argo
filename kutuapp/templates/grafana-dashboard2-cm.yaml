@@ -31,7 +31,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "iteration": 1647715369266,
+      "iteration": 1649276104556,
       "links": [],
       "liveNow": true,
       "panels": [
@@ -432,7 +432,7 @@ data:
           "type": "piechart"
         },
         {
-          "collapsed": false,
+          "collapsed": true,
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -440,243 +440,244 @@ data:
             "y": 6
           },
           "id": 15,
-          "panels": [],
+          "panels": [
+            {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 25,
+                    "gradientMode": "hue",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineInterpolation": "smooth",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": 3600000,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "line+area"
+                    }
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": null
+                      },
+                      {
+                        "color": "green",
+                        "value": 50
+                      },
+                      {
+                        "color": "orange",
+                        "value": 500
+                      },
+                      {
+                        "color": "red",
+                        "value": 1000
+                      }
+                    ]
+                  },
+                  "unit": "ms"
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 17,
+                "w": 12,
+                "x": 0,
+                "y": 7
+              },
+              "id": 4,
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "lastNotNull",
+                    "distinctCount"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "sortBy": "Last *",
+                  "sortDesc": true
+                },
+                "tooltip": {
+                  "mode": "multi"
+                }
+              },
+              "pluginVersion": "8.3.6",
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "PBFA97CFB590B2093"
+                  },
+                  "exemplar": true,
+                  "expr": "sum by(path, method) ((rate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) * 1000 / rate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0)",
+                  "interval": "",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{ path }} {{ method }}",
+                  "refId": "A"
+                }
+              ],
+              "title": "Verlauf der Antwortzeiten",
+              "transformations": [],
+              "type": "timeseries"
+            },
+            {
+              "description": "",
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "line",
+                    "fillOpacity": 25,
+                    "gradientMode": "opacity",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineInterpolation": "smooth",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "area"
+                    }
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": null
+                      },
+                      {
+                        "color": "green",
+                        "value": 1
+                      },
+                      {
+                        "color": "orange",
+                        "value": 200
+                      },
+                      {
+                        "color": "red",
+                        "value": 250
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 17,
+                "w": 12,
+                "x": 12,
+                "y": 7
+              },
+              "id": 5,
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "min",
+                    "max",
+                    "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "sortBy": "Last *",
+                  "sortDesc": true
+                },
+                "tooltip": {
+                  "mode": "multi"
+                }
+              },
+              "pluginVersion": "8.3.6",
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "PBFA97CFB590B2093"
+                  },
+                  "exemplar": true,
+                  "expr": "sum by(namespace) (floor(rate(kutuapp_connections_total[$__rate_interval]) * 100 / 3))",
+                  "format": "time_series",
+                  "hide": false,
+                  "instant": false,
+                  "interval": "",
+                  "intervalFactor": 10,
+                  "legendFormat": "HTTPS-Connections",
+                  "refId": "B"
+                },
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "PBFA97CFB590B2093"
+                  },
+                  "exemplar": true,
+                  "expr": "sum by(namespace) (sum(kutuapp_competition_websockets_active))",
+                  "hide": false,
+                  "interval": "",
+                  "legendFormat": "WSS Alle",
+                  "refId": "C"
+                },
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "PBFA97CFB590B2093"
+                  },
+                  "exemplar": true,
+                  "expr": "sum by(comp, dg) (kutuapp_competition_websockets_active)",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "WSS {{ comp }} / {{ dg }}",
+                  "refId": "A"
+                }
+              ],
+              "title": "Verlauf der Verbindungen",
+              "transformations": [],
+              "type": "timeseries"
+            }
+          ],
           "title": "Verlauf",
           "type": "row"
-        },
-        {
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 25,
-                "gradientMode": "hue",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "smooth",
-                "lineWidth": 2,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": 3600000,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "line+area"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "blue",
-                    "value": null
-                  },
-                  {
-                    "color": "green",
-                    "value": 50
-                  },
-                  {
-                    "color": "orange",
-                    "value": 500
-                  },
-                  {
-                    "color": "red",
-                    "value": 1000
-                  }
-                ]
-              },
-              "unit": "ms"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 17,
-            "w": 12,
-            "x": 0,
-            "y": 7
-          },
-          "id": 4,
-          "options": {
-            "legend": {
-              "calcs": [
-                "min",
-                "max",
-                "mean",
-                "lastNotNull",
-                "distinctCount"
-              ],
-              "displayMode": "table",
-              "placement": "bottom",
-              "sortBy": "Last *",
-              "sortDesc": true
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.3.6",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "exemplar": true,
-              "expr": "sum by(path, method) ((rate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) * 1000 / rate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0)",
-              "interval": "",
-              "intervalFactor": 2,
-              "legendFormat": "{{ path }} {{ method }}",
-              "refId": "A"
-            }
-          ],
-          "title": "Verlauf der Antwortzeiten",
-          "transformations": [],
-          "type": "timeseries"
-        },
-        {
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 25,
-                "gradientMode": "opacity",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "smooth",
-                "lineWidth": 2,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "area"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "blue",
-                    "value": null
-                  },
-                  {
-                    "color": "green",
-                    "value": 1
-                  },
-                  {
-                    "color": "orange",
-                    "value": 200
-                  },
-                  {
-                    "color": "red",
-                    "value": 250
-                  }
-                ]
-              },
-              "unit": "none"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 17,
-            "w": 12,
-            "x": 12,
-            "y": 7
-          },
-          "id": 5,
-          "options": {
-            "legend": {
-              "calcs": [
-                "min",
-                "max",
-                "lastNotNull"
-              ],
-              "displayMode": "table",
-              "placement": "bottom",
-              "sortBy": "Last *",
-              "sortDesc": true
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.3.6",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "exemplar": true,
-              "expr": "sum by(namespace) (floor(rate(kutuapp_connections_total[$__rate_interval]) * 100 / 3))",
-              "format": "time_series",
-              "hide": false,
-              "instant": false,
-              "interval": "",
-              "intervalFactor": 10,
-              "legendFormat": "HTTPS-Connections",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "exemplar": true,
-              "expr": "sum by(namespace) (sum(kutuapp_competition_websockets_active))",
-              "hide": false,
-              "interval": "",
-              "legendFormat": "WSS Alle",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "exemplar": true,
-              "expr": "sum by(comp, dg) (kutuapp_competition_websockets_active)",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "WSS {{ comp }} / {{ dg }}",
-              "refId": "A"
-            }
-          ],
-          "title": "Verlauf der Verbindungen",
-          "transformations": [],
-          "type": "timeseries"
         },
         {
           "collapsed": true,
@@ -684,7 +685,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 24
+            "y": 7
           },
           "id": 13,
           "panels": [
@@ -882,6 +883,96 @@ data:
           ],
           "title": "API / Status",
           "type": "row"
+        },
+        {
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 27,
+                "gradientMode": "hue",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "smooth",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": 3600000,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "decbytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 8
+          },
+          "id": 17,
+          "options": {
+            "legend": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum(irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\"}[$__rate_interval])) by (pod)",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 2,
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "title": "Netz-Traffik in Bytes",
+          "type": "timeseries"
         }
       ],
       "refresh": "10s",
@@ -946,7 +1037,7 @@ data:
       "timezone": "browser",
       "title": "Kutuapp-Graph",
       "uid": "kutuapp2",
-      "version": 9,
+      "version": 11,
       "weekStart": ""
     }
     `}}
