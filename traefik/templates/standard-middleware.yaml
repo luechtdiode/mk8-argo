@@ -64,7 +64,7 @@ metadata:
   name: max-connections
 spec:
   inFlightReq:
-    amount: 400
+    amount: 800
 ---
 # Here, an average of 100 requests per second is allowed.
 # In addition, a burst of 50 requests is allowed.
@@ -74,7 +74,7 @@ metadata:
   name: ratelimit
 spec:
   rateLimit:
-    average: 60
+    average: 100
     burst: 140
 ---
 # Latency Check
