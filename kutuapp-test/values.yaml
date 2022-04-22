@@ -16,7 +16,7 @@ routes:
     portSecure: 5858
 
 kutuapp-waf:
-  replicaCount: 1
+  replicaCount: 3
   image:
     repository: luechtdiode/nginx-naxsi
     tag: v1.0.0
