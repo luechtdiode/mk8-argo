@@ -64,7 +64,7 @@ metadata:
   name: max-connections
 spec:
   inFlightReq:
-    amount: 800
+    amount: 1600
 ---
 # Here, an average of 100 requests per second is allowed.
 # In addition, a burst of 50 requests is allowed.
