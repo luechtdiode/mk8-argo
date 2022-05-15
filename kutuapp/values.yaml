@@ -7,8 +7,8 @@ routes:
   - name: kutuapp
     domain: kutuapp2.sharevic.net
     dns_resolver: "cf-production"
-    port: 5858
-    portSecure: 5858
+    port: 5757
+    portSecure: 5757
     
 kutuapp-waf:
   replicaCount: 0
