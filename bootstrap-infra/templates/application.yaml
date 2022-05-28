@@ -18,7 +18,7 @@ spec:
         - values.yaml
     path: {{ .name }} 
     repoURL: {{ $.Values.repository }}
-    targetRevision: HEAD
+    targetRevision: preview
   syncPolicy:
     automated:
       prune: true

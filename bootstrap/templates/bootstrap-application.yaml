@@ -14,7 +14,7 @@ spec:
         - "values.yaml"
     path: bootstrap
     repoURL: {{ .Values.repository }}
-    targetRevision: HEAD
+    targetRevision: preview
   syncPolicy:
     automated:
       prune: true
