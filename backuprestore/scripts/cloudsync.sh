@@ -15,21 +15,26 @@ function cloudsync() {
 
   case $1 in
     down)
+      if [ -z $2 ]
+      then
+        LATEST_BACKUP="sj://$(uplink ls | grep mars  | tail -n +2 | awk '{ print $NF }' | sort -r | head -n 1)/"
+        CLOUD_PATH="$LATEST_BACKUP$PREFIX"
+      fi
       uplink cp $CLOUD_PATH/secrets.tar.gz secrets.tar.gz
 
       rm -rf $CLUSTER_DIR
       mkdir $CLUSTER_DIR
-      for file in $(uplink ls $CLOUD_PATH/cluster | awk -F/ '{ print $NF }'); do
+      for file in $(uplink ls $CLOUD_PATH/cluster/ | tail -n +2 | awk '{ print $NF }'); do
         uplink cp $CLOUD_PATH/cluster/$file $CLUSTER_DIR/$file
       done
 
-      for file in $(uplink ls $CLOUD_PATH/db | awk -F/ '{ print $NF }'); do
+      for file in $(uplink ls $CLOUD_PATH/db/ | tail -n +2 | awk '{ print $NF }'); do
         uplink cp $CLOUD_PATH/db/$file $DB_DIR/$file
       done
 
       rm -rf $BACKUP_DIR
       mkdir $BACKUP_DIR
-      for file in $(uplink ls $CLOUD_PATH/volumes | awk -F/ '{ print $NF }'); do
+      for file in $(uplink ls $CLOUD_PATH/volumes/ | tail -n +2 | awk '{ print $NF }'); do
         uplink cp $CLOUD_PATH/volumes/$file $BACKUP_DIR/$file
       done
 
