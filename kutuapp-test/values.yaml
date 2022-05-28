@@ -47,7 +47,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: handling-filebuffer-overflow-03cb2eb
+    tag: master-06ac517
   labels:
     monitoring: enabled
   network:
