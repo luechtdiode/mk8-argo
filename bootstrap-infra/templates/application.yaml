@@ -1,0 +1,63 @@
+{{- range .Values.bootstrap -}}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .name }}
+  namespace: {{ default "argocd" $.Values.argocdNamespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+  destination:
+    namespace: {{ .name }}
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+      valueFiles:
+        - values.yaml
+    path: {{ .name }} 
+    repoURL: {{ $.Values.repository }}
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true        
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - CreateNamespace=true
+      # - Replace=true
+---        
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .name }}
+{{- if .monitoring }}
+  labels:
+    monitoring: "enabled"
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: monitoring
+  namespace: {{ .name }}
+rules: null
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: monitoring-{{ .name }}
+  namespace: {{ .name }}
+subjects:
+  - kind: ServiceAccount
+    name: prometheus-monitoring-prometheus
+    namespace: prometheus
+  - kind: ServiceAccount
+    name: prometheus-blackbox-exporter
+    namespace: prometheus    
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: monitoring
+{{- end }}
+{{ end }}

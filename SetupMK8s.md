@@ -44,7 +44,7 @@ Activate plugins
 ----------------
 (use the two ip-addresses of cni1/2 for metallb setup)
 ```bash
-  microk8s enable rbac dns storage openebs ingress dashboard metallb helm3 fluentd jaeger prometheus
+  microk8s enable rbac dns storage openebs ingress metallb helm3 metrics-server fluentd
   sudo snap install kustomize
 ```
 
