@@ -1,6 +1,12 @@
 **/charts
 *.lock
 *-secret.yaml
+*-secret-content.yaml
+*-secret-private.yaml
 **/private
 *.tar.gz
+.idea
+.vscode
+uplink
+LICENSE
 admin.config
