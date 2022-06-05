@@ -31,7 +31,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "iteration": 1654284241889,
+      "iteration": 1654448892114,
       "links": [],
       "liveNow": true,
       "panels": [
@@ -42,14 +42,47 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 25,
+                "gradientMode": "none",
                 "hideFrom": {
                   "legend": false,
                   "tooltip": false,
                   "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "percent"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
                 }
               },
-              "decimals": 2,
-              "mappings": []
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
             },
             "overrides": []
           },
@@ -61,25 +94,10 @@ data:
           },
           "id": 7,
           "options": {
-            "displayLabels": [
-              "value",
-              "percent"
-            ],
             "legend": {
-              "displayMode": "table",
-              "placement": "right",
-              "values": [
-                "value",
-                "percent"
-              ]
-            },
-            "pieType": "pie",
-            "reduceOptions": {
-              "calcs": [
-                "sum"
-              ],
-              "fields": "",
-              "values": false
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
             },
             "tooltip": {
               "mode": "single"
@@ -100,7 +118,7 @@ data:
             }
           ],
           "title": "Erfolgreiche Anfragen",
-          "type": "piechart"
+          "type": "timeseries"
         },
         {
           "fieldConfig": {
@@ -129,7 +147,7 @@ data:
           },
           "gridPos": {
             "h": 6,
-            "w": 8,
+            "w": 6,
             "x": 6,
             "y": 0
           },
@@ -209,8 +227,8 @@ data:
           },
           "gridPos": {
             "h": 6,
-            "w": 9,
-            "x": 14,
+            "w": 6,
+            "x": 12,
             "y": 0
           },
           "id": 2,
@@ -275,23 +293,41 @@ data:
           "type": "stat"
         },
         {
-          "collapsed": false,
-          "gridPos": {
-            "h": 1,
-            "w": 24,
-            "x": 0,
-            "y": 6
-          },
-          "id": 15,
-          "panels": [],
-          "title": "Verlauf",
-          "type": "row"
-        },
-        {
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 19,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "smooth",
+                "lineStyle": {
+                  "fill": "solid"
+                },
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
               },
               "mappings": [],
               "thresholds": {
@@ -308,119 +344,28 @@ data:
                 ]
               }
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "5xx GET"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "red",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "4xx PUT"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "orange",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "4xx"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "orange",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "5xx"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "red",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "4xx GET"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "red",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "4xx OPTIONS"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "semi-dark-yellow",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
-            "h": 3,
-            "w": 23,
-            "x": 0,
-            "y": 7
+            "h": 6,
+            "w": 6,
+            "x": 18,
+            "y": 0
           },
           "id": 8,
           "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
+            "legend": {
               "calcs": [
+                "min",
+                "max",
                 "lastNotNull"
               ],
-              "fields": "",
-              "values": false
+              "displayMode": "table",
+              "placement": "bottom"
             },
-            "textMode": "auto"
+            "tooltip": {
+              "mode": "single"
+            }
           },
           "pluginVersion": "8.3.6",
           "targets": [
@@ -432,6 +377,7 @@ data:
               "exemplar": true,
               "expr": "sum by (status, method)(irate(kutuapp_responses_duration_seconds_count{status=~\"4xx|5xx\"}[$__rate_interval])) > 0",
               "interval": "",
+              "intervalFactor": 1,
               "legendFormat": "{{ status }} {{ method}}",
               "refId": "A"
             },
@@ -441,9 +387,12 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "max(kutuapp_abused_clients)",
+              "expr": "sum by (namespace) (kutuapp_abused_clients)",
+              "format": "time_series",
               "hide": false,
-              "interval": "",
+              "instant": false,
+              "interval": "1",
+              "intervalFactor": 1,
               "legendFormat": "Abused clients",
               "refId": "B"
             },
@@ -453,16 +402,29 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "max(kutuapp_abused_watchlist_clients)",
-              "format": "time_series",
+              "expr": "sum by (namespace) (kutuapp_abused_watchlist_clients)",
               "hide": false,
-              "interval": "",
-              "legendFormat": "Abused watchlist clients",
+              "instant": false,
+              "interval": "1",
+              "legendFormat": "Watchlist clients",
               "refId": "C"
             }
           ],
           "title": "Fehlerhafte Anfragen",
-          "type": "stat"
+          "type": "timeseries"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 6
+          },
+          "id": 15,
+          "panels": [],
+          "title": "Verlauf",
+          "type": "row"
         },
         {
           "fieldConfig": {
@@ -528,7 +490,7 @@ data:
             "h": 17,
             "w": 12,
             "x": 0,
-            "y": 10
+            "y": 7
           },
           "id": 4,
           "options": {
@@ -633,7 +595,7 @@ data:
             "h": 17,
             "w": 12,
             "x": 12,
-            "y": 10
+            "y": 7
           },
           "id": 5,
           "options": {
@@ -754,7 +716,7 @@ data:
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 27
+            "y": 24
           },
           "id": 17,
           "options": {
@@ -797,7 +759,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 36
+            "y": 33
           },
           "id": 13,
           "panels": [
@@ -1014,7 +976,7 @@ data:
                 "condition": "",
                 "key": "namespace",
                 "operator": "=",
-                "value": "kutuapp"
+                "value": "kutuapp-test"
               }
             ],
             "hide": 1,
