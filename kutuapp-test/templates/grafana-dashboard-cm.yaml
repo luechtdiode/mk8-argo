@@ -1019,8 +1019,8 @@ data:
       },
       "timepicker": {},
       "timezone": "browser",
-      "title": "Kutuapp-Graph",
-      "uid": "kutuapp2",
+      "title": "Kutuapp-Test Graph",
+      "uid": "kutuapptest",
       "version": 13,
       "weekStart": ""
     }
