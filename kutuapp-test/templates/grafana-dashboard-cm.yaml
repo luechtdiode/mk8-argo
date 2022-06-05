@@ -31,7 +31,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "iteration": 1646781450993,
+      "iteration": 1654284241889,
       "links": [],
       "liveNow": true,
       "panels": [
@@ -129,7 +129,7 @@ data:
           },
           "gridPos": {
             "h": 6,
-            "w": 6,
+            "w": 8,
             "x": 6,
             "y": 0
           },
@@ -156,11 +156,11 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "max(irate(kutuapp_responses_duration_seconds_sum[$__rate_interval]) * 1000 / irate(kutuapp_responses_duration_seconds_count[$__rate_interval]))",
+              "expr": "sum(irate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) * 1000 / sum(irate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]))",
               "hide": false,
               "instant": false,
               "interval": "",
-              "intervalFactor": 1,
+              "intervalFactor": 10,
               "legendFormat": "Zeit in ms",
               "refId": "D"
             },
@@ -174,7 +174,7 @@ data:
               "hide": false,
               "instant": false,
               "interval": "",
-              "intervalFactor": 1,
+              "intervalFactor": 10,
               "legendFormat": "Antw/s",
               "refId": "C"
             }
@@ -209,8 +209,8 @@ data:
           },
           "gridPos": {
             "h": 6,
-            "w": 6,
-            "x": 12,
+            "w": 9,
+            "x": 14,
             "y": 0
           },
           "id": 2,
@@ -262,10 +262,11 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "avg(irate(kutuapp_connections_total[$__rate_interval]))",
+              "expr": "sum by (namespace) (floor(rate(kutuapp_connections_total[$__rate_interval]) * 100 / 3))",
               "hide": false,
               "instant": false,
               "interval": "",
+              "intervalFactor": 10,
               "legendFormat": "# https",
               "refId": "A"
             }
@@ -274,19 +275,38 @@ data:
           "type": "stat"
         },
         {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 6
+          },
+          "id": 15,
+          "panels": [],
+          "title": "Verlauf",
+          "type": "row"
+        },
+        {
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "palette-classic"
+                "mode": "thresholds"
               },
-              "custom": {
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                }
-              },
-              "mappings": []
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
             },
             "overrides": [
               {
@@ -382,36 +402,25 @@ data:
             ]
           },
           "gridPos": {
-            "h": 6,
-            "w": 6,
-            "x": 18,
-            "y": 0
+            "h": 3,
+            "w": 23,
+            "x": 0,
+            "y": 7
           },
           "id": 8,
           "options": {
-            "displayLabels": [
-              "percent",
-              "value"
-            ],
-            "legend": {
-              "displayMode": "table",
-              "placement": "right",
-              "values": [
-                "value",
-                "percent"
-              ]
-            },
-            "pieType": "pie",
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
             "reduceOptions": {
               "calcs": [
-                "sum"
+                "lastNotNull"
               ],
               "fields": "",
               "values": false
             },
-            "tooltip": {
-              "mode": "single"
-            }
+            "textMode": "auto"
           },
           "pluginVersion": "8.3.6",
           "targets": [
@@ -425,23 +434,304 @@ data:
               "interval": "",
               "legendFormat": "{{ status }} {{ method}}",
               "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "max(kutuapp_abused_clients)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "Abused clients",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "max(kutuapp_abused_watchlist_clients)",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "Abused watchlist clients",
+              "refId": "C"
             }
           ],
           "title": "Fehlerhafte Anfragen",
-          "type": "piechart"
+          "type": "stat"
+        },
+        {
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 25,
+                "gradientMode": "hue",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": 3600000,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "line+area"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "blue",
+                    "value": null
+                  },
+                  {
+                    "color": "green",
+                    "value": 50
+                  },
+                  {
+                    "color": "orange",
+                    "value": 500
+                  },
+                  {
+                    "color": "red",
+                    "value": 1000
+                  }
+                ]
+              },
+              "unit": "ms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 17,
+            "w": 12,
+            "x": 0,
+            "y": 10
+          },
+          "id": 4,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull",
+                "distinctCount"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "sortBy": "Last *",
+              "sortDesc": true
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "pluginVersion": "8.3.6",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum by(path, method) ((rate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) * 1000 / rate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0)",
+              "interval": "",
+              "intervalFactor": 2,
+              "legendFormat": "{{ path }} {{ method }}",
+              "refId": "A"
+            }
+          ],
+          "title": "Verlauf der Antwortzeiten",
+          "transformations": [],
+          "type": "timeseries"
         },
         {
           "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "mode": "palette-classic"
               },
               "custom": {
-                "align": "auto",
-                "displayMode": "auto"
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 25,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "area"
+                }
               },
-              "decimals": 3,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "blue",
+                    "value": null
+                  },
+                  {
+                    "color": "green",
+                    "value": 1
+                  },
+                  {
+                    "color": "orange",
+                    "value": 200
+                  },
+                  {
+                    "color": "red",
+                    "value": 250
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 17,
+            "w": 12,
+            "x": 12,
+            "y": 10
+          },
+          "id": 5,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "sortBy": "Last *",
+              "sortDesc": true
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "pluginVersion": "8.3.6",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum by(namespace) (floor(rate(kutuapp_connections_total[$__rate_interval]) * 100 / 3))",
+              "format": "time_series",
+              "hide": false,
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 10,
+              "legendFormat": "HTTPS-Connections",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum by(namespace) (sum(kutuapp_competition_websockets_active))",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "WSS Alle",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum by(comp, dg) (kutuapp_competition_websockets_active)",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "WSS {{ comp }} / {{ dg }}",
+              "refId": "A"
+            }
+          ],
+          "title": "Verlauf der Verbindungen",
+          "transformations": [],
+          "type": "timeseries"
+        },
+        {
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 27,
+                "gradientMode": "hue",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "smooth",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": 3600000,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -456,71 +746,32 @@ data:
                   }
                 ]
               },
-              "unit": "ms"
+              "unit": "decbytes"
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Status"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 72
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Pfad"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 414
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Methode"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 76
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
-            "h": 11,
+            "h": 9,
             "w": 24,
             "x": 0,
-            "y": 6
+            "y": 27
           },
-          "id": 10,
+          "id": 17,
           "options": {
-            "footer": {
-              "fields": "",
-              "reducer": [
-                "diffperc"
+            "legend": {
+              "calcs": [
+                "logmin",
+                "max",
+                "mean",
+                "lastNotNull"
               ],
-              "show": false
+              "displayMode": "table",
+              "placement": "bottom"
             },
-            "showHeader": true,
-            "sortBy": [
-              {
-                "desc": true,
-                "displayName": "Zeit (min)"
-              }
-            ]
+            "tooltip": {
+              "mode": "single"
+            }
           },
-          "pluginVersion": "8.3.6",
           "targets": [
             {
               "datasource": {
@@ -528,248 +779,225 @@ data:
                 "uid": "PBFA97CFB590B2093"
               },
               "exemplar": true,
-              "expr": "avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\"}[$__rate_interval])) * 1000 / avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\"}[$__rate_interval]))>0",
-              "format": "table",
+              "expr": "sum(irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\"}[$__rate_interval])) by (pod)",
+              "format": "time_series",
               "instant": false,
               "interval": "",
-              "legendFormat": "",
+              "intervalFactor": 2,
+              "legendFormat": "{{pod}}",
               "refId": "A"
             }
           ],
-          "title": "Antwortzeiten pro Methode, Pfad und Status",
-          "transformations": [
-            {
-              "id": "sortBy",
-              "options": {
-                "fields": {},
-                "sort": [
-                  {
-                    "desc": false,
-                    "field": "path"
-                  }
-                ]
-              }
-            },
-            {
-              "id": "organize",
-              "options": {
-                "excludeByName": {
-                  "Time": true,
-                  "method": false,
-                  "path": false,
-                  "status": false
-                },
-                "indexByName": {
-                  "Time": 0,
-                  "Value": 4,
-                  "method": 1,
-                  "path": 2,
-                  "status": 3
-                },
-                "renameByName": {
-                  "Value": "Zeit",
-                  "method": "Methode",
-                  "path": "Pfad",
-                  "status": "Status"
-                }
-              }
-            },
-            {
-              "id": "groupBy",
-              "options": {
-                "fields": {
-                  "Antwortzeit": {
-                    "aggregations": [
-                      "min",
-                      "max",
-                      "mean",
-                      "lastNotNull"
-                    ],
-                    "operation": "aggregate"
-                  },
-                  "Methode": {
-                    "aggregations": [],
-                    "operation": "groupby"
-                  },
-                  "Pfad": {
-                    "aggregations": [],
-                    "operation": "groupby"
-                  },
-                  "Req/s": {
-                    "aggregations": [
-                      "min",
-                      "max",
-                      "lastNotNull"
-                    ],
-                    "operation": "aggregate"
-                  },
-                  "Status": {
-                    "aggregations": [],
-                    "operation": "groupby"
-                  },
-                  "Zeit": {
-                    "aggregations": [
-                      "min",
-                      "max",
-                      "mean",
-                      "lastNotNull"
-                    ],
-                    "operation": "aggregate"
-                  }
-                }
-              }
-            }
-          ],
-          "type": "table"
+          "title": "Netz-Traffik in Bytes",
+          "type": "timeseries"
         },
         {
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "decimals": 3,
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "dark-green",
-                    "value": null
-                  },
-                  {
-                    "color": "light-green",
-                    "value": 30
-                  },
-                  {
-                    "color": "#EAB839",
-                    "value": 300
-                  },
-                  {
-                    "color": "red",
-                    "value": 1000
-                  }
-                ]
-              },
-              "unit": "ms"
-            },
-            "overrides": []
-          },
+          "collapsed": true,
           "gridPos": {
-            "h": 28,
-            "w": 12,
+            "h": 1,
+            "w": 24,
             "x": 0,
-            "y": 17
+            "y": 36
           },
-          "id": 4,
-          "options": {
-            "colorMode": "none",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "textMode": "value_and_name"
-          },
-          "pluginVersion": "8.3.6",
-          "targets": [
+          "id": 13,
+          "panels": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "exemplar": true,
-              "expr": "(rate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) * 1000 / rate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{ path }} {{ method }}",
-              "refId": "A"
-            }
-          ],
-          "title": "Verlauf der Antwortzeiten",
-          "transformations": [],
-          "type": "stat"
-        },
-        {
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "decimals": 0,
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
+              "description": "",
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "displayMode": "auto"
+                  },
+                  "decimals": 3,
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "ms"
+                },
+                "overrides": [
                   {
-                    "color": "blue",
-                    "value": null
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Status"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 72
+                      }
+                    ]
                   },
                   {
-                    "color": "green",
-                    "value": 50
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Pfad"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 414
+                      }
+                    ]
                   },
                   {
-                    "color": "#EAB839",
-                    "value": 90
-                  },
-                  {
-                    "color": "red",
-                    "value": 200
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Methode"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 76
+                      }
+                    ]
                   }
                 ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 28,
-            "w": 12,
-            "x": 12,
-            "y": 17
-          },
-          "id": 5,
-          "options": {
-            "colorMode": "none",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "textMode": "value_and_name"
-          },
-          "pluginVersion": "8.3.6",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
               },
-              "exemplar": true,
-              "expr": "kutuapp_competition_websockets_active",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{ comp }} / {{ dg }}",
-              "refId": "A"
+              "gridPos": {
+                "h": 14,
+                "w": 24,
+                "x": 0,
+                "y": 25
+              },
+              "id": 10,
+              "options": {
+                "footer": {
+                  "fields": "",
+                  "reducer": [
+                    "diffperc"
+                  ],
+                  "show": false
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "Zeit (min)"
+                  }
+                ]
+              },
+              "pluginVersion": "8.3.6",
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "PBFA97CFB590B2093"
+                  },
+                  "exemplar": true,
+                  "expr": "avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\"}[$__rate_interval])) * 1000 / avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\"}[$__rate_interval]))>0",
+                  "format": "table",
+                  "instant": false,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "title": "Antwortzeiten pro Methode, Pfad und Status",
+              "transformations": [
+                {
+                  "id": "sortBy",
+                  "options": {
+                    "fields": {},
+                    "sort": [
+                      {
+                        "desc": false,
+                        "field": "path"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "organize",
+                  "options": {
+                    "excludeByName": {
+                      "Time": true,
+                      "method": false,
+                      "path": false,
+                      "status": false
+                    },
+                    "indexByName": {
+                      "Time": 0,
+                      "Value": 4,
+                      "method": 1,
+                      "path": 2,
+                      "status": 3
+                    },
+                    "renameByName": {
+                      "Value": "Zeit",
+                      "method": "Methode",
+                      "path": "Pfad",
+                      "status": "Status"
+                    }
+                  }
+                },
+                {
+                  "id": "groupBy",
+                  "options": {
+                    "fields": {
+                      "Antwortzeit": {
+                        "aggregations": [
+                          "min",
+                          "max",
+                          "mean",
+                          "lastNotNull"
+                        ],
+                        "operation": "aggregate"
+                      },
+                      "Methode": {
+                        "aggregations": [],
+                        "operation": "groupby"
+                      },
+                      "Pfad": {
+                        "aggregations": [],
+                        "operation": "groupby"
+                      },
+                      "Req/s": {
+                        "aggregations": [
+                          "min",
+                          "max",
+                          "lastNotNull"
+                        ],
+                        "operation": "aggregate"
+                      },
+                      "Status": {
+                        "aggregations": [],
+                        "operation": "groupby"
+                      },
+                      "Zeit": {
+                        "aggregations": [
+                          "min",
+                          "max",
+                          "mean",
+                          "lastNotNull"
+                        ],
+                        "operation": "aggregate"
+                      }
+                    }
+                  }
+                }
+              ],
+              "type": "table"
             }
           ],
-          "title": "Verlauf der Verbindungen",
-          "transformations": [],
-          "type": "stat"
+          "title": "API / Status",
+          "type": "row"
         }
       ],
-      "refresh": "5s",
+      "refresh": "10s",
       "schemaVersion": 34,
       "style": "dark",
       "tags": [],
@@ -786,7 +1014,7 @@ data:
                 "condition": "",
                 "key": "namespace",
                 "operator": "=",
-                "value": "kutuapp-test"
+                "value": "kutuapp"
               }
             ],
             "hide": 1,
@@ -824,14 +1052,14 @@ data:
         ]
       },
       "time": {
-        "from": "now-1h",
+        "from": "now-3h",
         "to": "now"
       },
       "timepicker": {},
       "timezone": "browser",
-      "title": "Kutuapp-Test",
-      "uid": "8MnNpxY7z",
-      "version": 37,
+      "title": "Kutuapp-Graph",
+      "uid": "kutuapp2",
+      "version": 13,
       "weekStart": ""
     }
     `}}
