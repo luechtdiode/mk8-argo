@@ -47,7 +47,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: master-a6c0bd3
+    tag: master-f9480fd
   labels:
     monitoring: enabled
   network:
