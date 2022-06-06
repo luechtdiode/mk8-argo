@@ -88,16 +88,20 @@ function cloudsync() {
       BUCKETLIST="$(uplink ls | grep mars  | tail -n +2 | awk '{ print $NF }' | sort -r | grep -v $BUCKET_YEAR)/"
       for OBSBCKT in $BUCKETLIST
       do
-        if [ "$OBSBCKT" =~ ^mars-[0-9]{4}-[0-9]{2}$ ]; then
-          uplink rb "sj://$OBSBCKT" --force
+        echo "test for removal: $OBSBCKT ..."
+        if [[ "$OBSBCKT" =~ ^mars-[0-9]{4}-[0-9]{2}$ ]]; then
+          echo "removing $OBSBCKT ..."
+          #uplink rb "sj://$OBSBCKT" --force
         fi
       done
 
       BUCKETLIST="$(uplink ls | grep mars  | tail -n +2 | awk '{ print $NF }' | sort -r | grep -v $BUCKET_MONTH)/"
       for OBSBCKT in $BUCKETLIST
       do
-        if [ "$OBSBCKT" =~ ^mars-[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]; then
-          uplink rb "sj://$OBSBCKT" --force
+        echo "test for removal: $OBSBCKT ..."
+        if [[ "$OBSBCKT" =~ ^mars-[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+          echo "removing $OBSBCKT ..."
+          #uplink rb "sj://$OBSBCKT" --force
         fi
       done
 
