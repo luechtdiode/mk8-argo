@@ -6,6 +6,7 @@ function findUplinkConfigDir() {
     echo "~/.config/storj/uplink"
   else
     echo "$UPLINK_CONFIG_DIR"
+  fi
 }
 
 UPLINK_CONFIG_DIR=$(findUplinkConfigDir)
