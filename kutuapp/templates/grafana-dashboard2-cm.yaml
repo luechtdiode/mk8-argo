@@ -31,7 +31,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "iteration": 1649277731326,
+      "iteration": 1654448892114,
       "links": [],
       "liveNow": true,
       "panels": [
@@ -42,14 +42,47 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 25,
+                "gradientMode": "none",
                 "hideFrom": {
                   "legend": false,
                   "tooltip": false,
                   "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "percent"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
                 }
               },
-              "decimals": 2,
-              "mappings": []
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
             },
             "overrides": []
           },
@@ -61,25 +94,10 @@ data:
           },
           "id": 7,
           "options": {
-            "displayLabels": [
-              "value",
-              "percent"
-            ],
             "legend": {
-              "displayMode": "table",
-              "placement": "right",
-              "values": [
-                "value",
-                "percent"
-              ]
-            },
-            "pieType": "pie",
-            "reduceOptions": {
-              "calcs": [
-                "sum"
-              ],
-              "fields": "",
-              "values": false
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
             },
             "tooltip": {
               "mode": "single"
@@ -100,7 +118,7 @@ data:
             }
           ],
           "title": "Erfolgreiche Anfragen",
-          "type": "piechart"
+          "type": "timeseries"
         },
         {
           "fieldConfig": {
@@ -281,106 +299,52 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 19,
+                "gradientMode": "opacity",
                 "hideFrom": {
                   "legend": false,
                   "tooltip": false,
                   "viz": false
+                },
+                "lineInterpolation": "smooth",
+                "lineStyle": {
+                  "fill": "solid"
+                },
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
                 }
               },
-              "mappings": []
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "5xx GET"
-                },
-                "properties": [
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
                   {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "red",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "4xx PUT"
-                },
-                "properties": [
+                    "color": "green",
+                    "value": null
+                  },
                   {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "orange",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "4xx"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "orange",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "5xx"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "red",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "4xx GET"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "red",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "4xx OPTIONS"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "semi-dark-yellow",
-                      "mode": "fixed"
-                    }
+                    "color": "red",
+                    "value": 80
                   }
                 ]
               }
-            ]
+            },
+            "overrides": []
           },
           "gridPos": {
             "h": 6,
@@ -390,25 +354,14 @@ data:
           },
           "id": 8,
           "options": {
-            "displayLabels": [
-              "percent",
-              "value"
-            ],
             "legend": {
-              "displayMode": "table",
-              "placement": "right",
-              "values": [
-                "value",
-                "percent"
-              ]
-            },
-            "pieType": "pie",
-            "reduceOptions": {
               "calcs": [
-                "sum"
+                "min",
+                "max",
+                "lastNotNull"
               ],
-              "fields": "",
-              "values": false
+              "displayMode": "table",
+              "placement": "bottom"
             },
             "tooltip": {
               "mode": "single"
@@ -424,12 +377,41 @@ data:
               "exemplar": true,
               "expr": "sum by (status, method)(irate(kutuapp_responses_duration_seconds_count{status=~\"4xx|5xx\"}[$__rate_interval])) > 0",
               "interval": "",
+              "intervalFactor": 1,
               "legendFormat": "{{ status }} {{ method}}",
               "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum by (namespace) (kutuapp_abused_clients)",
+              "format": "time_series",
+              "hide": false,
+              "instant": false,
+              "interval": "1",
+              "intervalFactor": 1,
+              "legendFormat": "Abused clients",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum by (namespace) (kutuapp_abused_watchlist_clients)",
+              "hide": false,
+              "instant": false,
+              "interval": "1",
+              "legendFormat": "Watchlist clients",
+              "refId": "C"
             }
           ],
           "title": "Fehlerhafte Anfragen",
-          "type": "piechart"
+          "type": "timeseries"
         },
         {
           "collapsed": false,
@@ -1039,7 +1021,7 @@ data:
       "timezone": "browser",
       "title": "Kutuapp-Graph",
       "uid": "kutuapp2",
-      "version": 12,
+      "version": 13,
       "weekStart": ""
     }
     `}}

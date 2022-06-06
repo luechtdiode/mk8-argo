@@ -9,11 +9,11 @@ routes:
     dns_resolver: "cf-production"
     port: 5858
     portSecure: 5858
-  - name: kutuapp-waf
+  - name: kutuapp
     domain: test-kutuapp.sharevic.net
     dns_resolver: "cf-production"
-    port: 5858
-    portSecure: 5858
+    port: 5757
+    portSecure: 5757
 
 kutuapp-waf:
   replicaCount: 3
@@ -47,7 +47,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: handling-filebuffer-overflow-03cb2eb
+    tag: v2r2b14-alpha
   labels:
     monitoring: enabled
   network:
