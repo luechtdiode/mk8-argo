@@ -13,7 +13,7 @@ function install()
   cp crontabcleaned.txt crontabupdated.txt
   #    22 2 * * * => every day at 02:22
   echo "$pathline" >> crontabupdated.txt
-  echo "00,10,20,30,40,50 * * * * $envparams $croncmd >> $(pwd)/backup.log 2>&1" >> crontabupdated.txt
+  echo "22 2 * * * $envparams $croncmd >> $(pwd)/backup.log 2>&1" >> crontabupdated.txt
   sudo crontab -u root crontabupdated.txt
 
   sudo rm /etc/sudoers.d/mk8backuprestore
@@ -21,6 +21,5 @@ function install()
   sudo pkexec visudo -c -f $(pwd)/mk8backuprestore
   sudo pkexec chown root:root $(pwd)/mk8backuprestore
   sudo pkexec mv $(pwd)/mk8backuprestore /etc/sudoers.d/mk8backuprestore
-  # sudo pkexec chown root:root $(pwd)/mk8backuprestore
 }
 
