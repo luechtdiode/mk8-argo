@@ -22,6 +22,12 @@ function db_backup_rotate()
   rm -f $(pwd)/db-backup/*database.dump
 }
 
+function db_backup_prepare()
+{
+  rm -f $(pwd)/db-backup
+  mkdir -p $(pwd)/db-backup
+}
+
 # db_backup <namespace> [<pg-user> [<db-name>]]
 function db_backup()
 {

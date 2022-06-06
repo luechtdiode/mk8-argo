@@ -37,16 +37,6 @@ function usage() {
   '
 }
 
-function install_old()
-{
-  croncmd="kubectl=$(which kubectl) && $(pwd)/main.sh"
-  sudo crontab -u root -l | grep -v 'backuprestore/main.sh' > crontabcleaned.txt
-  cp crontabcleaned.txt crontabupdated.txt
-  echo "* * * * * $croncmd >> $(pwd)/backup.log 2>&1" >> crontabupdated.txt
-  sudo crontab -u root crontabupdated.txt
-  # sudo cp crontabupdated.txt /etc/crontab
-}
-
 # ns_restore <namespace> [<target-databasename>]
 function ns_dbrestore()
 {
@@ -73,7 +63,7 @@ function ns_dbrestore()
     case $1 in
       short)
         secretbackup
-        db_backup_rotate
+        db_backup_prepare
         db_backup kutuapp kutuapp kutuapp
         db_backup kutuapp-test kutuapp kutuapp
         db_backup kmgetubs19 odoo
@@ -82,7 +72,7 @@ function ns_dbrestore()
         ;;
       all)
         secretbackup
-        db_backup_rotate
+        db_backup_prepare
         db_backup kutuapp kutuapp kutuapp
         db_backup kutuapp-test kutuapp kutuapp
         db_backup kmgetubs19 odoo
