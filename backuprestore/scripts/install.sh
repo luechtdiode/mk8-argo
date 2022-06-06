@@ -4,6 +4,7 @@ function install()
 {
   croncmd="$(pwd)/main.sh short"
   pathline="PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+  aliasline="export UPLINK_CONFIG_DIR=/home/$(whoami)/.config/storj/uplink"
   sudo crontab -u root -l > crontabcleaned.txt
   cat crontabcleaned.txt | grep -v 'backuprestore/'
   cat crontabcleaned.txt | grep -v 'PATH='
