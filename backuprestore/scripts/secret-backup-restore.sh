@@ -8,7 +8,7 @@ function secretbackup() {
     kubectl get secret $secret -n $namespace -o yaml > ../$namespace/templates/backup-$secret-secret-private.yaml
   done
 
-  find ../* -type f -name "*-secret.yaml" -o -name "*-secret-content.yaml" | xargs tar -czf secrets.tar.gz
+  find ../* -type f -name "*-secret.yaml" -o -name "*-secret-*.yaml" | xargs tar -czf secrets.tar.gz
   echo "secrets collected and saved to secrets.tar.gz"
 }
 

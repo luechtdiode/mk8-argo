@@ -15,9 +15,9 @@ source ./scripts/install.sh
 
 function usage() {
   echo 'Usage:
-    ./backup.sh args
-    backup all              => make cluster-, secret-, db- and incremental pvc-backup per month from all volumes of the registered namespaces
-    backup short            => make backup of secrets and db of the registered namespaces and push new bucked with cloudsync up
+    ./main.sh <args>; where args:
+    all                     => make cluster-, secret-, db- and incremental pvc-backup per month from all volumes of the registered namespaces
+    short                   => make backup of secrets and db of the registered namespaces and push new bucked with cloudsync up
     backup <namespace>      => make incremental pvc-backup per month from all volumes of the specified namespace
     dbbackup                => make zero-downtime db-backup or registered databases
     secrets                 => collects all *secret.yaml from the sibling-folders (namespaces)
