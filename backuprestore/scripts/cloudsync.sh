@@ -91,7 +91,7 @@ function cloudsync() {
         echo "test for removal: $OBSBCKT ..."
         if [[ "$OBSBCKT" =~ ^mars-[0-9]{4}-[0-9]{2}$ ]]; then
           echo "removing $OBSBCKT ..."
-          #uplink rb "sj://$OBSBCKT" --force
+          uplink rb "sj://$OBSBCKT" --force
         fi
       done
 
@@ -101,7 +101,7 @@ function cloudsync() {
         echo "test for removal: $OBSBCKT ..."
         if [[ "$OBSBCKT" =~ ^mars-[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
           echo "removing $OBSBCKT ..."
-          #uplink rb "sj://$OBSBCKT" --force
+          uplink rb "sj://$OBSBCKT" --force
         fi
       done
 
