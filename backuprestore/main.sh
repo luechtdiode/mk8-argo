@@ -3,6 +3,12 @@ cd "$(dirname "$0")"
 
 PVCROOT=/var/snap/microk8s/common/var/openebs/local
 kubectl=$(which kubectl)
+uplink=$(which uplink)
+
+echo "kubectl found at $kubectl"
+echo "uplink found at $uplink"
+echo "current path: $PATH"
+echo "current user: $(whoami)"
 
 source ./scripts/secret-backup-restore.sh
 source ./scripts/db-backup-restore.sh
