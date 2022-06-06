@@ -22,22 +22,22 @@ function _downSync() {
   BACKUP_DIR=$5
   SOURCE="$(pwd)/volumes-backup"
 
-  uplink --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false cp $CLOUD_PATH/secrets.tar.gz secrets.tar.gz
+  uplink cp --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false $CLOUD_PATH/secrets.tar.gz secrets.tar.gz
 
   rm -rf $CLUSTER_DIR
   mkdir $CLUSTER_DIR
   for file in $(uplink --config-dir $UPLINK_CONFIG_DIR ls $CLOUD_PATH/cluster/ | tail -n +2 | awk '{ print $NF }'); do
-    uplink --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false cp $CLOUD_PATH/cluster/$file $CLUSTER_DIR/$file
+    uplink cp --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false $CLOUD_PATH/cluster/$file $CLUSTER_DIR/$file
   done
 
   for file in $(uplink --config-dir $UPLINK_CONFIG_DIR ls $CLOUD_PATH/db/ | tail -n +2 | awk '{ print $NF }'); do
-    uplink --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false cp $CLOUD_PATH/db/$file $DB_DIR/$file
+    uplink cp --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false $CLOUD_PATH/db/$file $DB_DIR/$file
   done
 
   rm -rf $BACKUP_DIR
   mkdir $BACKUP_DIR
   for file in $(uplink --config-dir $UPLINK_CONFIG_DIR ls $CLOUD_PATH/volumes/ | tail -n +2 | awk '{ print $NF }'); do
-    uplink --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false cp $CLOUD_PATH/volumes/$file $BACKUP_DIR/$file
+    uplink cp --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false $CLOUD_PATH/volumes/$file $BACKUP_DIR/$file
   done
 
   files_restore $SOURCE $BACKUP_DIR
@@ -52,15 +52,15 @@ function _upSync() {
   BACKUP_DIR=$4
   SOURCE="$(pwd)/volumes-backup"
 
-  uplink --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false cp secrets.tar.gz $CLOUD_PATH/secrets.tar.gz
+  uplink cp --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false secrets.tar.gz $CLOUD_PATH/secrets.tar.gz
 
   for file in $(find $CLUSTER_DIR/* -name "*.tar.gz" | xargs ); do
-    uplink --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false cp $file $CLOUD_PATH/cluster/$(echo $file | awk -F/ '{ print $NF }')
+    uplink cp --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false $file $CLOUD_PATH/cluster/$(echo $file | awk -F/ '{ print $NF }')
   done
 
   for file in $(find $DB_DIR/* -name "*.dump" | xargs ); do
     echo  $file | awk -F"$DB_DIR" '{ print $NF }'
-    uplink --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false cp $file $CLOUD_PATH/db$(echo $file | awk -F"$DB_DIR" '{ print $NF }')
+    uplink cp --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false $file $CLOUD_PATH/db$(echo $file | awk -F"$DB_DIR" '{ print $NF }')
   done
 
   # collect all pvc incremental backups to one cloud-pvc incremental backup
@@ -69,7 +69,7 @@ function _upSync() {
   files_backup $SOURCE $BACKUP_DIR
 
   for file in $(find $BACKUP_DIR/* -name "backup*.tar.gz" | xargs ); do
-    uplink --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false cp $file $CLOUD_PATH/volumes/$(echo $file | awk -F/ '{ print $NF }')
+    uplink cp --config-dir $UPLINK_CONFIG_DIR --interactive false --progress false $file $CLOUD_PATH/volumes/$(echo $file | awk -F/ '{ print $NF }')
   done  
 }
 
