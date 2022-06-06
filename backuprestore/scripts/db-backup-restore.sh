@@ -24,7 +24,7 @@ function db_backup_rotate()
 
 function db_backup_prepare()
 {
-  rm -f $(pwd)/db-backup
+  rm -rf $(pwd)/db-backup
   mkdir -p $(pwd)/db-backup
 }
 
