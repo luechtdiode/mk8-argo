@@ -11,6 +11,7 @@ source ./scripts/pvc-backup-restore.sh
 source ./scripts/zfs-snapshot-backup-restore.sh
 source ./scripts/cluster-backup-restore.sh
 source ./scripts/cloudsync.sh
+source ./scripts/install.sh
 
 function usage() {
   echo 'Usage:
@@ -36,7 +37,7 @@ function usage() {
   '
 }
 
-function install()
+function install_old()
 {
   croncmd="kubectl=$(which kubectl) && $(pwd)/main.sh"
   sudo crontab -u root -l | grep -v 'backuprestore/main.sh' > crontabcleaned.txt
@@ -96,14 +97,14 @@ function ns_dbrestore()
         cloudsync up
         ;;
       clean_snapshots)
-        zfs_clean_snapshots $2  
+        zfs_clean_snapshots $2
         ;;
       cloudsync)
         cloudsync $2 $3
         ;;
       cluster)
         clusterbackup
-        ;;      
+        ;;
       secrets)
         secretbackup
         ;;
