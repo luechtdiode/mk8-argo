@@ -16,10 +16,9 @@ echo "uplink config dir found at $UPLINK_CONFIG_DIR"
 # _downSync CLOUD_PATH, CLUSTER_DIR, DB_DIR, BACKUP_DIR
 function _downSync() {
   CLOUD_PATH=$1
-
-  CLUSTER_DIR=$3
-  DB_DIR=$4
-  BACKUP_DIR=$5
+  CLUSTER_DIR=$2
+  DB_DIR=$3
+  BACKUP_DIR=$4
 
   uplink cp --config-dir $UPLINK_CONFIG_DIR --interactive=false --progress=false $CLOUD_PATH/secrets.tar.gz secrets.tar.gz
 
@@ -43,7 +42,6 @@ function _downSync() {
 # _upSync $CLOUD_PATH $CLUSTER_DIR $DB_DIR $BACKUP_DIR
 function _upSync() {
   CLOUD_PATH=$1
-
   CLUSTER_DIR=$2
   DB_DIR=$3
   BACKUP_DIR=$4
