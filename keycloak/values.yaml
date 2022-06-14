@@ -42,4 +42,4 @@ idp:
     existingSecretPasswordKey: "postgresql-password"
     ## @param externalDatabase.existingSecret Use an existing secret file with the external PostgreSQL credentials
     ##
-    # existingSecret: "keycloak-db-secret"
+    existingSecret: "keycloak-db-secret"
