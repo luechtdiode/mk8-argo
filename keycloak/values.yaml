@@ -39,6 +39,7 @@ idp:
     ## @param externalDatabase.database Database name
     ##
     database: keycloak
+    existingSecretPasswordKey: "postgresql-password"
     ## @param externalDatabase.existingSecret Use an existing secret file with the external PostgreSQL credentials
     ##
     # existingSecret: "keycloak-db-secret"
