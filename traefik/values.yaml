@@ -84,17 +84,20 @@ traefik:
         tls:
           enabled: true
           # this is the name of a TLSOption definition
-          options: ""
+          options: "default"
           certResolver: "cf-production"
     tlsOptions:
       default:
         minVersion: VersionTLS12
         maxVersion: VersionTLS13
         cipherSuites:
+          - TLS_ECDHE_PSK_WITH_AES_256_GCM_SHA384 
+          - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 
           - TLS_ECDHE_PSK_WITH_AES_128_GCM_SHA256
           - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
           - TLS_RSA_WITH_AES_256_GCM_SHA384
           - TLS_RSA_WITH_AES_128_GCM_SHA256
+          - TLS_SHA384_SHA384
           - TLS_AES_256_GCM_SHA384
           - TLS_AES_128_GCM_SHA256
         sniStrict: true
