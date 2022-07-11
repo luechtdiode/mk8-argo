@@ -8,7 +8,7 @@ templates:
 
 traefik:
     image:
-      tag: v2.8.1
+      tag: v2.7.3
     # Removing to allow IP setting
     #ports:
     #    udp53:
