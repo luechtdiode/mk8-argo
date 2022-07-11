@@ -4,7 +4,7 @@ argo-cd:
   installCRDs: false
   global:
     image:
-      tag: v2.3.2
+      tag: v2.4.4
   dex:
     # name: dex-server
     envFrom:

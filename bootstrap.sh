@@ -50,7 +50,7 @@ cd argocd
 helm repo add argo-cd https://argoproj.github.io/argo-helm
 helm repo update
 helm dependencies update
-
+# kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=v2.4.4
 kubectl create namespace argocd
 helm install -n argocd argocd . -f values.yaml --set installroute=false
 cd ..
