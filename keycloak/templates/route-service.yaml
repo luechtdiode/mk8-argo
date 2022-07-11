@@ -11,12 +11,12 @@ spec:
       kind: Rule
       priority: 5 
       services:
-      - kind: Service
-        name: {{ .name }}
-        port: {{ .port }}
-      #middlewares:
-      #  - name: secure
-      #    namespace: traefik
+        - kind: Service
+          name: {{ .name }}
+          port: {{ .port }}
+      middlewares:
+        - name: secure
+          namespace: traefik
       tls:
         certResolver: {{ .dns_resolver }}
 {{ end }}
