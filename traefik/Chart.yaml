@@ -1,6 +1,7 @@
 name: traefik
 apiVersion: v2
 version: 2.8.1
+appVersion: 2.8.1
 dependencies:
   - name: traefik
     version: "~10.24.0"
