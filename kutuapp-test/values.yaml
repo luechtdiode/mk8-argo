@@ -47,7 +47,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: iconified-result-view-0d44b0f
+    tag: iconified-result-view-2d74e0f
   labels:
     monitoring: enabled
   network:
