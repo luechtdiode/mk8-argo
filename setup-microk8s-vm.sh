@@ -30,7 +30,7 @@ wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.5/ku
 sudo install -m 755 tmp/kubeseal /usr/local/bin/kubeseal
 rm -rf tmp
 
-# install storj uplink (interactiv)
+# install storj uplink (interactiv) https://github.com/storj/storj/releases/download/v1.61.1/identity_linux_arm64.zip
 sudo apt install unzip
 curl -L https://github.com/storj/storj/releases/latest/download/uplink_linux_amd64.zip -o uplink_linux_amd64.zip
 unzip -o uplink_linux_amd64.zip && rm uplink_linux_amd64.zip
