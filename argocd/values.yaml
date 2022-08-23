@@ -49,10 +49,6 @@ argo-cd:
         name: stable
         type: helm
         url: https://charts.helm.sh/stable      
-      luechtdiode-dev-repo:  
-        name: generic-chart
-        type: helm
-        url: https://luechtdiode.github.io/generic-chart
       bitnami-sealed-secrets-repo:
         name: sealed-secrets
         type: helm
