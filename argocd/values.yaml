@@ -53,6 +53,10 @@ argo-cd:
         name: incubator-library
         type: helm
         url: https://registry.baloise.dev/chartrepo/library
+      luechtdiode-dev-repo:  
+        name: generic-chart
+        type: helm
+        url: https://luechtdiode.github.io/generic-chart
       bitnami-sealed-secrets-repo:
         name: sealed-secrets
         type: helm
