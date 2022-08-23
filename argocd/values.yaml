@@ -48,11 +48,7 @@ argo-cd:
       helm-public-charts-repo:  
         name: stable
         type: helm
-        url: https://charts.helm.sh/stable
-      baloise-dev-repo:  
-        name: incubator-library
-        type: helm
-        url: https://registry.baloise.dev/chartrepo/library
+        url: https://charts.helm.sh/stable      
       luechtdiode-dev-repo:  
         name: generic-chart
         type: helm
