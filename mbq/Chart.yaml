@@ -4,9 +4,9 @@ name: mbq
 dependencies:
   - name: generic-chart
     version: 2.1.0
-    repository: https://luechtdiode.github.io/generic-chart/
+    repository: https://luechtdiode.github.io/generic-chart
     alias: mbq-waf
   - name: generic-chart
     version: 2.1.0
-    repository: https://luechtdiode.github.io/generic-chart/
+    repository: https://luechtdiode.github.io/generic-chart
     alias: mbq
