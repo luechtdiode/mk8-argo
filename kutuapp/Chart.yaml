@@ -4,9 +4,9 @@ name: kutuapp
 dependencies:
   - name: generic-chart
     version: 2.1.0
-    repository: https://registry.baloise.dev/chartrepo/library
+    repository: https://luechtdiode.github.io/generic-chart
     alias: kutuapp
   - name: generic-chart
     version: 2.1.0
-    repository: https://registry.baloise.dev/chartrepo/library
+    repository: https://luechtdiode.github.io/generic-chart
     alias: kutuapp-waf
