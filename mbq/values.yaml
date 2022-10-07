@@ -42,15 +42,7 @@ mbq:
     tag: master-3f6ce2a
   additionalContainers:
     - name: mbq-waf
-      replicaCount: 1
       image: luechtdiode/nginx-naxsi:v1.0.0
-      resources:
-        requests:
-          cpu: 0.2
-          memory: 32Mi
-        limits:
-          cpu: 1.00
-          memory: 32Mi
       volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx
