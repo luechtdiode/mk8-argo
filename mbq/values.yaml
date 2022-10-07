@@ -8,7 +8,7 @@ routes:
 
 
 mbq-waf:
-  replicaCount: 1
+  replicaCount: 0
   image:
     repository: luechtdiode/nginx-naxsi
     tag: v1.0.0
@@ -40,7 +40,30 @@ mbq:
   image:
     repository: luechtdiode/mobile-queue
     tag: master-3f6ce2a
+  additionalContainers:
+    - name: mbq-waf
+      replicaCount: 1
+      image:
+        repository: luechtdiode/nginx-naxsi
+        tag: v1.0.0
+      resources:
+        requests:
+          cpu: 0.2
+          memory: 32Mi
+        limits:
+          cpu: 1.00
+          memory: 32Mi
+      volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-cm
   network:
+    waf:
+      containerPort: 80
+      servicePort: 5858
     http:
       containerPort: 8080
       servicePort: 5757
