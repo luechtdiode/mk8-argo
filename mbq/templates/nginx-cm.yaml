@@ -74,7 +74,7 @@ data:
     }
         
     upstream mbq {
-      server mbq:5757;
+      server localhost:8080;
     }
 
     server {
