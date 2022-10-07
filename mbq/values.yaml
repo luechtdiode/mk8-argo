@@ -43,9 +43,7 @@ mbq:
   additionalContainers:
     - name: mbq-waf
       replicaCount: 1
-      image:
-        repository: luechtdiode/nginx-naxsi
-        tag: v1.0.0
+      image: luechtdiode/nginx-naxsi:v1.0.0
       resources:
         requests:
           cpu: 0.2
