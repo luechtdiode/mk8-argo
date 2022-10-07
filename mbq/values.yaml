@@ -46,6 +46,10 @@ mbq:
       volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx
+  volumes:
+    - name: nginx-config
+      configMap:
+        name: nginx-cm
   network:
     waf:
       containerPort: 80
