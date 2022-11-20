@@ -47,7 +47,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: backend-switch-5f89e45
+    tag: backend-switch-82e6708
   labels:
     monitoring: enabled
   network:
