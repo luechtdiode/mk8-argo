@@ -73,7 +73,7 @@ kutuapp:
       port: 5757
   readynessProbe:
     httpGet:
-      path: /metrics
+      path: /
       port: 5757
   env:
     - name: _NAMESPACE
