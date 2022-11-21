@@ -70,11 +70,11 @@ kutuapp:
   livenessProbe:
     httpGet:
       path: /metrics
-      port: 3000
+      port: 5757
   readynessProbe:
     httpGet:
       path: /metrics
-      port: 3000
+      port: 5757
   env:
     - name: _NAMESPACE
       valueFrom:
