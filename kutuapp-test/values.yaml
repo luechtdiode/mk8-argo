@@ -2,46 +2,18 @@ routes:
   - name: kutuapp-waf
     domain: kutuapp-test.interpolar.ch
     dns_resolver: "cf-production"
-    port: 5858
-    portSecure: 5858
+    port: 5757
+    portSecure: 5757
   - name: kutuapp-waf
     domain: kutuapp-test.sharevic.net
     dns_resolver: "cf-production"
-    port: 5858
-    portSecure: 5858
+    port: 5757
+    portSecure: 5757
   - name: kutuapp
     domain: test-kutuapp.sharevic.net
     dns_resolver: "cf-production"
     port: 5757
     portSecure: 5757
-
-kutuapp-waf:
-  replicaCount: 3
-  image:
-    repository: luechtdiode/nginx-naxsi
-    tag: v1.0.0
-  defaultAffinityRules:
-    enabled: false
-  network:
-    http:
-      containerPort: 80
-      servicePort: 5858
-  service:
-    type: NodePort
-  resources:
-    requests:
-      cpu: 0.05
-      memory: 32Mi
-    limits:
-      cpu: 0.5
-      memory: 32Mi
-  volumeMounts:
-    - name: nginx-config
-      mountPath: /etc/nginx
-  volumes:
-    - name: nginx-config
-      configMap:
-        name: nginx-cm
 
 kutuapp:
   replicaCount: 1

@@ -4,34 +4,6 @@ routes:
     dns_resolver: "cf-production"
     port: 5757
     portSecure: 5757
-    
-kutuapp-waf:
-  replicaCount: 0
-  image:
-    repository: luechtdiode/nginx-naxsi
-    tag: v1.0.0
-  defaultAffinityRules:
-    enabled: false
-  network:
-    http:
-      containerPort: 80
-      servicePort: 5858
-  service:
-    type: NodePort
-  resources:
-    requests:
-      cpu: 0.2
-      memory: 32Mi
-    limits:
-      cpu: 1.00
-      memory: 32Mi
-  volumeMounts:
-    - name: nginx-config
-      mountPath: /etc/nginx
-  volumes:
-    - name: nginx-config
-      configMap:
-        name: nginx-cm
 
 kutuapp:
   replicaCount: 1
@@ -53,6 +25,14 @@ kutuapp:
     limits:
       cpu: 3.00
       memory: 2.0Gi
+  livenessProbe:
+    httpGet:
+      path: /metrics
+      port: 5757
+  readynessProbe:
+    httpGet:
+      path: /
+      port: 5757
   envFrom:
     - secretRef:
         name: smtp-secret
