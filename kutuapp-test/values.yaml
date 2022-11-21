@@ -67,6 +67,14 @@ kutuapp:
     limits:
       cpu: 0.5
       memory: 2.0Gi
+  livenessProbe:
+    httpGet:
+      path: /metrics
+      port: 3000
+  readynessProbe:
+    httpGet:
+      path: /metrics
+      port: 3000
   env:
     - name: _NAMESPACE
       valueFrom:
