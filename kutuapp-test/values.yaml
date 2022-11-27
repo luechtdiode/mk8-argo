@@ -19,7 +19,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: dependabot-prs-608c59d
+    tag: dependabot-prs-3d2879a
   labels:
     monitoring: enabled
   network:
