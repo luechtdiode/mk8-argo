@@ -19,7 +19,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r2b21-alpha4
+    tag: v2r2b21-alpha5
   labels:
     monitoring: enabled
   network:
