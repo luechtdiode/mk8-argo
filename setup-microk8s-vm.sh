@@ -23,6 +23,7 @@ sudo iptables -P FORWARD ACCEPT
 sudo usermod -a -G microk8s $USER
 # newgrp microk8s
 # su - $USER
+alias kubectl='microk8s kubectl'
 
 # install kubeseal
 mkdir tmp
