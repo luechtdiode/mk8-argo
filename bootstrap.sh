@@ -1,5 +1,8 @@
 #!/bin/bash
 
+alias kubectl='microk8s kubectl'
+alias helm='helm3'
+
 # cleanup
 helm -n argocd uninstall argocd
 kubectl delete namespace argocd
