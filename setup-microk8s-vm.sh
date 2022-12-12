@@ -46,8 +46,6 @@ unzip -o uplink_linux_amd64.zip && rm uplink_linux_amd64.zip
 sudo install -m 755 uplink /usr/local/bin/uplink
 uplink setup # 2 eu1.storj.io, access-name, api-key, passphrase, passphrase, n
 
-sudo snap install helm3
-
 cd mk8-argo
 
 ./bootstrap.sh
