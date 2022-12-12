@@ -23,7 +23,12 @@ sudo iptables -P FORWARD ACCEPT
 sudo usermod -a -G microk8s $USER
 # newgrp microk8s
 # su - $USER
-alias kubectl='microk8s kubectl'
+
+echo "alias kubectl='microk8s kubectl'" > ~/.bash_aliases
+echo "alias helm='microk8s helm3'" > ~/.bash_aliases
+source ~/.bash_aliases
+source ~/.bashrc
+
 sudo ufw allow in on cni0 && sudo ufw allow out on cni0
 sudo ufw default allow routed
 
