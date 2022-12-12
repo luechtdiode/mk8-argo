@@ -18,7 +18,8 @@ sudo systemctl enable --now iscsid
 # snap info microk8s
 sudo snap install microk8s --classic --channel=latest/stable
 sudo microk8s status --wait-ready
-sudo microk8s enable rbac helm3 dns ingress metrics-server storage host-access openebs
+sudo microk8s enable community
+sudo microk8s enable rbac helm3 dns ingress metrics-server host-access openebs
 sudo iptables -P FORWARD ACCEPT
 sudo usermod -a -G microk8s $USER
 # newgrp microk8s
