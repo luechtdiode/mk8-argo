@@ -35,14 +35,15 @@ cd backuprestore
 cd ..
 
 # traefik
+kubectl create namespace prometheus
 cd traefik
 helm repo add traefik https://helm.traefik.io/traefik
 helm repo update
 helm dependencies update
 
 kubectl create namespace traefik
-helm install -n traefik traefik/traefik . -f values.yaml
-helm upgrade -n traefik traefik/traefik . -f values.yaml
+helm install -n traefik traefik . -f values.yaml
+helm upgrade -n traefik traefik . -f values.yaml
 cd ..
 
 # argocd
