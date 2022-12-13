@@ -21,7 +21,7 @@ function restoreSecret() {
 }
 
 function applySecret() {
-  namespace=$(echo $1 | cut -d/ -f2 )
+  namespace=$(echo $1 | cut -d/ -f1 )
 
   kubectl -n $namespace apply -f <"../$1"
   echo "Secret $1 applied in namespace $namespace"
