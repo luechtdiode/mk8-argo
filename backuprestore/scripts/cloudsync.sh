@@ -3,7 +3,7 @@ source ./scripts/file-incremental-backup-restore.sh
 function findUplinkConfigDir() {
   if [ -z $UPLINK_CONFIG_DIR ];
   then
-    echo "~/.config/storj/uplink"
+    echo "/home/$(whoami)/.config/storj/uplink"
   else
     echo "$UPLINK_CONFIG_DIR"
   fi
@@ -13,7 +13,7 @@ UPLINK_CONFIG_DIR=$(findUplinkConfigDir)
 
 echo "uplink config dir found at $UPLINK_CONFIG_DIR"
 
-# _downSync CLOUD_PATH, CLUSTER_DIR, DB_DIR, BACKUP_DIR
+# _downSync CLOUD_PATH CLUSTER_DIR DB_DIR BACKUP_DIR
 function _downSync() {
   CLOUD_PATH=$1
   CLUSTER_DIR=$2
@@ -85,7 +85,7 @@ function cloudsync() {
         LATEST_BACKUP="sj://$(uplink --config-dir $UPLINK_CONFIG_DIR ls | grep mars  | tail -n +2 | awk '{ print $NF }' | sort -r | head -n 1)/"
         CLOUD_PATH="$LATEST_BACKUP$PREFIX"
       fi
-      _downSync $CLOUD_PATH, $CLUSTER_DIR, $DB_DIR, $BACKUP_DIR
+      _downSync $CLOUD_PATH $CLUSTER_DIR $DB_DIR $BACKUP_DIR
       files_restore $SOURCE $BACKUP_DIR
     ;;
     *)
