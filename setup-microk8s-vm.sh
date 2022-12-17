@@ -25,7 +25,8 @@ sudo microk8s refresh-certs --cert front-proxy-client.crt
 sudo microk8s config > .kube/config
 
 sudo microk8s enable community
-sudo microk8s enable rbac helm3 dns ingress metrics-server host-access openebs prometheus
+#sudo microk8s enable rbac helm3 dns ingress metrics-server host-access openebs prometheus
+sudo microk8s enable rbac helm3 dns ingress metrics-server storage openebs dashboard
 sudo iptables -P FORWARD ACCEPT
 sudo usermod -a -G microk8s $USER
 # newgrp microk8s
