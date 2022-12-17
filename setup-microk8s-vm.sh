@@ -39,6 +39,11 @@ wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.5/ku
 sudo install -m 755 tmp/kubeseal /usr/local/bin/kubeseal
 rm -rf tmp
 
+# install calicoctl
+curl -L https://github.com/projectcalico/calico/releases/download/v3.24.5/calicoctl-linux-amd64 -o calicoctl
+chmod +x ./calicoctl
+sudo install -m 755 calicoctl /usr/local/bin/calicoctl
+rm calicoctl
 # install storj uplink (interactiv) https://github.com/storj/storj/releases/download/v1.61.1/identity_linux_arm64.zip
 sudo apt install unzip
 curl -L https://github.com/storj/storj/releases/latest/download/uplink_linux_amd64.zip -o uplink_linux_amd64.zip
