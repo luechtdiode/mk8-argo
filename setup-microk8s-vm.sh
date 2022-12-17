@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# start with sudo bash -i setup-microk8s-vm.sh
+
 git clone https://github.com/luechtdiode/mk8-argo.git
 git checkout master
 
@@ -9,24 +11,28 @@ mkdir $(pwd)/.kube
 sudo chown -f -R $USER $(pwd)/.kube
 
 # install iscsi for openebs storage-drivers
-#sudo apt-get update
-#sudo apt-get install open-iscsi
-#sudo systemctl enable --now iscsid
+sudo apt-get update
+sudo apt-get install open-iscsi
+sudo systemctl enable --now iscsid
 # sudo cat /etc/iscsi/initiatorname.iscsi
-# systemctl status iscsid
+systemctl status iscsid
 
 # snap info microk8s
 sudo snap install microk8s --classic --channel=1.23/stable
 sudo microk8s status --wait-ready
 
-sudo microk8s refresh-certs --cert ca.crt
-sudo microk8s refresh-certs --cert server.crt
-sudo microk8s refresh-certs --cert front-proxy-client.crt
+#sudo microk8s refresh-certs --cert ca.crt
+#sudo microk8s refresh-certs --cert server.crt
+#sudo microk8s refresh-certs --cert front-proxy-client.crt
 sudo microk8s config > .kube/config
 
 sudo microk8s enable community
-#sudo microk8s enable rbac helm3 dns ingress metrics-server host-access openebs prometheus
 sudo microk8s enable rbac helm3 dns ingress metrics-server storage openebs dashboard
+sudo microk8s status --wait-ready
+sudo microk8s enable dashboard
+sudo microk8s status --wait-ready
+kubectl patch svc kubernetes-dashboard -n kube-system -p '{"spec": {"type": "NodePort"}}'
+
 sudo iptables -P FORWARD ACCEPT
 sudo usermod -a -G microk8s $USER
 # newgrp microk8s
@@ -61,4 +67,4 @@ rm calicoctl
 
 cd mk8-argo
 
-./bootstrap.sh
+sudo bash -i ./bootstrap.sh
