@@ -9,17 +9,23 @@ mkdir $(pwd)/.kube
 sudo chown -f -R $USER $(pwd)/.kube
 
 # install iscsi for openebs storage-drivers
-sudo apt-get update
-sudo apt-get install open-iscsi
-sudo systemctl enable --now iscsid
+#sudo apt-get update
+#sudo apt-get install open-iscsi
+#sudo systemctl enable --now iscsid
 # sudo cat /etc/iscsi/initiatorname.iscsi
 # systemctl status iscsid
 
 # snap info microk8s
-sudo snap install microk8s --classic --channel=latest/stable
+sudo snap install microk8s --classic --channel=1.23/stable
 sudo microk8s status --wait-ready
+
+sudo microk8s refresh-certs --cert ca.crt
+sudo microk8s refresh-certs --cert server.crt
+sudo microk8s refresh-certs --cert front-proxy-client.crt
+sudo microk8s config > .kube/config
+
 sudo microk8s enable community
-sudo microk8s enable rbac helm3 dns ingress metrics-server host-access openebs
+sudo microk8s enable rbac helm3 dns ingress metrics-server host-access openebs prometheus
 sudo iptables -P FORWARD ACCEPT
 sudo usermod -a -G microk8s $USER
 # newgrp microk8s
@@ -44,12 +50,13 @@ curl -L https://github.com/projectcalico/calico/releases/download/v3.24.5/calico
 chmod +x ./calicoctl
 sudo install -m 755 calicoctl /usr/local/bin/calicoctl
 rm calicoctl
+
 # install storj uplink (interactiv) https://github.com/storj/storj/releases/download/v1.61.1/identity_linux_arm64.zip
-sudo apt install unzip
-curl -L https://github.com/storj/storj/releases/latest/download/uplink_linux_amd64.zip -o uplink_linux_amd64.zip
-unzip -o uplink_linux_amd64.zip && rm uplink_linux_amd64.zip
-sudo install -m 755 uplink /usr/local/bin/uplink
-uplink setup # 2 eu1.storj.io, access-name, api-key, passphrase, passphrase, n
+#sudo apt install unzip
+#curl -L https://github.com/storj/storj/releases/latest/download/uplink_linux_amd64.zip -o uplink_linux_amd64.zip
+#unzip -o uplink_linux_amd64.zip && rm uplink_linux_amd64.zip
+#sudo install -m 755 uplink /usr/local/bin/uplink
+#uplink setup # 2 eu1.storj.io, access-name, api-key, passphrase, passphrase, n
 
 cd mk8-argo
 
