@@ -10,9 +10,9 @@ kubectl delete namespace sealed-secrets
 helm -n traefik uninstall traefik
 kubectl delete namespace traefik
 
-kubectl apply -f admin-user-sa.yaml
-kubectl apply -f admin-cluster-rolebinding.yaml
-kubectl -n kube-system get secret $(kubectl -n kube-system get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
+#kubectl apply -f admin-user-sa.yaml
+#kubectl apply -f admin-cluster-rolebinding.yaml
+#kubectl -n kube-system get secret $(kubectl -n kube-system get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
 
 # sealed-secrets
 cd sealed-secrets
