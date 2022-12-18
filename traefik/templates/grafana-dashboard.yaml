@@ -1,3 +1,4 @@
+{{ if not .Values.templates.dashboard_hostname -}}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -1354,3 +1355,4 @@ data:
       "weekStart": ""
     }
     `}}
+{{- end -}}
