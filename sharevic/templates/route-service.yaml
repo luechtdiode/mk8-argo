@@ -18,13 +18,12 @@ spec:
         - kind: Service
           name: {{ $servicename }}
           port: {{ $servicport }}
-
       #middlewares:
       #- name: secure
       #  namespace: traefik
       #- name: app-passthrough-{{ .name }}-header
+    {{ end }}
   tls:
     certResolver: {{ $resolver }}
-    {{ end }}
 {{ end }}
 
