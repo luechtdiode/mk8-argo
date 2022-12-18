@@ -14,8 +14,8 @@ spec:
         - name: kubernetes-dashboard
           port: 443
       middlewares:
-      - name: secure
-        namespace: traefik
+        - name: secure
+          namespace: traefik
       tls:
         certResolver: cf-production
     - kind: Rule
@@ -26,8 +26,8 @@ spec:
           port: 443
           scheme: h2c
       middlewares:
-      - name: secure
-        namespace: traefik
+        - name: secure
+          namespace: traefik
       tls:
         certResolver: cf-production
 
