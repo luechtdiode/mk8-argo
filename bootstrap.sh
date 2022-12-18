@@ -42,8 +42,7 @@ helm repo update
 helm dependencies update
 
 kubectl create namespace traefik
-helm install -n traefik traefik . -f values.yaml
-helm upgrade -n traefik traefik . -f values.yaml
+helm install -n traefik traefik . -f values.yaml --set templates.skippodmonitor=true
 cd ..
 
 # argocd
