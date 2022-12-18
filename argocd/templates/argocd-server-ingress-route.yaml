@@ -19,9 +19,7 @@ spec:
         namespace: traefik
       - name: more-security-response-header
         namespace: traefik
-      tls:
-        certResolver: cf-production
-    - kind: Rule
+   - kind: Rule
       match: Host(`argo.interpolar.ch`) && Headers(`Content-Type`, `application/grpc`)
       priority: 11
       services:
@@ -33,6 +31,6 @@ spec:
         namespace: traefik
       - name: more-security-response-header
         namespace: traefik
-      tls:
-        certResolver: cf-production
+  tls:
+    certResolver: cf-production
 {{ end }}
