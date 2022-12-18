@@ -19,8 +19,6 @@ spec:
       services:
         - name: argocd-server
           port: 443
-      tls:
-        certResolver: cf-production
     - kind: Rule
       match: >-
         Host(`argo.interpolar.ch`) && Headers(`Content-Type`,
@@ -35,6 +33,6 @@ spec:
         - name: argocd-server
           port: 443
           scheme: h2c
-      tls:
-        certResolver: cf-production
+  tls:
+    certResolver: cf-production
 {{ end }}
