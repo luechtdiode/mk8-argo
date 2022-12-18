@@ -9,30 +9,32 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: HostRegexp(`{subdomain:argo}.interpolar.ch`)
+      match: 'HostRegexp(`{subdomain:argo}.interpolar.ch`)'
+      middlewares:
+        - name: security-response-header
+          namespace: traefik
+        - name: more-security-response-header
+          namespace: traefik
       priority: 10
       services:
         - name: argocd-server
           port: 443
-      middlewares:
-      - name: security-response-header
-        namespace: traefik
-      - name: more-security-response-header
-        namespace: traefik
       tls:
         certResolver: cf-production
-   - kind: Rule
-      match: Host(`argo.interpolar.ch`) && Headers(`Content-Type`, `application/grpc`)
+    - kind: Rule
+      match: >-
+        Host(`argo.interpolar.ch`) && Headers(`Content-Type`,
+        `application/grpc`)
+      middlewares:
+        - name: security-response-header
+          namespace: traefik
+        - name: more-security-response-header
+          namespace: traefik
       priority: 11
       services:
         - name: argocd-server
           port: 443
           scheme: h2c
-      middlewares:
-      - name: security-response-header
-        namespace: traefik
-      - name: more-security-response-header
-        namespace: traefik
       tls:
         certResolver: cf-production
 {{ end }}
