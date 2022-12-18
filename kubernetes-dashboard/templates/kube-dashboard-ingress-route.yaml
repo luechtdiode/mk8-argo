@@ -16,8 +16,6 @@ spec:
       middlewares:
         - name: secure
           namespace: traefik
-      tls:
-        certResolver: cf-production
     - kind: Rule
       match: Host(`kube.interpolar.ch`) && Headers(`Content-Type`, `application/grpc`)
       priority: 11
@@ -28,6 +26,6 @@ spec:
       middlewares:
         - name: secure
           namespace: traefik
-      tls:
-        certResolver: cf-production
+  tls:
+    certResolver: cf-production
 
