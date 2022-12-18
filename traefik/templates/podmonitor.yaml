@@ -1,3 +1,4 @@
+{{ if not .Values.templates.dashboard_hostname -}}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
@@ -26,3 +27,4 @@ spec:
     staticConfig:
       static:
       - "https://traefik.interpolar.ch"
+{{- end -}}
