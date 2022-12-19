@@ -44,6 +44,17 @@ function restoreSecrets() {
   cd ..
 }
 
+function restoreAppStates() {
+  cd backuprestore
+  ./main.sh privatesecretrestore
+  ./main.sh restorepvc kmgetubs19
+  ./main.sh restorepvc keycloak
+  ./main.sh restorepvc kutuapp-test
+  ./main.sh restorepvc kutuapp
+  ./main.sh restorepvc sharevic
+  cd ..
+}
+
 function installTraefik() {
   # traefik
   cd traefik
@@ -87,6 +98,7 @@ function setup() {
   installTraefik
   installArgo
   boostrapViaArgo
+  restoreAppStates
   cd ..
 }
 
