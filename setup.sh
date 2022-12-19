@@ -151,4 +151,4 @@ kubectl get svc -n kube-system | grep kubernetes-dashboard
 zfsInitPool
 
 echo bootstrapping apps ...
-source ./bootstrap.sh
+source ./mk8-argo/bootstrap.sh
