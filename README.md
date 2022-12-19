@@ -1,5 +1,13 @@
 # mk8-argo
 
+## Installation
+```bash
+export NIC_IPS=<iprange for metallb>
+export ACCESSNAME=<storj.accessname>
+export ACCESSGRANT=<storj.accessgrant>
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/luechtdiode/mk8-argo/master/setup.sh)"
+```
+
 |App|Status|Entrypoint|
 |---|------|----------|
 |bootstrap|[![App Status](https://argo.interpolar.ch/api/badge?name=bootstrap&revision=true)](https://argo.interpolar.ch/applications/bootstrap)|n/a|
