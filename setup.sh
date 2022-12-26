@@ -17,6 +17,9 @@ read -p "press any key to continue ...."
 
 [ -d mk8-argo ]  && rm -rf mk8-argo
 
+sudo microk8s stop
+wait
+
 git clone https://github.com/luechtdiode/mk8-argo.git
 
 source ./mk8-argo/createzfspool.sh
