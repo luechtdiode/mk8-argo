@@ -46,12 +46,12 @@ function restoreSecrets() {
 
 function restoreAppStates() {
   cd backuprestore
-  ./main.sh privatesecretrestore
-  ./main.sh restorepvc kmgetubs19
-  ./main.sh restorepvc keycloak
-  ./main.sh restorepvc kutuapp-test
-  ./main.sh restorepvc kutuapp
-  ./main.sh restorepvc sharevic
+  #./main.sh privatesecretrestore
+  ./main.sh restore kmgetubs19
+  ./main.sh restore keycloak
+  ./main.sh restore kutuapp-test
+  ./main.sh restore kutuapp
+  ./main.sh restorep sharevic
   cd ..
 }
 
