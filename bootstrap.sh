@@ -51,7 +51,7 @@ function restoreAppStates() {
   ./main.sh restore keycloak
   ./main.sh restore kutuapp-test
   ./main.sh restore kutuapp
-  ./main.sh restorep sharevic
+  ./main.sh restore sharevic
   cd ..
 }
 
