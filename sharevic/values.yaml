@@ -11,8 +11,8 @@ routes:
 
 sharevic-waf:
   replicaCount: 1
-  annotations:
-    "sidecar.jaegertracing.io/inject": "true"      
+  #annotations:
+  #  "sidecar.jaegertracing.io/inject": "true"
   image:
     repository: luechtdiode/nginx-naxsi
     tag: master-1df1bb5

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: traefik-config
+  name: '{{ printf "%s-configs" .Release.Name }}'
   namespace: traefik
 data:
   traefik-config.yaml: |

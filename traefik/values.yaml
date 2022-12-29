@@ -7,8 +7,8 @@ templates:
     dns_resolver: "cf-production"
 
 traefik:
-    image:
-      tag: v2.7.1
+    #image:
+    #  tag: v2.7.1
     # Removing to allow IP setting
     #ports:
     #    udp53:
@@ -19,26 +19,34 @@ traefik:
     globalArguments:
       - "--global.checknewversion"
       - "--serversTransport.insecureSkipVerify=true"
-      - "--tracing.jaeger=true"
-      - "--tracing.serviceName=traefik"
+
     additionalArguments:
-      - --providers.file.filename=/data/traefik-config.yaml
-      - --providers.kubernetesCRD.allowCrossNamespace=true
-      - --providers.kubernetesCRD.allowExternalNameServices=true
-      - --entrypoints.websecure.http.tls.certresolver=cf-production
-      - --certificatesresolvers.cf-staging.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
-      - --certificatesresolvers.cf-staging.acme.dnschallenge.provider=cloudflare
-      - --certificatesresolvers.cf-staging.acme.dnschallenge.resolvers=1.1.1.1
-      - --certificatesresolvers.cf-staging.acme.storage=/certs/acme-stageing.json
-      - --certificatesresolvers.cf-production.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
-      - --certificatesresolvers.cf-production.acme.dnschallenge.provider=cloudflare
-      - --certificatesresolvers.cf-production.acme.dnschallenge.resolvers=1.1.1.1
-      - --certificatesresolvers.cf-production.acme.storage=/certs/acme.json
+      - --providers.file.filename=/config/traefik-config.yaml
 
-    deployment:
-      annotations:
-        "sidecar.jaegertracing.io/inject": "true"    
+    #deployment:
+    #  annotations:
+    #    "sidecar.jaegertracing.io/inject": "true"    
 
+    certResolvers:
+      cf-staging:
+        caserver: https://acme-staging-v02.api.letsencrypt.org/directory
+        dnsChallenge:
+          provider: cloudflare
+          resolvers: 1.1.1.1
+        storage: /certs/acme-stageing.json
+      cf-production:
+        caserver: https://acme-staging-v02.api.letsencrypt.org/directory
+        dnsChallenge:
+          provider: cloudflare
+          resolvers: 1.1.1.1
+        storage: /certs/acme-stageing.json        
+      cf-production_prod:
+        caserver: https://acme-v02.api.letsencrypt.org/directory
+        dnsChallenge:
+          provider: cloudflare
+          resolvers: 1.1.1.1
+        storage: /certs/acme.json        
+       
     env:
       - name: CF_API_EMAIL
         valueFrom:
@@ -52,11 +60,12 @@ traefik:
             name: acme-provider-api-token-secret
     persistence:
       enabled: true
+      #storageClass: openebs-hostpath
       path: /certs
       size: 128Mi
     volumes:
-      - mountPath: /data
-        name: traefik-config
+      - mountPath: /config
+        name: '{{ printf "%s-configs" .Release.Name }}'
         type: configMap
     ports:
       web:
@@ -114,13 +123,17 @@ traefik:
       spec:
         externalTrafficPolicy: Local
     ingressClass:
-      fallbackApiVersion: v1
+      enabled: true
+      isDefaultClass: true
     ingressRoute:
       dashboard:
         enabled: true
     providers:
       kubernetesCRD:
         enabled: true
+        allowCrossNamespace: true
+        allowExternalNameServices: true
+        allowEmptyServices: false        
       kubernetesIngress:
         # IP used for Kubernetes Ingress endpoints
         publishedService:
