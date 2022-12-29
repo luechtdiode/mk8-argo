@@ -37,7 +37,7 @@ spec:
                 - /bin/sh
                 - '-c'
                 - '-e'
-                - pg_isready -U $POSTGRES_USER -d $POSTGRES_USER -q && [ $? == 0 ]
+                - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB -q && [ $? == 0 ]
             initialDelaySeconds: 15
             timeoutSeconds: 5
             periodSeconds: 10
@@ -48,8 +48,13 @@ spec:
           env:
             - name: PGDATA
               value: /var/lib/pgsql/data           
-            - name: POSTGRES_USER
+            - name: POSTGRES_DB
               value: kutuapp
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: kutu-postgres-secret
+                  key: user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
