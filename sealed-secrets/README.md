@@ -5,7 +5,7 @@ Install SealedSecret
 cd ~/microk8s-setup/mk8-argo/sealed-secrets
 
 # get kubeseal, extract and install
-wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.5/kubeseal-0.17.5-linux-amd64.tar.gz -O - | tar xz -C $(pwd)/tmp
+wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.19.3/kubeseal-0.19.3-linux-amd64.tar.gz -O - | tar xz -C $(pwd)/tmp
 sudo install -m 755 tmp/kubeseal /usr/local/bin/kubeseal
 rm -rf tmp
 
