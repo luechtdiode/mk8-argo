@@ -1,0 +1,9 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: nic-ips
+  namespace: metallb-system
+spec:
+  addresses:
+    - {{ .Values.nic-ips }}
+  autoAssign: true

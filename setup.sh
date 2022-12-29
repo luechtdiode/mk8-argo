@@ -57,7 +57,7 @@ then
   sleep 30s
 fi
 # snap info microk8s
-sudo snap install microk8s --classic --channel=1.23/stable
+sudo snap install microk8s --classic --channel=1.26/stable
 sudo microk8s status --wait-ready
 sudo usermod -a -G microk8s $USER
 
@@ -89,13 +89,19 @@ if [ -z "$NIC_IPS" ]; then
 else
   echo "Automatic passing $NIC_IPS to metallb ..."
   { echo "$NIC_IPS"; } | sudo microk8s enable metallb
+  
+  if [ -z "$(kubectl describe IPAddressPool -n metallb-system | grep Name: | awk '{print $2}')" ]
+  then
+    # Create a IP Adresspool
+    cat mk8-argo/metallb-system/metallb-ippool.yaml | sed 's|{{ .Values.nic-ips }}|'$NIC_IPS'|g' | kubectl apply -f -
+  fi
 fi
+
+
 sudo microk8s enable ingress
 sudo microk8s enable metrics-server
-sudo microk8s enable storage
-sudo microk8s enable openebs
-sleep 10s
-wait
+#sudo microk8s enable openebs
+sudo microk8s enable hostpath-storage
 sudo microk8s enable dashboard
 wait
 sudo microk8s status --wait-ready
