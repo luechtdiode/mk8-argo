@@ -51,10 +51,10 @@ function ns_dbrestore()
       db_restore kmgetubs19 odoo ${2:-odoo}
     ;;
     kutuapp-test)
-      db_restore kutuapp-test kutuapp ${2:-kutuapp}
+      db_restore kutuapp-test kutuadmin ${2:-kutuapp}
     ;;
     kutuapp)
-      db_restore kutuapp kutuapp ${2:-kutuapp}
+      db_restore kutuapp kutuadmin ${2:-kutuapp}
     ;;
     keycloak)
       db_restore keycloak keycloak ${2:-keycloak}

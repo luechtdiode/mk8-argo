@@ -5,7 +5,9 @@
 export NIC_IPS=<iprange for metallb>
 export ACCESSNAME=<storj.accessname>
 export ACCESSGRANT=<storj.accessgrant>
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/luechtdiode/mk8-argo/master/setup.sh)"
+export BACKUP_DATE=<date of backup to restore from>
+#bash -c "$(curl -fsSL https://raw.githubusercontent.com/luechtdiode/mk8-argo/master/setup.sh)"
+bash -ci "$(curl -fsSL https://raw.githubusercontent.com/luechtdiode/mk8-argo/mk8-126/setup.sh)"
 ```
 
 |App|Status|Entrypoint|

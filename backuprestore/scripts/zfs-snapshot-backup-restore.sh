@@ -3,6 +3,7 @@
 # https://docs.oracle.com/cd/E23824_01/html/821-1448/recover-1.html#scrolltoc
 
 ZFS_POOL=zfspv-pool
+source ./scripts/file-incremental-backup-restore.sh
 
 # zfs_backup $namespace $pvcname $BACKUP_DIR
 function zfs_backup() {
@@ -71,6 +72,62 @@ function zfs_backup() {
   done
 }
 
+# zfs_tar_migration $namespace $pvcname $BACKUP_DIR $TARGET_DIR
+function zfs_tar_migration() {
+  namespace=$1
+  pvcname=$2
+  BACKUP_DIR=$3
+  TEMP_DIR=$(pwd)/zfstemp
+  TARGET_DIR=$4
+  files=$(find ${BACKUP_DIR}/*.gz | grep -vF .tar.)
+  if ! [ -z $files ]
+  then
+    echo "--------------------------------"
+    echo "migrate zfs-tar for namespace $namespace, pvcname: $pvcname via: $TARGET_DIR ..."
+
+    sudo zfs create -o mountpoint=$TEMP_DIR "${ZFS_POOL}/${pvcname}"
+    if zfs_restore $namespace $pvcname $BACKUP_DIR
+    then
+      for d in ${TARGET_DIR}/*
+      do
+        echo "cleaning $d"
+        sudo  rm -rf $d
+      done
+    fi
+    sudo mv $TEMP_DIR $TARGET_DIR
+
+    sudo zfs unmount $TEMP_DIR
+    sudo zfs set mountpoint=none "${ZFS_POOL}/${pvcname}"
+    sudo zfs destroy -f "${ZFS_POOL}/${pvcname}"
+    rm -rf $TEMP_DIR
+  else
+    echo "--------------------------------"
+    echo "no migration zfs->tar for namespace $namespace, pvcname: $pvcname files: $files ..."
+  fi
+}
+
+# tar_zfs_migration $namespace $volumename $BACKUP_DIR
+function tar_zfs_migration() {
+  namespace=$1
+  volumename=$2
+  BACKUP_DIR=$3
+  TARGET_DIR=$(pwd)/zfstemp
+  files=$(find ${BACKUP_DIR}/*.tar.gz)
+  if ! [ -z $files ]
+  then
+    echo "--------------------------------"
+    echo "migrate tar->zfs for namespace $namespace, volume: $volumename via: $TARGET_DIR ..."
+
+    sudo zfs set mountpoint=$TARGET_DIR "${ZFS_POOL}/${volumename}"
+    files_restore $TARGET_DIR $BACKUP_DIR
+    sudo zfs unmount $TARGET_DIR
+    sudo zfs set mountpoint=none "${ZFS_POOL}/${volumename}"
+  else
+    echo "--------------------------------"
+    echo "no migration tar->zfs for namespace $namespace, volume: $volumename files: $files ..."
+  fi
+}
+
 # zfs_restore $namespace $pvcname $BACKUP_DIR
 function zfs_restore() {
   namespace=$1
@@ -83,7 +140,8 @@ function zfs_restore() {
 
   number=1
   echo "searching for .gz archives to restore..."
-  for backupfile in ${BACKUP_DIR}/*.gz
+  files=$(find ${BACKUP_DIR}/*.gz | grep -vF .tar.)
+  for backupfile in files
   do
     zfssnapshotname=$(echo $backupfile | sed "s/snapcontent-/snapshot-/g" | awk -F/ '{ if($NF != "") print $NF }' | sed "s/.gz//g")
     echo "restoring zfs backup #$number"
@@ -94,6 +152,9 @@ function zfs_restore() {
     snap=($(sed -e "s/pvcname/$pvc/g" -e "s/zfspv-snapname/snap-$number/g" scripts/zfs-snapshot.yaml | kubectl -n $namespace apply -f -)[0])
     let "number=number+1"
   done
+
+  # no gz-files to restore, then try migration from tar to zfs ...
+  [ number -eq 1 ] tar_zfs_migration $namespace $volumename $BACKUP_DIR
 }
 
 # zfs_restore $namespace $pvcname $BACKUP_DIR

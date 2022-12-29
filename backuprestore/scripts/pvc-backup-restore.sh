@@ -3,10 +3,16 @@ source ./scripts/file-incremental-backup-restore.sh
 function pvc_backup()
 {
   namespace=$1
+  deployments=$(kubectl get deployments -n $namespace -o jsonpath='{ .items[*].metadata.name }')
+  if [ -z deployments ] 
+  then
+    echo "no active deployments in namespace $namespace found. No pvc backp applied!"
+    return 1
+  fi
   echo "backup for namespace $namespace, disable argo-autosync ..."
+  kubectl patch application bootstrap -n argocd --type merge --patch "$(cat scripts/disable-sync-patch.yaml)"
   kubectl patch application $namespace -n argocd --type merge --patch "$(cat scripts/disable-sync-patch.yaml)"
 
-  deployments=$(kubectl get deployments -n $namespace -o jsonpath='{ .items[*].metadata.name }')
   for deployment in $deployments
   do
     echo "backup for namespace $namespace, stopping deployment $deployment ..."
@@ -49,16 +55,33 @@ function pvc_backup()
 
   echo "--------------------------------"
   kubectl patch application $namespace -n argocd --type merge --patch "$(cat scripts/enable-sync-patch.yaml)"
+  kubectl patch application bootstrap -n argocd --type merge --patch "$(cat scripts/enable-sync-patch.yaml)"
   echo "================================"
 }
 
 function pvc_restore()
 {
   namespace=$1
+  deployments=$(kubectl get deployments -n $namespace -o jsonpath='{ .items[*].metadata.name }')
+  if [ -z deployments ] 
+  then
+    echo "no active deployments in namespace $namespace found. No pvc restore applied!"
+    return 1
+  fi
+
+  for deployment in $deployments
+  do
+    until kubectl wait --for=condition=available --timeout=600s deployment/$deployment -n $namespace
+    do
+      echo "application $namespace not ready to connect deployment-pvcs. wait ..."
+      sleep 5
+    done
+  done
+
   echo "restore for namespace $namespace, disable argo-autosync ..."
+  kubectl patch application bootstrap -n argocd --type merge --patch "$(cat scripts/disable-sync-patch.yaml)"
   kubectl patch application $namespace -n argocd --type merge --patch "$(cat scripts/disable-sync-patch.yaml)"
 
-  deployments=$(kubectl get deployments -n $namespace -o jsonpath='{ .items[*].metadata.name }')
   for deployment in $deployments
   do
     echo "restore for namespace $namespace, stopping deployment $deployment ..."
@@ -78,12 +101,14 @@ function pvc_restore()
         echo "--------------------------------"
         echo "restore for namespace $namespace, pvc-name: $pvcname, volume: $volumename to: $TARGET_DIR ..."
         files_restore $TARGET_DIR $BACKUP_DIR
+        zfs_tar_migration $namespace $pvcname $BACKUP_DIR $TARGET_DIR
         ;;
       openebs-hostpath)
         TARGET_DIR="$PVCROOT/$volumename"
         echo "--------------------------------"
         echo "restore for namespace $namespace, pvc-name: $pvcname, volume: $volumename to: $TARGET_DIR ..."
         files_restore $TARGET_DIR $BACKUP_DIR
+        zfs_tar_migration $namespace $pvcname $BACKUP_DIR $TARGET_DIR
         ;;
       openebs-zfspv)
         SOURCE="$PVCROOT/$volumename"
@@ -100,5 +125,6 @@ function pvc_restore()
 
   echo "--------------------------------"
   kubectl patch application $namespace -n argocd --type merge --patch "$(cat scripts/enable-sync-patch.yaml)"
+  kubectl patch application bootstrap -n argocd --type merge --patch "$(cat scripts/enable-sync-patch.yaml)"
   echo "================================"
 }

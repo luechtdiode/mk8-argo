@@ -28,6 +28,7 @@ function _downSync() {
     uplink cp --config-dir $UPLINK_CONFIG_DIR --interactive=false --progress=false $CLOUD_PATH/cluster/$file $CLUSTER_DIR/$file
   done
 
+  mkdir -p $DB_DIR
   for file in $(uplink --config-dir $UPLINK_CONFIG_DIR ls $CLOUD_PATH/db/ | tail -n +2 | awk '{ print $NF }'); do
     uplink cp --config-dir $UPLINK_CONFIG_DIR --interactive=false --progress=false $CLOUD_PATH/db/$file $DB_DIR/$file
   done

@@ -1,15 +1,78 @@
 #!/bin/bash
 
-function cleanupNamspaces() {
-  # cleanup
-  helm -n argocd uninstall argocd
-  kubectl delete namespace argocd
+alias helm=microk8s.helm3
 
-  helm -n sealed-secrets uninstall sealed-secrets
-  kubectl delete namespace sealed-secrets
+function askn() {
+  read -t 15 -p "$1 (y/N)? " answer
+  case "${answer,,}" in
+    [Yy]* )
+      echo yes
+      return 1;
+    ;;
+    *)
+      echo no
+      return 0;
+  esac
+}
 
-  helm -n traefik uninstall traefik
-  kubectl delete namespace traefik
+function askp() {
+  read -t 15 -p "$1 (Y/n)? " answer
+  case "${answer,,}" in
+    [Nn]* )
+      echo no
+      return 1;
+    ;;
+    *)
+      echo yes
+      return 0;
+  esac
+}
+
+# namespace deployment
+function waitForDeployment() {
+  until kubectl wait --for=condition=available deployment/$2 -n $1 --timeout=15s
+  do
+    if askp "should be waited for readyness of $2 in $1?"
+    then
+      echo "waiting next 15s ..."
+    else
+      break;
+    fi
+  done
+}
+
+function mk8_restart() {
+  echo "restart microk8s ..."
+  sudo snap restart microk8s
+  until [ -z "$(sudo microk8s status | grep 'microk8s is not running.')" ]
+  do
+    echo "waiting until microk8s has started ..."
+    sleep 5
+  done
+}
+
+function cleanupNamespaces() {
+  if askp "should argo, sealed-secrets and traefik namespace be cleaned?"
+  then
+    # cleanup
+    helm -n argocd uninstall argocd
+    kubectl delete namespace argocd
+
+    helm -n sealed-secrets uninstall sealed-secrets
+    kubectl delete namespace sealed-secrets
+
+    helm -n traefik uninstall traefik
+    kubectl delete namespace traefik
+  fi
+}
+
+function installOpenEBSCRD() {
+  cd openebs
+  helm repo add openebs-zfslocalpv https://openebs.github.io/zfs-localpv
+  helm repo update
+  helm dependencies update
+  helm install -n openebs zfs-localpv openebs-zfslocalpv/zfs-localpv -f values.yaml --create-namespace
+  cd ..
 }
 
 function installAdmin() {
@@ -21,38 +84,47 @@ function installAdmin() {
 function installSealedSecrets() {
   # sealed-secrets
   cd sealed-secrets
-  if [ ! -f /usr/local/bin/kubeseal]; then
-    wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.5/kubeseal-0.17.5-linux-amd64.tar.gz -O - | tar xz -C $(pwd)/tmp
-    sudo install -m 755 tmp/kubeseal /usr/local/bin/kubeseal
-    rm -rf tmp
-  fi
-
   helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
   helm repo update
   helm dependencies update
   kubectl create namespace sealed-secrets
   helm install -n kube-system sealed-secrets . -f values.yaml
+  waitForDeployment kube-system sealed-secrets-controller
   cd ..
 }
 
 function restoreSecrets() {
   # restore secrets
   cd backuprestore
-  ./main.sh cloudsync down
+  if [[ -z $BACKUP_DATE ]] || [[ ! -d cloud-backup-$BACKUP_DATE ]]; then
+    ./main.sh cloudsync down $BACKUP_DATE
+  fi
   ./main.sh privatesecretrestore
-  ./main.sh secretrestore
   cd ..
 }
 
 function restoreAppStates() {
-  cd backuprestore
-  #./main.sh privatesecretrestore
-  ./main.sh restore kmgetubs19
-  ./main.sh restore keycloak
-  ./main.sh restore kutuapp-test
-  ./main.sh restore kutuapp
-  ./main.sh restore sharevic
-  cd ..
+  if ! askn "restore pvcs?"
+  then
+    cd backuprestore
+    ./main.sh restore pg-admin
+    ./main.sh restore kmgetubs19
+    ./main.sh restore kutuapp-test
+    ./main.sh restore kutuapp
+    ./main.sh restore sharevic
+    cd ..
+  fi
+}
+
+function restoreAppDBStates() {
+  if ! askn "restore databases?"
+  then
+    cd backuprestore
+    ./main.sh dbrestore kmgetubs19
+    ./main.sh dbrestore kutuapp-test
+    ./main.sh dbrestore kutuapp
+    cd ..
+  fi
 }
 
 function installTraefik() {
@@ -64,6 +136,8 @@ function installTraefik() {
 
   kubectl create namespace traefik
   helm install -n traefik traefik . -f values.yaml --set templates.skippodmonitor=true
+
+  waitForDeployment traefik traefik
   cd ..
 }
 
@@ -73,12 +147,11 @@ function installArgo() {
   helm repo add argo-cd https://argoproj.github.io/argo-helm
   helm repo update
   helm dependencies update
-  # kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=v2.4.4
+  # kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=v2.9.6
   kubectl create namespace argocd
-  helm install -n argocd argocd . -f values.yaml --set installroute=false
+  helm install -n argocd argocd . -f values.yaml --set installroute=false --set argo-cd.crds.install=true
+  waitForDeployment argocd argocd-server
   cd ..
-
-  kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -n argocd
   echo "argocd working now"
 }
 
@@ -88,20 +161,40 @@ function boostrapViaArgo() {
   helm template bootstrap/ | kubectl apply -f -
 
   echo "argo-cd works via git-ops now"
+  waitForDeployment sharevic sharevic-waf
+  waitForDeployment kmgetubs19 odoo11
+  waitForDeployment kutuapp-test kutuapp
+  waitForDeployment kutuapp kutuapp
+  waitForDeployment mbq mbq
 }
 
 function setup() {
-  cd mk8-argo
-  cleanupNamspaces
+  cleanupNamespaces
   installSealedSecrets
   restoreSecrets
+  #installOpenEBSCRD
   installTraefik
   installArgo
   boostrapViaArgo
+  mk8_restart
   restoreAppStates
-  cd ..
+  restoreAppDBStates
 }
 
-echo $(pwd)
-
-setup
+echo "
+  util-script bootstrap.sh
+  ------------------------
+  usage: source ./bootstrap.sh && setup
+  other functions:
+    mk8_restart
+    cleanupNamespaces
+    installSealedSecrets
+    restoreSecrets
+    installOpenEBSCRD
+    installTraefik
+    installArgo
+    boostrapViaArgo
+    restoreAppStates
+    restoreAppDBStates
+  ------------------------
+"
