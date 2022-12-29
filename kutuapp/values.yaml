@@ -26,10 +26,20 @@ kutuapp:
       cpu: 3.00
       memory: 2.0Gi
   livenessProbe:
+    initialDelaySeconds: 15
+    timeoutSeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 10
     httpGet:
       path: /metrics
       port: 5757
   readynessProbe:
+    initialDelaySeconds: 15
+    timeoutSeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 10
     httpGet:
       path: /
       port: 5757
