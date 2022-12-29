@@ -2,7 +2,7 @@ pg-admin:
   replicaCount: 1
   image:
     repository: dpage/pgadmin4
-    tag: 6.9
+    tag: 6.18
   network:
     http:
       containerPort: 80
