@@ -1,5 +1,5 @@
 pg-admin:
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: dpage/pgadmin4
     tag: 6.9
