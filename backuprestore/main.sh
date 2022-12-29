@@ -56,8 +56,6 @@ function ns_dbrestore()
     kutuapp)
       db_restore kutuapp kutuadmin ${2:-kutuapp}
     ;;
-    keycloak)
-      db_restore keycloak keycloak ${2:-keycloak}
   esac
 }
 
@@ -73,8 +71,6 @@ function ns_dbrestore()
         db_backup kutuapp kutuapp kutuapp
         db_backup kutuapp-test kutuapp kutuapp
         db_backup kmgetubs19 odoo
-        db_backup keycloak keycloak keycloak
-        pvc_backup traefik
         cloudsync up
         ;;
       all)
@@ -83,10 +79,7 @@ function ns_dbrestore()
         db_backup kutuapp kutuapp kutuapp
         db_backup kutuapp-test kutuapp kutuapp
         db_backup kmgetubs19 odoo
-        db_backup keycloak keycloak keycloak
-        pvc_backup traefik
         pvc_backup kmgetubs19
-        pvc_backup keycloak
         pvc_backup kutuapp-test
         pvc_backup kutuapp
         pvc_backup sharevic
@@ -110,7 +103,6 @@ function ns_dbrestore()
         db_backup kutuapp kutuapp kutuapp
         db_backup kutuapp-test kutuapp kutuapp
         db_backup kmgetubs19 odoo
-        db_backup keycloak keycloak keycloak
         ;;
       dbrestore)
         ns_dbrestore $2 $3

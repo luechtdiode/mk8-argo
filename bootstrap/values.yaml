@@ -8,10 +8,9 @@ bootstrap:
  - name: prometheus
    monitoring: true
  - name: kubernetes-dashboard
- - name: velero
+ #- name: velero
  - name: storj
  - name: pg-admin
- - name: keycloak
  - name: kmgetubs19
  - name: kutuapp-test
    monitoring: true

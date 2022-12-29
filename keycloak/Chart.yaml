@@ -1,8 +1,0 @@
-name: keycloak
-apiVersion: v2
-version: 1.0.0
-dependencies:
-  - name: keycloak
-    version: '9.2.9'
-    repository: https://charts.bitnami.com/bitnami
-    alias: idp
