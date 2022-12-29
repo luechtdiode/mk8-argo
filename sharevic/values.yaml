@@ -33,7 +33,6 @@ sharevic-waf:
   persistence:
     enabled: true
     name: sharevic-data
-    storageClass: openebs-hostpath
     accessModes: ReadWriteOnce
     size: 10Mi
     annotations:

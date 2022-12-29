@@ -9,5 +9,4 @@ spec:
   resources:
     requests:
       storage: 300Mi
-  storageClassName: openebs-hostpath
   volumeMode: Filesystem

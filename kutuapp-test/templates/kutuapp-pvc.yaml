@@ -8,5 +8,4 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: microk8s-hostpath
   volumeMode: Filesystem

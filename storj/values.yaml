@@ -24,7 +24,6 @@ storj-s3-gateway:
     enabled: false
   persistence:
     enabled: true
-    storageClass: openebs-zfspv
     accessModes: ReadWriteOnce
     name: storj-data
     size: 5Gi

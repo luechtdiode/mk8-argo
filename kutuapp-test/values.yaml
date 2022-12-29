@@ -76,7 +76,6 @@ kutuapp:
   persistence:
     enabled: true
     name: kutuapp-data
-    storageClass: microk8s-hostpath
     accessModes: ReadWriteOnce
     size: 1Gi
     annotations:

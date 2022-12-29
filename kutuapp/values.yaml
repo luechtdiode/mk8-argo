@@ -61,7 +61,6 @@ kutuapp:
   persistence:
     enabled: true
     name: kutuapp-data
-    storageClass: openebs-hostpath
     accessModes: ReadWriteOnce
     size: 10Gi
     annotations:
