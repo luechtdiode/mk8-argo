@@ -68,5 +68,6 @@ function db_restore()
   kubectl -n $NAMESPACE exec $postgrespod -- bash \
     -c "createdb -U $PG_USER -T template0 $TO_DB_NAME"  
   [[ $? ]] && echo "-> dump backup to database $TO_DB_NAME ..." && cat $DUMPFILE | kubectl -n $NAMESPACE exec -i $postgrespod -- pg_restore -U $PG_USER --no-password --section=pre-data --section=data --section=post-data --clean --dbname $TO_DB_NAME
+  [[ ! $? ]] && echo "restore not successfull! debug in pg-container with kubectl -n $NAMESPACE exec -i $postgrespod -- bash "
   echo "restore finished"
 }
