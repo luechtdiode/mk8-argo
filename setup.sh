@@ -28,6 +28,9 @@ fi
 sudo microk8s stop
 wait
 
+# backup existing csr.conf.template conaining local coordinates of the node
+[[ -e /var/snap/microk8s/current/certs/csr.conf.template ]] && cp /var/snap/microk8s/current/certs/csr.conf.template csr.conf.template
+
 source ./mk8-argo/createzfspool.sh
 source ./mk8-argo/bootstrap.sh
 
@@ -48,8 +51,6 @@ if [[ -z $(systemctl status iscsid | grep 'active (running)') ]]
 then
   sudo systemctl enable --now iscsid
 fi
-# sudo cat /etc/iscsi/initiatorname.iscsi
-# systemctl status iscsid
 wait
 
 if ! [[ installed == '*not installed' ]]
@@ -61,15 +62,19 @@ sudo snap install microk8s --classic --channel=1.26/stable
 sudo microk8s status --wait-ready
 sudo usermod -a -G microk8s $USER
 
-cp /var/snap/microk8s/current/certs/csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template.bak
-cp csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template
-nano /var/snap/microk8s/current/certs/csr.conf.template
+if [[ -e csr.conf.template ]]
+then
+  cp /var/snap/microk8s/current/certs/csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template.bak
+  cp csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template
+else
+  nano /var/snap/microk8s/current/certs/csr.conf.template
+fi
 
 sudo microk8s refresh-certs --cert ca.crt
 sudo microk8s refresh-certs --cert server.crt
 sudo microk8s refresh-certs --cert front-proxy-client.crt
-sudo microk8s config > .kube/config
-admintoken=$(cat .kube/config | grep token:)
+sudo microk8s config > ~/.kube/config
+admintoken=$(cat ~/.kube/config | grep token:)
 
 echo "alias kubectl='microk8s kubectl'" > ~/.bash_aliases
 echo "alias helm='microk8s helm3'" > ~/.bash_aliases
