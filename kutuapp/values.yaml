@@ -10,8 +10,6 @@ kutuapp:
   image:
     repository: luechtdiode/kutuapp
     tag: bumps-4194242
-  labels:
-    monitoring: enabled
   network:
     metrics:
       servicePort: 3000
