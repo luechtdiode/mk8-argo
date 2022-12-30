@@ -176,7 +176,11 @@ then
   zfsDestroyPool
 fi
 
-zfsInitPool
+
+if ! askn "should zfs/zpool be prepared?"
+then
+  zfsInitPool
+fi
 
 mk8_restart
 
