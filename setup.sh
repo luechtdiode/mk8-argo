@@ -97,11 +97,11 @@ else
   
   if [ -z "$(kubectl describe IPAddressPool -n metallb-system | grep Name: | awk '{print $2}')" ]
   then
+    mk8_restart
     # Create a IP Adresspool
     cat mk8-argo/metallb-system/metallb-ippool.yaml | sed 's|{{ .Values.nic-ips }}|'$NIC_IPS'|g' | kubectl apply -f -
   fi
 fi
-
 
 sudo microk8s enable ingress
 sudo microk8s enable metrics-server

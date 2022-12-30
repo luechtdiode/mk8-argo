@@ -90,7 +90,7 @@ traefik:
           enabled: true
           # this is the name of a TLSOption definition
           options: "default"
-          certResolver: "cf-staging"
+          certResolver: "cf-production"
     tlsOptions:
       default:
         minVersion: VersionTLS12

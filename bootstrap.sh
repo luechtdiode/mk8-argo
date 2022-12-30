@@ -104,20 +104,20 @@ function restoreSecrets() {
 }
 
 function restoreAppStates() {
-  if ! askn "restore pvcs?"
+  if askp "restore pvcs?"
   then
     cd backuprestore
     ./main.sh restore pg-admin
     ./main.sh restore kmgetubs19
-    ./main.sh restore kutuapp-test
-    ./main.sh restore kutuapp
+    ./main.sh restore kutuapp-test kutuapp-data
+    ./main.sh restore kutuapp kutuapp-data
     ./main.sh restore sharevic
     cd ..
   fi
 }
 
 function restoreAppDBStates() {
-  if ! askn "restore databases?"
+  if askp "restore databases?"
   then
     cd backuprestore
     ./main.sh dbrestore kmgetubs19
@@ -176,7 +176,6 @@ function setup() {
   installTraefik
   installArgo
   boostrapViaArgo
-  mk8_restart
   restoreAppStates
   restoreAppDBStates
 }
