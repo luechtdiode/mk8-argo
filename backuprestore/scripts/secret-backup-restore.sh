@@ -1,8 +1,7 @@
 
 function secretbackup() {
-  maxageSeconds=$(echo 365*24*3600 | bc)
   # find from mk8-argo project-root (backuprestore/..)
-  
+
   echo "deleting previous collected secret-private files in local filesystem:"
   find ../* -type f -name "*-secret-private.yaml"
   find ../* -type f -name "*-secret-private.yaml" | xargs rm -f
@@ -58,18 +57,26 @@ function find_custom_secrets_in_cluster() {
 
 function restoreSecret() {
   [[ $1 == */backup-*-secret.yaml ]] && applySecret $1
-  newname=$(echo "../$1" | sed 's/-secret/-sealedsecret/')
+  newname=$(echo "../$1" | sed 's/-secret/-sealedsecret/' | sed 's/backup-//')
   namespace=$(echo $newname | cut -d/ -f2 )
 
-  kubeseal <"../$1" -o yaml >$newname -n $namespace
-  echo "Secret $1 restored and resealed as $newname in namespace $namespace"
+  if kubeseal <"../$1" -o yaml >$newname -n $namespace
+  then
+    echo "-> Secret $1 restored and resealed as $newname in namespace $namespace"
+  else
+    echo "-> Secret $1 not restored and resealed as $newname in namespace $namespace"
+  fi
 }
 
 function applySecret() {
   namespace=$(echo $1 | cut -d/ -f1 )
 
-  kubectl -n $namespace apply -f "../$1"
-  echo "Secret $1 applied in namespace $namespace"
+  if kubectl -n $namespace apply -f "../$1"
+  then
+    echo "-> Secret $1 applied in namespace $namespace"
+  else
+    echo "-> Secret $1 not applied in namespace $namespace"
+  fi
 }
 
 function secretrestore() {
@@ -80,8 +87,11 @@ function secretrestore() {
 }
 
 function sealed-private-secretrestore() {
+  kubectl delete secret -n kube-system -l sealedsecrets.bitnami.com/sealed-secrets-key
+  kubectl delete secret -n sealed-secrets -l sealedsecrets.bitnami.com/sealed-secrets-key
   tar -zxvf secrets.tar.gz -C .. # extract contents of secrets.tar.gz
   for file in $(tar -ztvf secrets.tar.gz  | awk -F' ' '{ if($NF != "") print $NF }' | xargs ); do
     [[ $file == *-secret-private.yaml ]] && [[ -e "../$file" ]] && echo $(applySecret $file)
   done
+  kubectl delete pod -n kube-system -l app.kubernetes.io/name=sealed-secrets
 }
