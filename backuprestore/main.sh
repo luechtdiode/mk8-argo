@@ -29,6 +29,7 @@ function usage() {
     secrets                 => collects all *secret.yaml from the sibling-folders (namespaces)
     cluster                 => make backup of cluster resources (kubernetes dqlite-data)
     restore <namespace>     => restore the backed up volumes of the specified namespace
+    restore <namespace> <pvcname> => restore a dedicated pvc of the specified namespace
     dbrestore <namespace>   => restore the database from its last stored backup
     dbrestore <namespace> <dbname> => restore database from a dedicated database
     dbrestore <namespace> <dbname> <to dbname> => restore database to a dedicated database
@@ -109,7 +110,7 @@ function ns_dbrestore()
         ns_dbrestore $2 $3 $4
         ;;
       restore)
-        pvc_restore $2
+        pvc_restore $2 $3
         ;;
       backup)
         pvc_backup $2
