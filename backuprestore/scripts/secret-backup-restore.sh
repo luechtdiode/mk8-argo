@@ -70,8 +70,17 @@ function restoreSecret() {
 
 function applySecret() {
   namespace=$(echo $1 | cut -d/ -f1 )
-
   if kubectl -n $namespace apply -f "../$1"
+  then
+    echo "-> Secret $1 applied in namespace $namespace"
+  else
+    echo "-> Secret $1 not applied in namespace $namespace"
+  fi
+}
+
+function applySecretFromTar() {
+  namespace=$(echo $1 | cut -d/ -f1 )
+  if tar -xOzf secrets.tar.gz $1 | kubectl -n $namespace apply -f -
   then
     echo "-> Secret $1 applied in namespace $namespace"
   else
@@ -89,9 +98,11 @@ function secretrestore() {
 function sealed-private-secretrestore() {
   kubectl delete secret -n kube-system -l sealedsecrets.bitnami.com/sealed-secrets-key
   kubectl delete secret -n sealed-secrets -l sealedsecrets.bitnami.com/sealed-secrets-key
-  tar -zxvf secrets.tar.gz -C .. # extract contents of secrets.tar.gz
+  # tar -zxvf secrets.tar.gz -C .. # extract contents of secrets.tar.gz
   for file in $(tar -ztvf secrets.tar.gz  | awk -F' ' '{ if($NF != "") print $NF }' | xargs ); do
-    [[ $file == *-secret-private.yaml ]] && [[ -e "../$file" ]] && echo $(applySecret $file)
+    [[ $file == *-secret-private.yaml ]] && echo $(applySecretFromTar $file)
   done
   kubectl delete pod -n kube-system -l app.kubernetes.io/name=sealed-secrets
+  #find ../* -type f -name "*-secret-private.yaml" | xargs rm -f
+  #find ../* -type f -name "backup-*-secret.yaml" | xargs rm -f
 }
