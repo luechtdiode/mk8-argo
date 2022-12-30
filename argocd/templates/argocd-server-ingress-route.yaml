@@ -33,6 +33,6 @@ spec:
         - name: argocd-server
           port: 443
           scheme: h2c
-  tls:
-    certResolver: cf-production
+  #tls:
+  #  certResolver: cf-production
 {{ end }}

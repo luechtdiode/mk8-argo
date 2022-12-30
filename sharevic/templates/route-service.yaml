@@ -1,7 +1,6 @@
 {{ range .Values.routes }}
     {{- $servicename := .name -}}
     {{- $servicport := .port -}}
-    {{- $resolver := .dns_resolver -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -18,12 +17,9 @@ spec:
         - kind: Service
           name: {{ $servicename }}
           port: {{ $servicport }}
-      #middlewares:
-      #- name: secure
-      #  namespace: traefik
-      #- name: app-passthrough-{{ .name }}-header
+      middlewares:
+      - name: secure
+        namespace: traefik
     {{ end }}
-  tls:
-    certResolver: {{ $resolver }}
 {{ end }}
 

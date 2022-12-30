@@ -6,8 +6,6 @@ routes:
        - domain: interpolar.ch
        - domain: www.interpolar.ch
     port: 80
-    dns_resolver: "cf-production"
-
 
 sharevic-waf:
   replicaCount: 1

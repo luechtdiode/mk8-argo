@@ -51,8 +51,8 @@ spec:
       {{- if .host }}
         - name: app-passthrough-{{ .domain }}-header
       {{- end }}
-  tls:
-    certResolver: {{ .dns_resolver }}
+  #tls:
+  #  certResolver: {{ .dns_resolver }}
 {{- end }}        
 {{- if .host }}
 ---

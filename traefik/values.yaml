@@ -35,12 +35,6 @@ traefik:
           resolvers: 1.1.1.1
         storage: /certs/acme-stageing.json
       cf-production:
-        caserver: https://acme-staging-v02.api.letsencrypt.org/directory
-        dnsChallenge:
-          provider: cloudflare
-          resolvers: 1.1.1.1
-        storage: /certs/acme-stageing.json        
-      cf-production_prod:
         caserver: https://acme-v02.api.letsencrypt.org/directory
         dnsChallenge:
           provider: cloudflare
@@ -96,7 +90,7 @@ traefik:
           enabled: true
           # this is the name of a TLSOption definition
           options: "default"
-          certResolver: "cf-production"
+          certResolver: "cf-staging"
     tlsOptions:
       default:
         minVersion: VersionTLS12

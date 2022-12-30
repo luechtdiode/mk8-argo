@@ -50,9 +50,7 @@ monitoring:
       ingressClassName: "traefik"
       annotations:
         traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
-        traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-        traefik.ingress.kubernetes.io/router.tls: "true"
-        traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
       hosts: 
         - alertmanager.interpolar.ch
 
@@ -84,11 +82,8 @@ monitoring:
       enabled: true
       ingressClassName: "traefik"
       annotations:
-        # kubernetes.io/ingress.class: traefik
         traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.tls: "true"
-        traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
       hosts: 
         - grafana.interpolar.ch
   prometheus:
@@ -96,11 +91,8 @@ monitoring:
       enabled: true
       ingressClassName: "traefik"
       annotations:
-        # kubernetes.io/ingress.class: traefik
         traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.tls: "true"
-        traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
       hosts: 
         - prometheus.interpolar.ch
     prometheusSpec:
@@ -166,11 +158,8 @@ blackbox-exporter:
     enabled: false
     className: "traefik"
     annotations:
-      # kubernetes.io/ingress.class: traefik
       traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
       traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls: "true"
-      traefik.ingress.kubernetes.io/router.tls.certresolver: "cf-production"
     hosts: 
       - host: blackbox.interpolar.ch
         paths:
