@@ -49,21 +49,24 @@ function db_backup()
   echo "backup finished"
 }
 
-# db_restore <namespace> [<pg-user> [<db-name>]]
+# db_restore <namespace> [<pg-user> [<db-name> [<to-db-name>]]]
 function db_restore()
 {
   NAMESPACE="$1"
   PG_USER="${2:-$NAMESPACE}"
   DB_NAME="${3:-$PG_USER}"
+  TO_DB_NAME="${4:-$DB_NAME}"
   DUMPFILE="db-backup/$NAMESPACE-$DB_NAME-database.dump"
-  echo "restoring backup from $DUMPFILE to db $DB_NAME, user $PG_USER in $NAMESPACE ..."
+  echo "-> restoring backup from $DUMPFILE to db $TO_DB_NAME, user $PG_USER in $NAMESPACE ..."
   postgrespod=$(findPostgresPod $NAMESPACE)
+  echo "kill client connections, drop database $TO_DB_NAME ..."
   kubectl -n $NAMESPACE exec $postgrespod -- bash \
-    -c "echo \"select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = '$DB_NAME' and pid <> pg_backend_pid();\" \
-        | psql -U $PG_USER --dbname $DB_NAME\
-        && dropdb -U $PG_USER --if-exists $DB_NAME"
+    -c "echo \"select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = '$TO_DB_NAME' and pid <> pg_backend_pid();\" \
+        | psql -U $PG_USER --dbname $TO_DB_NAME\
+        && dropdb -U $PG_USER --if-exists $TO_DB_NAME"
+  echo "-> recreate database $TO_DB_NAME ..."
   kubectl -n $NAMESPACE exec $postgrespod -- bash \
-    -c "createdb -U $PG_USER -T template0 $DB_NAME"
-  cat $DUMPFILE | kubectl -n $NAMESPACE exec -i $postgrespod -- pg_restore -U $PG_USER --no-password --section=pre-data --section=data --section=post-data --clean --dbname $DB_NAME
+    -c "createdb -U $PG_USER -T template0 $TO_DB_NAME"  
+  [[ $? ]] && echo "-> dump backup to database $TO_DB_NAME ..." && cat $DUMPFILE | kubectl -n $NAMESPACE exec -i $postgrespod -- pg_restore -U $PG_USER --no-password --section=pre-data --section=data --section=post-data --clean --dbname $TO_DB_NAME
   echo "restore finished"
 }

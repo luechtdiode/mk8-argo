@@ -30,7 +30,8 @@ function usage() {
     cluster                 => make backup of cluster resources (kubernetes dqlite-data)
     restore <namespace>     => restore the backed up volumes of the specified namespace
     dbrestore <namespace>   => restore the database from its last stored backup
-    dbrestore <namespace> <dbname> => restore database to a dedicated database
+    dbrestore <namespace> <dbname> => restore database from a dedicated database
+    dbrestore <namespace> <dbname> <to dbname> => restore database to a dedicated database
     secretrestore           => extracts secrets from backup and reseals the sealedsecrets
     privatesecretrestore    => extracts private secrets from backup and applies in the namespaces
     clusterrestore          => restores cluster resouces (kubernetes dqlite-data)
@@ -43,18 +44,18 @@ function usage() {
   '
 }
 
-# ns_restore <namespace> [<target-databasename>]
+# ns_restore <namespace> [<source-databasename> [<target-databasename>]]
 function ns_dbrestore()
 {
   case $1 in
     kmgetubs19)
-      db_restore kmgetubs19 odoo ${2:-odoo}
+      db_restore kmgetubs19 odoo ${2:-odoo} ${3:-odoo}
     ;;
     kutuapp-test)
-      db_restore kutuapp-test kutuadmin ${2:-kutuapp}
+      db_restore kutuapp-test kutuadmin ${2:-kutuapp} ${3:-kutuapp}
     ;;
     kutuapp)
-      db_restore kutuapp kutuadmin ${2:-kutuapp}
+      db_restore kutuapp kutuadmin ${2:-kutuapp} ${3:-kutuapp}
     ;;
   esac
 }
@@ -105,7 +106,7 @@ function ns_dbrestore()
         db_backup kmgetubs19 odoo
         ;;
       dbrestore)
-        ns_dbrestore $2 $3
+        ns_dbrestore $2 $3 $4
         ;;
       restore)
         pvc_restore $2
