@@ -9,7 +9,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r2b21
+    tag: bumps-4194242
   network:
     metrics:
       servicePort: 3000
