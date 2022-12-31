@@ -80,8 +80,8 @@ function ns_dbrestore()
       short)
         secretbackup
         db_backup_prepare
-        db_backup kutuapp kutuapp kutuapp
-        db_backup kutuapp-test kutuapp kutuapp
+        db_backup kutuapp kutuadmin kutuapp
+        db_backup kutuapp-test kutuadmin kutuapp
         db_backup kmgetubs19 odoo
         pvc_backup traefik
         cloudsync up
@@ -89,8 +89,8 @@ function ns_dbrestore()
       all)
         secretbackup
         db_backup_prepare
-        db_backup kutuapp kutuapp kutuapp
-        db_backup kutuapp-test kutuapp kutuapp
+        db_backup kutuapp kutuadmin kutuapp
+        db_backup kutuapp-test kutuadmin kutuapp
         db_backup kmgetubs19 odoo
         pvc_backup traefik
         pvc_backup kmgetubs19
@@ -114,8 +114,8 @@ function ns_dbrestore()
         secretbackup
         ;;
       dbbackup)
-        db_backup kutuapp kutuapp kutuapp
-        db_backup kutuapp-test kutuapp kutuapp
+        db_backup kutuapp kutuadmin kutuapp
+        db_backup kutuapp-test kutuadmin kutuapp
         db_backup kmgetubs19 odoo
         ;;
       dbrestore)
