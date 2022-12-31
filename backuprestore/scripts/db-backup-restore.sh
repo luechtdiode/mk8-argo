@@ -6,7 +6,7 @@ function findPostgresPod()
   postgrespod=$(kubectl -n $NAMESPACE get pod -l component=postgres -o jsonpath='{.items[*].metadata.name}')
   [ -z $postgrespod ] && postgrespod=$(kubectl -n $NAMESPACE get pod -o jsonpath='{.items[*].metadata.name}' | tr ' ' '\n' | grep postgres)
     
-  until kubectl wait --for=jsonpath='{.status.phase}'=Running --timeout=600s pod/$postgrespod -n $NAMESPACE
+  until kubectl wait pod $postgrespod -n $NAMESPACE --for=jsonpath='{.status.phase}'=Running --timeout=600s
   do
     echo "$postgrespod not ready yet. wait ..."
     sleep 5
