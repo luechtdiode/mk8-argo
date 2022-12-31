@@ -96,8 +96,16 @@ else
   { echo "$NIC_IPS"; } | sudo microk8s enable metallb
   
   if [ -z "$(kubectl describe IPAddressPool -n metallb-system | grep Name: | awk '{print $2}')" ]
-  then
-    mk8_restart
+  then    
+    until kubectl wait pod -l app=metallb -n metallb-system --for condition=Ready --timeout=180s
+    do
+      if askp "should be waited for readyness of metal loadbalancer?"
+      then
+        echo "waiting next 180s ..."
+      else
+        break;
+      fi
+    done
     # Create a IP Adresspool
     cat mk8-argo/metallb-system/metallb-ippool.yaml | sed 's|{{ .Values.nic-ips }}|'$NIC_IPS'|g' | kubectl apply -f -
   fi
