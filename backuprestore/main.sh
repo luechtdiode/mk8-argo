@@ -74,6 +74,7 @@ function ns_dbrestore()
         db_backup kutuapp-test kutuapp kutuapp
         db_backup kmgetubs19 odoo
         db_backup keycloak keycloak keycloak
+        pvc_backup traefik
         cloudsync up
         ;;
       all)
@@ -83,6 +84,7 @@ function ns_dbrestore()
         db_backup kutuapp-test kutuapp kutuapp
         db_backup kmgetubs19 odoo
         db_backup keycloak keycloak keycloak
+        pvc_backup traefik
         pvc_backup kmgetubs19
         pvc_backup keycloak
         pvc_backup kutuapp-test
