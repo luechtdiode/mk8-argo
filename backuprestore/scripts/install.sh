@@ -23,3 +23,17 @@ function install()
   sudo pkexec mv $(pwd)/mk8backuprestore /etc/sudoers.d/mk8backuprestore
 }
 
+function uninstall() {
+  croncmd="$(pwd)/main.sh short"
+  pathline="PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+  envparams="UPLINK_CONFIG_DIR=/home/$(whoami)/.config/storj/uplink KUBECONFIG=/home/$(whoami)/.kube/config"
+  sudo crontab -u root -l  \
+    | grep -v 'backuprestore/' \
+    | grep -v 'PATH=' \
+    > crontabcleaned.txt
+
+  cp crontabcleaned.txt crontabupdated.txt
+  sudo crontab -u root crontabupdated.txt
+
+  sudo pkexec rm /etc/sudoers.d/mk8backuprestore
+}

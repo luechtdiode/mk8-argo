@@ -22,25 +22,35 @@ source ./scripts/install.sh
 function usage() {
   echo 'Usage:
     ./main.sh <args>; where args:
+    
+    BACKUP:
     all                     => make cluster-, secret-, db- and incremental pvc-backup per month from all volumes of the registered namespaces
     short                   => make backup of secrets and db of the registered namespaces and push new bucked with cloudsync up
     backup <namespace>      => make incremental pvc-backup per month from all volumes of the specified namespace
     dbbackup                => make zero-downtime db-backup or registered databases
     secrets                 => collects all *secret.yaml from the sibling-folders (namespaces)
     cluster                 => make backup of cluster resources (kubernetes dqlite-data)
-    restore <namespace>     => restore the backed up volumes of the specified namespace
-    restore <namespace> <pvcname> => restore a dedicated pvc of the specified namespace
-    dbrestore <namespace>   => restore the database from its last stored backup
+    
+    RESTORE:
+    restore <namespace>            => restore the backed up volumes of the specified namespace
+    restore <namespace> <pvcname>  => restore a dedicated pvc of the specified namespace
+    dbrestore <namespace>          => restore the database from its last stored backup
     dbrestore <namespace> <dbname> => restore database from a dedicated database
     dbrestore <namespace> <dbname> <to dbname> => restore database to a dedicated database
     secretrestore           => extracts secrets from backup and reseals the sealedsecrets
     privatesecretrestore    => extracts private secrets from backup and applies in the namespaces
     clusterrestore          => restores cluster resouces (kubernetes dqlite-data)
+    
+    CLOUD-SYNC:
     cloudsync               => save all current backups to storj bucket
                                [[up | down] bucket-qualifier] defaults to up today 
     cloudsync up            => save all current backups to storj bucket
     cloudsync down          => download all backups from storj bucket
+    
+    MAINTENANCE:
     clean_snapshots <namespace> => clean zfs-snapshots
+    install                 => installs daily backup starting at 02:22
+    uninstall               => uninstalls daily backup scheduling
     help                    => print usage
   '
 }
@@ -129,6 +139,10 @@ function ns_dbrestore()
       install)
         install
         echo "daily backup in crontab registered for backup-location $(pwd)"
+        ;;
+      uninstall)
+        uninstall
+        echo "daily backup from crontab removed for backup-location $(pwd)"
         ;;
       help)
         usage
