@@ -5,7 +5,7 @@
 export NIC_IPS=<iprange for metallb>
 export ACCESSNAME=<storj.accessname>
 export ACCESSGRANT=<storj.accessgrant>
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/luechtdiode/mk8-argo/master/setup.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/luechtdiode/mk8-argo/mk8-123/setup.sh)"
 ```
 
 |App|Status|Entrypoint|
@@ -20,3 +20,4 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/luechtdiode/mk8-argo/mas
 |kutuapp-test|[![App Status](https://argo.interpolar.ch/api/badge?name=kutuapp-test&revision=true)](https://argo.interpolar.ch/applications/kutuapp-test)|[KuTu App Test](https://kutuapp-test.sharevic.net/)|
 |kutuapp|[![App Status](https://argo.interpolar.ch/api/badge?name=kutuapp&revision=true)](https://argo.interpolar.ch/applications/kutuapp)|[KuTu App](https://kutuapp.sharevic.net/)|
 |kmgetubs19|[![App Status](https://argo.interpolar.ch/api/badge?name=kmgetubs19&revision=true)](https://argo.interpolar.ch/applications/kmgetubs19)|[KmGeTuBS19 Homepage](https://kmgetubs19.sharevic.net/)|
+
