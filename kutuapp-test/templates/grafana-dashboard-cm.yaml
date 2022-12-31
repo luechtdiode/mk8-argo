@@ -13,7 +13,10 @@ data:
         "list": [
           {
             "builtIn": 1,
-            "datasource": "-- Grafana --",
+            "datasource": {
+              "type": "datasource",
+              "uid": "grafana"
+            },
             "enable": true,
             "hide": true,
             "iconColor": "rgba(0, 211, 255, 1)",
@@ -31,17 +34,22 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "iteration": 1654448892114,
       "links": [],
       "liveNow": true,
       "panels": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -97,10 +105,12 @@ data:
             "legend": {
               "calcs": [],
               "displayMode": "list",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "mode": "single",
+              "sort": "none"
             }
           },
           "pluginVersion": "8.3.6",
@@ -112,6 +122,7 @@ data:
               },
               "exemplar": true,
               "expr": "avg by (status, method)(irate(kutuapp_responses_duration_seconds_count{status=~\"2xx|other\"}[$__rate_interval])) > 0",
+              "hide": false,
               "interval": "",
               "legendFormat": "{{ status }} {{ method }}",
               "refId": "A"
@@ -121,6 +132,10 @@ data:
           "type": "timeseries"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -166,7 +181,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.3.6",
+          "pluginVersion": "9.3.1",
           "targets": [
             {
               "datasource": {
@@ -201,6 +216,10 @@ data:
           "type": "stat"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -246,7 +265,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.3.6",
+          "pluginVersion": "9.3.1",
           "targets": [
             {
               "datasource": {
@@ -293,12 +312,18 @@ data:
           "type": "stat"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -361,10 +386,12 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "mode": "single",
+              "sort": "none"
             }
           },
           "pluginVersion": "8.3.6",
@@ -376,6 +403,7 @@ data:
               },
               "exemplar": true,
               "expr": "sum by (status, method)(irate(kutuapp_responses_duration_seconds_count{status=~\"4xx|5xx\"}[$__rate_interval])) > 0",
+              "hide": false,
               "interval": "",
               "intervalFactor": 1,
               "legendFormat": "{{ status }} {{ method}}",
@@ -415,6 +443,10 @@ data:
         },
         {
           "collapsed": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -423,16 +455,31 @@ data:
           },
           "id": 15,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Verlauf",
           "type": "row"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -504,11 +551,13 @@ data:
               ],
               "displayMode": "table",
               "placement": "bottom",
+              "showLegend": true,
               "sortBy": "Last *",
               "sortDesc": true
             },
             "tooltip": {
-              "mode": "multi"
+              "mode": "multi",
+              "sort": "none"
             }
           },
           "pluginVersion": "8.3.6",
@@ -520,6 +569,7 @@ data:
               },
               "exemplar": true,
               "expr": "sum by(path, method) ((rate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]) * 1000 / rate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) > 0)",
+              "hide": false,
               "interval": "",
               "intervalFactor": 2,
               "legendFormat": "{{ path }} {{ method }}",
@@ -531,6 +581,10 @@ data:
           "type": "timeseries"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "description": "",
           "fieldConfig": {
             "defaults": {
@@ -538,6 +592,8 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -607,11 +663,13 @@ data:
               ],
               "displayMode": "table",
               "placement": "bottom",
+              "showLegend": true,
               "sortBy": "Last *",
               "sortDesc": true
             },
             "tooltip": {
-              "mode": "multi"
+              "mode": "multi",
+              "sort": "none"
             }
           },
           "pluginVersion": "8.3.6",
@@ -661,12 +719,18 @@ data:
           "type": "timeseries"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -728,10 +792,12 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "mode": "single",
+              "sort": "none"
             }
           },
           "targets": [
@@ -743,6 +809,7 @@ data:
               "exemplar": true,
               "expr": "sum(irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\"}[$__rate_interval])) by (pod)",
               "format": "time_series",
+              "hide": false,
               "instant": false,
               "interval": "",
               "intervalFactor": 2,
@@ -754,7 +821,11 @@ data:
           "type": "timeseries"
         },
         {
-          "collapsed": true,
+          "collapsed": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -762,205 +833,220 @@ data:
             "y": 33
           },
           "id": 13,
-          "panels": [
+          "panels": [],
+          "targets": [
             {
-              "description": "",
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "custom": {
-                    "align": "auto",
-                    "displayMode": "auto"
-                  },
-                  "decimals": 3,
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green"
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  },
-                  "unit": "ms"
-                },
-                "overrides": [
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Status"
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.width",
-                        "value": 72
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Pfad"
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.width",
-                        "value": 414
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Methode"
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.width",
-                        "value": 76
-                      }
-                    ]
-                  }
-                ]
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
               },
-              "gridPos": {
-                "h": 14,
-                "w": 24,
-                "x": 0,
-                "y": 25
-              },
-              "id": 10,
-              "options": {
-                "footer": {
-                  "fields": "",
-                  "reducer": [
-                    "diffperc"
-                  ],
-                  "show": false
-                },
-                "showHeader": true,
-                "sortBy": [
-                  {
-                    "desc": true,
-                    "displayName": "Zeit (min)"
-                  }
-                ]
-              },
-              "pluginVersion": "8.3.6",
-              "targets": [
-                {
-                  "datasource": {
-                    "type": "prometheus",
-                    "uid": "PBFA97CFB590B2093"
-                  },
-                  "exemplar": true,
-                  "expr": "avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\"}[$__rate_interval])) * 1000 / avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\"}[$__rate_interval]))>0",
-                  "format": "table",
-                  "instant": false,
-                  "interval": "",
-                  "legendFormat": "",
-                  "refId": "A"
-                }
-              ],
-              "title": "Antwortzeiten pro Methode, Pfad und Status",
-              "transformations": [
-                {
-                  "id": "sortBy",
-                  "options": {
-                    "fields": {},
-                    "sort": [
-                      {
-                        "desc": false,
-                        "field": "path"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "organize",
-                  "options": {
-                    "excludeByName": {
-                      "Time": true,
-                      "method": false,
-                      "path": false,
-                      "status": false
-                    },
-                    "indexByName": {
-                      "Time": 0,
-                      "Value": 4,
-                      "method": 1,
-                      "path": 2,
-                      "status": 3
-                    },
-                    "renameByName": {
-                      "Value": "Zeit",
-                      "method": "Methode",
-                      "path": "Pfad",
-                      "status": "Status"
-                    }
-                  }
-                },
-                {
-                  "id": "groupBy",
-                  "options": {
-                    "fields": {
-                      "Antwortzeit": {
-                        "aggregations": [
-                          "min",
-                          "max",
-                          "mean",
-                          "lastNotNull"
-                        ],
-                        "operation": "aggregate"
-                      },
-                      "Methode": {
-                        "aggregations": [],
-                        "operation": "groupby"
-                      },
-                      "Pfad": {
-                        "aggregations": [],
-                        "operation": "groupby"
-                      },
-                      "Req/s": {
-                        "aggregations": [
-                          "min",
-                          "max",
-                          "lastNotNull"
-                        ],
-                        "operation": "aggregate"
-                      },
-                      "Status": {
-                        "aggregations": [],
-                        "operation": "groupby"
-                      },
-                      "Zeit": {
-                        "aggregations": [
-                          "min",
-                          "max",
-                          "mean",
-                          "lastNotNull"
-                        ],
-                        "operation": "aggregate"
-                      }
-                    }
-                  }
-                }
-              ],
-              "type": "table"
+              "refId": "A"
             }
           ],
           "title": "API / Status",
           "type": "row"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto",
+                "inspect": false
+              },
+              "decimals": 3,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "ms"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Status"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Pfad"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 414
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Methode"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 76
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 24,
+            "x": 0,
+            "y": 34
+          },
+          "id": 10,
+          "options": {
+            "footer": {
+              "fields": "",
+              "reducer": [
+                "diffperc"
+              ],
+              "show": false
+            },
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "Zeit (min)"
+              }
+            ]
+          },
+          "pluginVersion": "9.3.1",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\"}[$__rate_interval])) * 1000 / avg by (method, status, path) (irate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\"}[$__rate_interval]))>0",
+              "format": "table",
+              "hide": false,
+              "instant": false,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "title": "Antwortzeiten pro Methode, Pfad und Status",
+          "transformations": [
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "path"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true,
+                  "method": false,
+                  "path": false,
+                  "status": false
+                },
+                "indexByName": {
+                  "Time": 0,
+                  "Value": 4,
+                  "method": 1,
+                  "path": 2,
+                  "status": 3
+                },
+                "renameByName": {
+                  "Value": "Zeit",
+                  "method": "Methode",
+                  "path": "Pfad",
+                  "status": "Status"
+                }
+              }
+            },
+            {
+              "id": "groupBy",
+              "options": {
+                "fields": {
+                  "Antwortzeit": {
+                    "aggregations": [
+                      "min",
+                      "max",
+                      "mean",
+                      "lastNotNull"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "Methode": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  },
+                  "Pfad": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  },
+                  "Req/s": {
+                    "aggregations": [
+                      "min",
+                      "max",
+                      "lastNotNull"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "Status": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  },
+                  "Zeit": {
+                    "aggregations": [
+                      "min",
+                      "max",
+                      "mean",
+                      "lastNotNull"
+                    ],
+                    "operation": "aggregate"
+                  }
+                }
+              }
+            }
+          ],
+          "type": "table"
         }
       ],
       "refresh": "10s",
-      "schemaVersion": 34,
+      "schemaVersion": 37,
       "style": "dark",
       "tags": [],
       "templating": {
@@ -968,7 +1054,7 @@ data:
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "PBFA97CFB590B2093"
+              "uid": "prometheus"
             },
             "description": "Umgebung / Namespace",
             "filters": [
@@ -988,7 +1074,7 @@ data:
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "PBFA97CFB590B2093"
+              "uid": "prometheus"
             },
             "description": "Wettkampf",
             "filters": [],
@@ -1001,7 +1087,7 @@ data:
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "PBFA97CFB590B2093"
+              "uid": "prometheus"
             },
             "description": "Durchgang",
             "filters": [],
@@ -1021,7 +1107,7 @@ data:
       "timezone": "browser",
       "title": "Kutuapp-Test Graph",
       "uid": "kutuapptest",
-      "version": 13,
+      "version": 2,
       "weekStart": ""
     }
     `}}
