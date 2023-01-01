@@ -1,4 +1,3 @@
-{{ if not .Values.templates.dashboard_hostname -}}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
@@ -12,6 +11,7 @@ spec:
       - traefik
   podMetricsEndpoints:
     - port: metrics
+{{ if .Values.templates.dashboard_hostname -}}
 ---
 kind: Probe
 apiVersion: monitoring.coreos.com/v1
@@ -20,11 +20,11 @@ metadata:
 spec:
   jobName: http-get
   interval: 60s
-  module: http_2xx
+  module: http_4xx
   prober:
     url: prometheus-blackbox-exporter.prometheus:9115
   targets:
     staticConfig:
       static:
-      - "https://traefik.interpolar.ch"
+        - "https://{{ trimPrefix "https://" .Values.templates.dashboard_hostname }}"
 {{- end -}}

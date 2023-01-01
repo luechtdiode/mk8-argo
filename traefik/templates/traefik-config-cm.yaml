@@ -5,6 +5,10 @@ metadata:
   namespace: traefik
 data:
   traefik-config.yaml: |
+    metrics:
+      prometheus: 
+        addEntryPointsLabels: true
+        addRoutersLabels: true
     http:
       middlewares:
         headers-default:
