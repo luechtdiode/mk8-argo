@@ -3,7 +3,7 @@
 function install()
 {
   croncmd="$(pwd)/main.sh short"
-  pathline="PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+  pathline="PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/snap/bin"
   envparams="UPLINK_CONFIG_DIR=/home/$(whoami)/.config/storj/uplink KUBECONFIG=/home/$(whoami)/.kube/config"
   sudo crontab -u root -l  \
     | grep -v 'backuprestore/' \
@@ -24,9 +24,6 @@ function install()
 }
 
 function uninstall() {
-  croncmd="$(pwd)/main.sh short"
-  pathline="PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
-  envparams="UPLINK_CONFIG_DIR=/home/$(whoami)/.config/storj/uplink KUBECONFIG=/home/$(whoami)/.kube/config"
   sudo crontab -u root -l  \
     | grep -v 'backuprestore/' \
     | grep -v 'PATH=' \
