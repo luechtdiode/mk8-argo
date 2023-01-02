@@ -269,8 +269,9 @@ data:
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
+              "editorMode": "code",
               "exemplar": true,
-              "expr": " sum by (namespace) (kutuapp_competitions_active)",
+              "expr": " kutuapp_competitions_active",
               "hide": false,
               "instant": false,
               "interval": "",
@@ -676,8 +677,9 @@ data:
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
+              "editorMode": "code",
               "exemplar": true,
-              "expr": "sum by(namespace) (floor(rate(kutuapp_connections_total[$__rate_interval]) * 100 / 3))",
+              "expr": "kutuapp_connections_active",
               "format": "time_series",
               "hide": false,
               "instant": false,
@@ -803,8 +805,9 @@ data:
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
+              "editorMode": "code",
               "exemplar": true,
-              "expr": "sum(irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\"}[$__rate_interval])) by (pod)",
+              "expr": "sum(rate(container_network_transmit_bytes_total[$__rate_interval])) by (pod)",
               "format": "time_series",
               "hide": false,
               "instant": false,
@@ -865,7 +868,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1096,14 +1100,14 @@ data:
         ]
       },
       "time": {
-        "from": "now-3h",
+        "from": "now-6h",
         "to": "now"
       },
       "timepicker": {},
       "timezone": "browser",
       "title": "Kutuapp-Graph",
       "uid": "kutuapp2",
-      "version": 2,
+      "version": 1,
       "weekStart": ""
     }
     `}}
