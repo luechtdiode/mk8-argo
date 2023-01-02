@@ -1500,7 +1500,11 @@ data:
       "refresh": false,
       "schemaVersion": 37,
       "style": "dark",
-      "tags": [],
+      "tags": [
+        "mk8",
+        "traefik"
+      ],
+
       "templating": {
         "list": [
           {
