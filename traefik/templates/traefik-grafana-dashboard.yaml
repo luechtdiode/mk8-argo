@@ -1504,7 +1504,6 @@ data:
         "mk8",
         "traefik"
       ],
-
       "templating": {
         "list": [
           {
@@ -1586,7 +1585,7 @@ data:
       "timezone": "",
       "title": "Traefik Dashboard",
       "uid": "n5bu_kv4s",
-      "version": 3,
+      "version": 4,
       "weekStart": ""
     }
     `}}
