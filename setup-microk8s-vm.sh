@@ -29,7 +29,6 @@ sudo microk8s config > .kube/config
 sudo microk8s enable community
 sudo microk8s enable rbac helm3 dns ingress metrics-server storage openebs dashboard
 sudo microk8s status --wait-ready
-sudo microk8s enable dashboard
 sudo microk8s status --wait-ready
 kubectl patch svc kubernetes-dashboard -n kube-system -p '{"spec": {"type": "NodePort"}}'
 
