@@ -23,7 +23,7 @@ kutuapp:
       memory: 1.5Gi
     limits:
       cpu: 3.00
-      memory: 2.0Gi
+      memory: 4.0Gi
   livenessProbe:
     initialDelaySeconds: 15
     timeoutSeconds: 5
