@@ -132,7 +132,10 @@ data:
           "type": "timeseries"
         },
         {
-          "datasource": {},
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -187,7 +190,7 @@ data:
               },
               "exemplar": true,
               "expr": "sum(irate(kutuapp_responses_duration_seconds_sum{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval])) * 1000 / sum(irate(kutuapp_responses_duration_seconds_count{path!=\"unlabelled\", status=\"2xx\"}[$__rate_interval]))",
-              "hide": true,
+              "hide": false,
               "instant": false,
               "interval": "",
               "intervalFactor": 10,
@@ -728,7 +731,7 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
-                "axisCenteredZero": false,
+                "axisCenteredZero": true,
                 "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
@@ -790,7 +793,7 @@ data:
                 "mean",
                 "lastNotNull"
               ],
-              "displayMode": "table",
+              "displayMode": "list",
               "placement": "bottom",
               "showLegend": true
             },
@@ -813,8 +816,20 @@ data:
               "instant": false,
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "{{pod}}",
+              "legendFormat": "transmitted {{pod}}",
               "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "expr": "sum(rate(container_network_receive_bytes_total[$__rate_interval])*-1) by (pod)",
+              "hide": false,
+              "legendFormat": "received {{pod}}",
+              "range": true,
+              "refId": "B"
             }
           ],
           "title": "Netz-Traffik in Bytes",
@@ -1048,7 +1063,11 @@ data:
       "refresh": "10s",
       "schemaVersion": 37,
       "style": "dark",
-      "tags": [],
+      "tags": [
+        "mk8",
+        "kutuapp",
+        "prod"
+      ],
       "templating": {
         "list": [
           {
@@ -1107,7 +1126,7 @@ data:
       "timezone": "browser",
       "title": "Kutuapp-Graph",
       "uid": "kutuapp2",
-      "version": 1,
+      "version": 3,
       "weekStart": ""
     }
     `}}
