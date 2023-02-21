@@ -16,7 +16,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: fix-client-form-validation-a4ef788
+    tag: fix-client-form-validation-fb6d3bc
   network:
     metrics:
       servicePort: 3000
