@@ -74,8 +74,8 @@ metadata:
   name: ratelimit
 spec:
   rateLimit:
-    average: 100
-    burst: 140
+    average: 200
+    burst: 500
 ---
 # Latency Check
 apiVersion: traefik.containo.us/v1alpha1
@@ -84,7 +84,7 @@ metadata:
   name: circuitbreaker
 spec:
   circuitBreaker:
-    expression: LatencyAtQuantileMS(50.0) > 1500 || ResponseCodeRatio(500, 600, 0, 600) > 0.50
+    expression: LatencyAtQuantileMS(50.0) > 4000 || ResponseCodeRatio(500, 600, 0, 600) > 0.50 || NetworkErrorRatio() > 0.30
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
