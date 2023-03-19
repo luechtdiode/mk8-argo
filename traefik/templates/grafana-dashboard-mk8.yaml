@@ -6,7 +6,7 @@ metadata:
   labels:
     grafana_dashboard: "1"
 data:
-  traefik-grafana-dashboard.json: |-
+  traefik-mk8-grafana-dashboard.json: |-
     {{`
     {
       "annotations": {
