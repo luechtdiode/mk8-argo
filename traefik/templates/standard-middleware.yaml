@@ -84,7 +84,9 @@ metadata:
   name: circuitbreaker
 spec:
   circuitBreaker:
-    expression: LatencyAtQuantileMS(50.0) > 4000 || ResponseCodeRatio(500, 600, 0, 600) > 0.50 || NetworkErrorRatio() > 0.30
+    # expression: LatencyAtQuantileMS(50.0) > 4000 || ResponseCodeRatio(500, 600, 0, 600) > 0.50 || NetworkErrorRatio() > 0.30
+    # expression: LatencyAtQuantileMS(50.0) > 4000 || ResponseCodeRatio(500, 600, 0, 600) > 0.50
+    expression: LatencyAtQuantileMS(50.0) > 4000 || ResponseCodeRatio(500, 600, 0, 600) > 0.80
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
