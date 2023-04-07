@@ -16,7 +16,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: custom-wettkampf-mode-c5f8eef
+    tag: custom-wettkampf-mode-68bd1fa
   network:
     metrics:
       servicePort: 3000
