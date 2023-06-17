@@ -16,7 +16,7 @@ kutuapp-waf:
   replicaCount: 3
   image:
     repository: luechtdiode/nginx-naxsi
-    tag: v1.0.0
+    tag: v1.0.1
   defaultAffinityRules:
     enabled: false
   network:
