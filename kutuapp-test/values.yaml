@@ -1,8 +1,8 @@
 routes:
   - name: kutuapp
     domain: kutuapp-test.interpolar.ch
-    port: 5757
-    portSecure: 5757
+    port: 5858
+    portSecure: 5858
   - name: kutuapp
     domain: kutuapp-test.sharevic.net
     port: 5757
@@ -11,6 +11,34 @@ routes:
     domain: test-kutuapp.sharevic.net
     port: 5757
     portSecure: 5757
+
+kutuapp-waf:
+  replicaCount: 3
+  image:
+    repository: luechtdiode/nginx-naxsi
+    tag: v1.0.0
+  defaultAffinityRules:
+    enabled: false
+  network:
+    http:
+      containerPort: 80
+      servicePort: 5858
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 32Mi
+    limits:
+      cpu: 1.00
+      memory: 32Mi
+  volumeMounts:
+    - name: nginx-config
+      mountPath: /etc/nginx
+  volumes:
+    - name: nginx-config
+      configMap:
+        name: nginx-cm
 
 kutuapp:
   replicaCount: 1
