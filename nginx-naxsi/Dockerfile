@@ -1,4 +1,4 @@
-FROM alpine:3.15.0 AS nginx-naxsi-build
+FROM alpine:3.18.2 AS nginx-naxsi-build
 
 #Config files and some ideas taken from
 # https://github.com/Epheo/docker-naxsi-proxy-waf/
@@ -7,7 +7,7 @@ RUN apk update && apk upgrade
 
 #Software versions  
 #nginx - see latest tags on http://nginx.org/en/download.html
-ENV NGINX_VERSION 1.21.5
+ENV NGINX_VERSION 1.22.1
 
 # naxsi - see latest tags on https://github.com/nbs-system/naxsi/releases
 ENV NAXSI_VERSION 1.3
@@ -16,7 +16,7 @@ ENV NAXSI_VERSION 1.3
 ENV NGX_VERSION 0.33
 
 # see latest tags on https://www.openssl.org
-ENV OPENSSL_VERSION 3.0.1
+ENV OPENSSL_VERSION 3.1.1
 
 RUN set -ex && \
     addgroup -S nginx && \
