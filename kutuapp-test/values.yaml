@@ -16,7 +16,7 @@ kutuapp-waf:
   replicaCount: 3
   image:
     repository: luechtdiode/nginx-naxsi
-    tag: v1.0.1
+    tag: 687-teamwertungen-6f15dfe
   defaultAffinityRules:
     enabled: false
   network:
