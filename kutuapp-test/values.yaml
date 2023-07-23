@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: 687-teamwertungen-1a9b28f
+    tag: 687-teamwertungen-80310b4
   network:
     metrics:
       servicePort: 3000
