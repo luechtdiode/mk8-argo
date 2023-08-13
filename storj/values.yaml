@@ -2,7 +2,7 @@ storj-s3-gateway:
   replicaCount: 1
   image:
     repository: docker.io/storjlabs/gateway
-    tag: 591a85a0a057b84d93dff060fbba0344d624209d5fca933cafbc15950a233daa
+    tag: @sha256:591a85a0a057b84d93dff060fbba0344d624209d5fca933cafbc15950a233daa
     pullPolicy: Always
   args: [ "run" ]
   network:
