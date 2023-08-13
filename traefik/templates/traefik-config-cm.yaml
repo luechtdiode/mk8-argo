@@ -13,11 +13,11 @@ data:
       middlewares:
         headers-default:
           headers:
-            sslRedirect: true
+            #sslRedirect: true
             browserXssFilter: true
             contentTypeNosniff: true
-            forceSTSHeader: true
-            stsIncludeSubdomains: true
-            stsPreload: true
-            stsSeconds: 15552000
+            #forceSTSHeader: true
+            #stsIncludeSubdomains: true
+            #stsPreload: true
+            #stsSeconds: 15552000
             customFrameOptionsValue: SAMEORIGIN
