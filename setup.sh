@@ -22,7 +22,7 @@ then
   git pull
   cd ..
 else
-  git clone -b mk8-126 --single-branch https://github.com/luechtdiode/mk8-argo.git
+  git clone -b mk8-128 --single-branch https://github.com/luechtdiode/mk8-argo.git
 fi
 
 sudo microk8s stop
@@ -58,7 +58,7 @@ then
   sleep 30s
 fi
 # snap info microk8s
-sudo snap install microk8s --classic --channel=1.26/stable
+sudo snap install microk8s --classic --channel=1.28/stable
 sudo microk8s status --wait-ready
 sudo usermod -a -G microk8s $USER
 
@@ -94,9 +94,9 @@ if [ -z "$NIC_IPS" ]; then
 else
   echo "Automatic passing $NIC_IPS to metallb ..."
   { echo "$NIC_IPS"; } | sudo microk8s enable metallb
-  
+
   if [ -z "$(kubectl describe IPAddressPool -n metallb-system | grep Name: | awk '{print $2}')" ]
-  then    
+  then
     until kubectl wait pod -l app=metallb -n metallb-system --for condition=Ready --timeout=180s
     do
       if askp "should be waited for readyness of metal loadbalancer?"
