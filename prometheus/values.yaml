@@ -52,7 +52,7 @@ monitoring:
         traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
       hosts: 
-        - alertmanager.interpolar.ch:8443
+        - alertmanager.interpolar.ch
 
     alertmanagerSpec:
       externalUrl: https://alertmanager.interpolar.ch:8443/
@@ -85,7 +85,7 @@ monitoring:
         traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
       hosts: 
-        - grafana.interpolar.ch:8443
+        - grafana.interpolar.ch
   prometheus:
     ingress:
       enabled: true
@@ -94,10 +94,10 @@ monitoring:
         traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
       hosts: 
-        - prometheus.interpolar.ch:8443
+        - prometheus.interpolar.ch
     prometheusSpec:
       ## How long to retain metrics
-      externalUrl: https://prometheus.interpolar.ch/
+      externalUrl: https://prometheus.interpolar.ch:8443/
       retention: 365d
       retentionSize: 100GB
       # resources:
@@ -161,7 +161,7 @@ blackbox-exporter:
       traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
       traefik.ingress.kubernetes.io/router.entrypoints: websecure
     hosts: 
-      - host: blackbox.interpolar.ch:8443
+      - host: blackbox.interpolar.ch
         paths:
           - path: /
             pathType: ImplementationSpecific
