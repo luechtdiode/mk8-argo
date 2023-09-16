@@ -178,6 +178,7 @@ fi
 
 kubectl apply -f ./mk8-argo/admin-user-sa.yaml
 kubectl apply -f ./mk8-argo/admin-cluster-rolebinding.yaml
+admintoken=$(kubectl -n kube-system create token admin-user)
 
 if ! askn "should zfs/zpool be cleared?"
 then
