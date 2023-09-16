@@ -52,10 +52,10 @@ monitoring:
         traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
       hosts: 
-        - alertmanager.interpolar.ch
+        - alertmanager.interpolar.ch:8443
 
     alertmanagerSpec:
-      externalUrl: https://alertmanager.interpolar.ch/
+      externalUrl: https://alertmanager.interpolar.ch:8443/
       ## Example which selects all namespaces with label "alertmanagerconfig" set to "enabled"
       alertmanagerConfigNamespaceSelector:
         matchLabels:
@@ -85,7 +85,7 @@ monitoring:
         traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
       hosts: 
-        - grafana.interpolar.ch
+        - grafana.interpolar.ch:8443
   prometheus:
     ingress:
       enabled: true
@@ -94,7 +94,7 @@ monitoring:
         traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
       hosts: 
-        - prometheus.interpolar.ch
+        - prometheus.interpolar.ch:8443
     prometheusSpec:
       ## How long to retain metrics
       externalUrl: https://prometheus.interpolar.ch/
@@ -161,7 +161,7 @@ blackbox-exporter:
       traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
       traefik.ingress.kubernetes.io/router.entrypoints: websecure
     hosts: 
-      - host: blackbox.interpolar.ch
+      - host: blackbox.interpolar.ch:8443
         paths:
           - path: /
             pathType: ImplementationSpecific
