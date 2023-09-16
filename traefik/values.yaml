@@ -4,7 +4,7 @@ templates:
     authsecretname:  traefik-dashboard-user-secret
     http_redirect:
       enable: true
-    dns_resolver: "cf-production"
+    dns_resolver: "cf-staging"
 
 traefik:
     #image:
