@@ -81,7 +81,6 @@ echo "alias helm='microk8s helm3'" > ~/.bash_aliases
 source ~/.bash_aliases
 source ~/.bashrc
 
-sudo microk8s enable cis-hardening
 sudo microk8s enable community
 sudo microk8s enable rbac
 sudo microk8s enable helm3
@@ -201,6 +200,7 @@ then
     setup
   cd ..
 fi
+sudo microk8s enable cis-hardening
 
 echo "Admin $admintoken"
 echo "Dashboard Service NodePort"
