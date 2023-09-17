@@ -81,6 +81,7 @@ echo "alias helm='microk8s helm3'" > ~/.bash_aliases
 source ~/.bash_aliases
 source ~/.bashrc
 
+sudo microk8s enable cis-hardening
 sudo microk8s enable community
 sudo microk8s enable rbac
 sudo microk8s enable helm3
@@ -119,7 +120,7 @@ sudo microk8s enable dashboard
 wait
 sudo microk8s status --wait-ready
 
-until microk8s kubectl wait pod -l k8s-app=kubernetes-dashboard -n kube-system --for condition=Ready --timeout=180s
+until kubectl wait pod -l k8s-app=kubernetes-dashboard -n kube-system --for condition=Ready --timeout=180s
 do
   if askp "should be waited for readyness of kubernetes-dashboard?"
   then
@@ -128,7 +129,7 @@ do
     break;
   fi
 done
-microk8s kubectl patch svc kubernetes-dashboard -n kube-system -p '{"spec": {"type": "NodePort"}}'
+kubectl patch svc kubernetes-dashboard -n kube-system -p '{"spec": {"type": "NodePort"}}'
 
 sudo iptables -P FORWARD ACCEPT
 sudo ufw allow in on cni0 && sudo ufw allow out on cni0
