@@ -200,7 +200,7 @@ then
     setup
   cd ..
 fi
-sudo microk8s enable cis-hardening
+# sudo microk8s enable cis-hardening
 
 echo "Admin $admintoken"
 echo "Dashboard Service NodePort"
