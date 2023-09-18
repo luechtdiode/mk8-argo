@@ -28,13 +28,13 @@ traefik:
     #    "sidecar.jaegertracing.io/inject": "true"    
 
     certResolvers:
-      cf-staging:
+      cf-production:
         caserver: https://acme-staging-v02.api.letsencrypt.org/directory
         dnsChallenge:
           provider: cloudflare
           resolvers: 1.1.1.1
         storage: /certs/acme-stageing.json
-      cf-production:
+      cf-staging:
         caserver: https://acme-v02.api.letsencrypt.org/directory
         dnsChallenge:
           provider: cloudflare
