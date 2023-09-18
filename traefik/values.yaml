@@ -28,13 +28,13 @@ traefik:
     #    "sidecar.jaegertracing.io/inject": "true"    
 
     certResolvers:
-      cf-production:
+      cf-staging:
         caserver: https://acme-staging-v02.api.letsencrypt.org/directory
         dnsChallenge:
           provider: cloudflare
           resolvers: 1.1.1.1
         storage: /certs/acme-stageing.json
-      cf-staging:
+      cf-production:
         caserver: https://acme-v02.api.letsencrypt.org/directory
         dnsChallenge:
           provider: cloudflare
@@ -108,7 +108,7 @@ traefik:
           #- TLS_SHA384_SHA384
           #- TLS_AES_256_GCM_SHA384
           #- TLS_AES_128_GCM_SHA256
-        sniStrict: true
+        sniStrict: false
         preferServerCipherSuites: true
         curvePreferences:
           - CurveP521
