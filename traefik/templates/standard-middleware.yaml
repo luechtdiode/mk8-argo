@@ -129,7 +129,7 @@ metadata:
   name: more-security-response-header
 spec:
   headers:
-    #sslRedirect: true  
+    sslRedirect: true  
     #forceSTSHeader: true
     #stsIncludeSubdomains: true
     #stsPreload: true
