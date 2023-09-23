@@ -3140,8 +3140,8 @@ monitoring:
       retention: 365d
 
       ## Maximum size of metrics
-      ##
-      retentionSize: "100Gi"
+      ## use GB instead of Gi!
+      retentionSize: "100GB"
 
       ## Allow out-of-order/out-of-bounds samples ingested into Prometheus for a specified duration
       ## See https://prometheus.io/docs/prometheus/latest/configuration/configuration/#tsdb
