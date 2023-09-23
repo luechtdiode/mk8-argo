@@ -1,12 +1,12 @@
 apiVersion: v2
-version: 33.1.0
+version: 51.1.1
 name: prometheus-community
 dependencies:
   - name: kube-prometheus-stack
-    version: 51.0.3
+    version: 51.1.1
     repository: https://prometheus-community.github.io/helm-charts
     alias: monitoring
   - name: prometheus-blackbox-exporter
-    version: 8.0.0
+    version: 8.3.0
     repository: https://prometheus-community.github.io/helm-charts
     alias: blackbox-exporter
