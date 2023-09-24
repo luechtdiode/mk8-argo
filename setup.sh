@@ -178,7 +178,7 @@ fi
 
 kubectl apply -f ./mk8-argo/admin-user-sa.yaml
 kubectl apply -f ./mk8-argo/admin-cluster-rolebinding.yaml
-kubectl apply -n ./mk8-argo/admin-user-secret-accesstoken.yaml
+kubectl apply -f ./mk8-argo/admin-user-secret-accesstoken.yaml
 admintoken=$(kubectl -n kube-system get secret admin-user-secret -o go-template="{{.data.token | base64decode}}")
 
 if ! askn "should zfs/zpool be cleared?"
