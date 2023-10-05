@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: 726-turn10-mit-ab-noten-anstatt-de-0527f27
+    tag: v2r3b2-Beta1
   network:
     metrics:
       servicePort: 3000
