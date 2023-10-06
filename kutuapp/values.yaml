@@ -9,6 +9,7 @@ kutuapp:
   image:
     repository: luechtdiode/kutuapp
     tag: v2r3b2
+    pullPolicy: Always
   network:
     metrics:
       servicePort: 3000
