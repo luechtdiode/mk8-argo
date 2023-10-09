@@ -10,6 +10,8 @@ echo "uplink found at $uplink"
 echo "current path: $PATH"
 echo "current user: $(whoami)"
 
+alias kubectl = $kubectl
+
 source ./scripts/secret-backup-restore.sh
 source ./scripts/db-backup-restore.sh
 source ./scripts/file-incremental-backup-restore.sh
