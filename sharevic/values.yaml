@@ -13,7 +13,7 @@ sharevic-waf:
   #  "sidecar.jaegertracing.io/inject": "true"
   image:
     repository: luechtdiode/nginx-naxsi
-    tag: master-1df1bb5
+    tag: v1.0.1
   defaultAffinityRules:
     enabled: false
   network:
