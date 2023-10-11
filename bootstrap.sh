@@ -52,7 +52,7 @@ function mk8_restart() {
 }
 
 function cleanupNamespaces() {
-  if askp "should argo, sealed-secrets and traefik namespace be cleaned?"
+  if askp "should argo, sealed-secrets harbor and traefik namespace be cleaned?"
   then
     # cleanup
     helm -n argocd uninstall argocd
@@ -63,6 +63,10 @@ function cleanupNamespaces() {
 
     helm -n traefik uninstall traefik
     kubectl delete namespace traefik
+
+    helm -n harbor uninstall harbor
+    kubectl delete namespace harbor
+
   fi
 }
 
@@ -108,6 +112,7 @@ function restoreAppStates() {
   then
     cd backuprestore
     ./main.sh restore traefik
+    ./main.sh restore harbor
     ./main.sh restore pg-admin
     ./main.sh restore kmgetubs19
     ./main.sh restore kutuapp-test kutuapp-data
@@ -142,6 +147,20 @@ function installTraefik() {
   cd ..
 }
 
+function installHarbor() {
+  # harbor
+  cd harbor
+  helm repo add harbor https://helm.goharbor.io
+  helm repo update
+  helm dependencies update
+
+  kubectl create namespace harbor
+  helm install -n harbor harbor . -f values.yaml --set templates.skippodmonitor=true
+
+  waitForDeployment harbor harbor
+  cd ..
+}
+
 function installArgo() {
   # argocd
   cd argocd
@@ -162,6 +181,7 @@ function boostrapViaArgo() {
   helm template bootstrap/ | kubectl apply -f -
 
   echo "argo-cd works via git-ops now"
+  waitForDeployment harbor harbor
   waitForDeployment sharevic sharevic-waf
   waitForDeployment kmgetubs19 odoo11
   waitForDeployment kutuapp-test kutuapp
@@ -175,6 +195,7 @@ function setup() {
   restoreSecrets
   #installOpenEBSCRD
   installTraefik
+  installHarbor
   installArgo
   boostrapViaArgo
   restoreAppStates

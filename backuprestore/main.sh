@@ -95,6 +95,7 @@ function ns_dbrestore()
         db_backup kutuapp-test kutuadmin kutuapp
         db_backup kmgetubs19 odoo
         pvc_backup traefik
+        pvc_backup harbor
         pvc_backup kmgetubs19
         pvc_backup kutuapp-test
         pvc_backup kutuapp
