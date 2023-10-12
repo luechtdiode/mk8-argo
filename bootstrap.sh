@@ -67,6 +67,8 @@ function cleanupNamespaces() {
     helm -n harbor uninstall harbor
     kubectl delete namespace harbor
 
+    rm -f original-containerd-template.toml
+    rm -f original-dockerio-host.toml
   fi
 }
 
