@@ -125,6 +125,7 @@ function restoreAppStates() {
   if askp "restore pvcs?"
   then
     cd backuprestore
+    ./main.sh restore traefik
     ./main.sh restore pg-admin
     ./main.sh restore kmgetubs19
     ./main.sh restore kutuapp-test kutuapp-data
