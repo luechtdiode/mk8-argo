@@ -225,6 +225,7 @@ function toggleHarborMirror() {
     waitForDeployment harbor harbor-portal
     waitForDeployment harbor harbor-jobservice
   elif [[ ! askn "Should harbor-mirror be used fom now on?" ]]
+  then
     cp /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml ./original-dockerio-host.toml
     nano harbor-mirror-host.toml
     cp harbor-mirror-host.toml /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml
