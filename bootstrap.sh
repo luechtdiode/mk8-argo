@@ -267,9 +267,11 @@ echo "
     cleanupNamespaces
     installSealedSecrets
     restoreSecrets
+    extractDockerSecrets
     installOpenEBSCRD
     installTraefik
     installHarbor
+    toggleHarborMirror
     installArgo
     boostrapViaArgo
     restoreAppStates

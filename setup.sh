@@ -34,6 +34,7 @@ wait
 source ./mk8-argo/createzfspool.sh
 source ./mk8-argo/bootstrap.sh
 sudo snap install kubectl --classic
+sudo snap install jq
 
 # detach zfspv-pool
 zfsDetachPool
