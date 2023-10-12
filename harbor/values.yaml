@@ -29,7 +29,7 @@ harbor:
         secretName: ""
     ingress:
       hosts:
-        core: harbor.interpolar.ch
+        core: harbor.interpolar.ch:8443
       # set to the type of ingress controller if it has specific requirements.
       # leave as `default` for most ingress controllers.
       # set to `gce` if using the GCE ingress controller
@@ -105,7 +105,7 @@ harbor:
   # the IP address of k8s node
   #
   # If Harbor is deployed behind the proxy, set it as the URL of proxy
-  externalURL: https://harbor.interpolar.ch
+  externalURL: https://harbor.interpolar.ch:8443
 
   # The internal TLS used for harbor components secure communicating. In order to enable https
   # in each component tls cert files need to provided in advance.
