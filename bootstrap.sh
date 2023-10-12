@@ -83,6 +83,7 @@ function installAdmin() {
   kubectl apply -f admin-user-sa.yaml
   kubectl apply -f admin-cluster-rolebinding.yaml
   kubectl apply -f admin-user-secret-accesstoken.yaml
+  sleep 10
   #kubectl -n kube-system get secret $(kubectl -n kube-system get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
   kubectl -n kube-system get secret admin-user-secret -o go-template="{{.data.token | base64decode}}"
 }
