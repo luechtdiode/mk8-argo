@@ -176,7 +176,14 @@ function installHarbor() {
 function extractDockerSecretsImpl() {
     cp /var/snap/microk8s/current/args/containerd-template.toml original-container-template.toml
     kubectl apply -f docker-registry-sealedsecret.yaml
-    secret=$(kubectl get secret docker-registry-secret -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode)
+    
+    secret="$(kubectl get secret docker-registry-secret -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode)"
+    while [ -z "$secret" ]
+    do
+      echo "wait for existing docker-registry-secret ($secret)"
+      sleep 10
+      secret="$(kubectl get secret docker-registry-secret -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode)"
+    done
     username=$(echo $secret | jq .[][].username)
     password=$(echo $secret | jq .[][].password)
     echo """
