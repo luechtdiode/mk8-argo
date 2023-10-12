@@ -117,7 +117,7 @@ function restorePreArgoAppStates() {
   then
     cd backuprestore
     ./main.sh restore traefik
-    ./main.sh restore harbor
+    # ./main.sh restore harbor
     cd ..
   fi
 }
@@ -276,9 +276,9 @@ function setup() {
   extractDockerSecrets
   #installOpenEBSCRD
   installTraefik
-  installHarbor
+  #installHarbor
   restorePreArgoAppStates
-  toggleHarborMirror
+  #toggleHarborMirror
   installArgo
   boostrapViaArgo
   restoreAppStates
