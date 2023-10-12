@@ -169,7 +169,10 @@ function installHarbor() {
   kubectl create namespace harbor
   helm install -n harbor harbor . -f values.yaml
 
-  waitForDeployment harbor harbor
+  waitForDeployment harbor harbor-registry
+  waitForDeployment harbor harbor-core
+  waitForDeployment harbor harbor-portal
+  waitForDeployment harbor harbor-jobservice
   cd ..
 }
 
@@ -221,7 +224,10 @@ function toggleHarborMirror() {
   sudo microk8s stop
   sudo microk8s start
   waitForDeployment traefik traefik
-  waitForDeployment harbor harbor
+  waitForDeployment harbor harbor-registry
+  waitForDeployment harbor harbor-core
+  waitForDeployment harbor harbor-portal
+  waitForDeployment harbor harbor-jobservice
 }
 
 function installArgo() {
@@ -245,7 +251,6 @@ function boostrapViaArgo() {
 
   echo "argo-cd works via git-ops now"
   waitForDeployment traefik traefik
-  waitForDeployment harbor harbor
   waitForDeployment sharevic sharevic-waf
   waitForDeployment kmgetubs19 odoo11
   waitForDeployment kutuapp-test kutuapp
