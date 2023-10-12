@@ -186,8 +186,9 @@ function extractDockerSecretsImpl() {
     done
     username=$(echo $secret | jq .[][].username)
     password=$(echo $secret | jq .[][].password)
+    plugins='plugins."io.containerd.grpc.v1.cri".registry.configs."registry-1.docker.io".auth'
     echo """
-  [plugins."io.containerd.grpc.v1.cri".registry.configs."registry-1.docker.io".auth]
+  [$plugins]
     username = $username
     password = $password
 """ >> /var/snap/microk8s/current/args/containerd-template.toml
