@@ -82,7 +82,9 @@ function installOpenEBSCRD() {
 function installAdmin() {
   kubectl apply -f admin-user-sa.yaml
   kubectl apply -f admin-cluster-rolebinding.yaml
-  kubectl -n kube-system get secret $(kubectl -n kube-system get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
+  kubectl apply -f admin-user-secret-accesstoken.yaml
+  #kubectl -n kube-system get secret $(kubectl -n kube-system get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
+  kubectl -n kube-system get secret admin-user-secret -o go-template="{{.data.token | base64decode}}"
 }
 
 function installSealedSecrets() {
@@ -107,12 +109,19 @@ function restoreSecrets() {
   cd ..
 }
 
-function restoreAppStates() {
+function restorePreArgoAppStates() {
   if askp "restore pvcs?"
   then
     cd backuprestore
     ./main.sh restore traefik
     ./main.sh restore harbor
+    cd ..
+  fi
+}
+function restoreAppStates() {
+  if askp "restore pvcs?"
+  then
+    cd backuprestore
     ./main.sh restore pg-admin
     ./main.sh restore kmgetubs19
     ./main.sh restore kutuapp-test kutuapp-data
@@ -196,6 +205,7 @@ function setup() {
   #installOpenEBSCRD
   installTraefik
   installHarbor
+  restorePreArgoAppStates
   installArgo
   boostrapViaArgo
   restoreAppStates
@@ -213,6 +223,7 @@ echo "
     restoreSecrets
     installOpenEBSCRD
     installTraefik
+    installHarbor
     installArgo
     boostrapViaArgo
     restoreAppStates

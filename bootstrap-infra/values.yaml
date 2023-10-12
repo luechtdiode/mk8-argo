@@ -2,10 +2,11 @@ repository: https://github.com/luechtdiode/mk8-argo.git
 branch: mk8-128
 bootstrap:
  - name: sealed-secrets
- - name: openebs
+ #- name: openebs
  - name: prometheus
    monitoring: true
  - name: traefik
    monitoring: true
+ - name: harbor  
  - name: argocd
  - name: kubernetes-dashboard
