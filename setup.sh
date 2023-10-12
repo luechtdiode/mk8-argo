@@ -63,12 +63,17 @@ sudo snap install microk8s --classic --channel=1.28/stable
 sudo microk8s status --wait-ready
 sudo usermod -a -G microk8s $USER
 
+cp /var/snap/microk8s/current/args/containerd-template.toml ./original-containerd-template.toml
+
 if [[ -e csr.conf.template ]]
 then
   cp /var/snap/microk8s/current/certs/csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template.bak
   cp csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template
 else
+  cp /var/snap/microk8s/current/certs/csr.conf.template ./csr.conf.template
   nano /var/snap/microk8s/current/certs/csr.conf.template
+  cp /var/snap/microk8s/current/certs/csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template.bak
+  cp csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template
 fi
 
 sudo microk8s refresh-certs --cert ca.crt

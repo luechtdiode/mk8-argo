@@ -1,0 +1,5 @@
+server = "https://harbor.interpolar.ch:8443"
+
+[host."https://harbor.interpolar.ch:8443"]
+  capabilities = ["pull", "resolve"]
+  skip_verify = true

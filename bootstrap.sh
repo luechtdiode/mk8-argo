@@ -110,7 +110,7 @@ function restoreSecrets() {
 }
 
 function restorePreArgoAppStates() {
-  if askp "restore pvcs?"
+  if askp "restore pre argo apps (traefik, harbor) pvcs?"
   then
     cd backuprestore
     ./main.sh restore traefik
@@ -164,10 +164,53 @@ function installHarbor() {
   helm dependencies update
 
   kubectl create namespace harbor
-  helm install -n harbor harbor . -f values.yaml --set templates.skippodmonitor=true
+  helm install -n harbor harbor . -f values.yaml
 
   waitForDeployment harbor harbor
   cd ..
+}
+
+function extractDockerSecretsImpl() {
+    cp /var/snap/microk8s/current/args/containerd-template.toml original-container-template.toml
+    kubectl apply -f docker-registry-sealedsecret.yaml
+    secret=$(kubectl get secret docker-registry-secret -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode)
+    username=$(echo $secret | jq .[][].username)
+    password=$(echo $secret | jq .[][].password)
+    echo """
+[plugins."io.containerd.grpc.v1.cri".registry.configs."registry-1.docker.io".auth]
+username = $username
+password = $password
+    """ >> /var/snap/microk8s/current/args/containerd-template.toml
+    mk8_restart
+}
+
+function extractDockerSecrets() {
+  if [[ -e original-containerd-template.toml ]]
+  then
+    cat /var/snap/microk8s/current/args/containerd-template.toml
+    if ! askn "hopefully, the creds are set already. Should they be added manually?"
+    then
+      extractDockerSecretsImpl
+    fi
+  else
+    extractDockerSecretsImpl
+  fi
+}
+
+function toggleHarborMirror() {
+  if [[ -e original-dockerio-host.toml ]]
+  then
+    cp original-dockerio-host.toml /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml
+    rm -f ./original-dockerio-host.toml
+  else 
+    cp /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml ./original-dockerio-host.toml
+    nano harbor-mirror-host.toml
+    cp harbor-mirror-host.toml /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml
+  fi
+  sudo microk8s stop
+  sudo microk8s start
+  waitForDeployment traefik traefik
+  waitForDeployment harbor harbor
 }
 
 function installArgo() {
@@ -190,6 +233,7 @@ function boostrapViaArgo() {
   helm template bootstrap/ | kubectl apply -f -
 
   echo "argo-cd works via git-ops now"
+  waitForDeployment traefik traefik
   waitForDeployment harbor harbor
   waitForDeployment sharevic sharevic-waf
   waitForDeployment kmgetubs19 odoo11
@@ -202,10 +246,12 @@ function setup() {
   cleanupNamespaces
   installSealedSecrets
   restoreSecrets
+  extractDockerSecrets
   #installOpenEBSCRD
   installTraefik
   installHarbor
   restorePreArgoAppStates
+  toggleHarborMirror
   installArgo
   boostrapViaArgo
   restoreAppStates
