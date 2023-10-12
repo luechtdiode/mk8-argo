@@ -5,7 +5,7 @@ bootstrap:
  # - name: openebs
  - name: traefik
    monitoring: true
- - name: harbor
+ #- name: harbor
  - name: argocd
  - name: prometheus
    monitoring: true
