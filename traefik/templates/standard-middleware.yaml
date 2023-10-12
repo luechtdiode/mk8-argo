@@ -19,7 +19,7 @@ metadata:
 spec:
   chain:
     middlewares:
-    #- name: http-redirect 
+    - name: http-redirect 
     - name: standard
     - name: more-security-response-header
     - name: x-fwd-proto-https
@@ -130,8 +130,8 @@ metadata:
 spec:
   headers:
     sslRedirect: true  
-    #forceSTSHeader: true
-    #stsIncludeSubdomains: true
-    #stsPreload: true
-    #stsSeconds: 31536000
-    #contentSecurityPolicy: "default-src 'self' *.interpolar.ch *.sharevic.net data: gap: ws: wss:; style-src 'self' 'unsafe-inline'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.interpolar.ch *.sharevic.net www.google-analytics.com; img-src 'self' www.google-analytics.com data: *.fbcdn.net pbs.twimg.com media.licdn.com *.cdninstagram.com *.googleusercontent.com *.akamaihd.net www.google-analytics.com;"
+    forceSTSHeader: true
+    stsIncludeSubdomains: true
+    stsPreload: true
+    stsSeconds: 31536000
+    contentSecurityPolicy: "default-src 'self' *.interpolar.ch *.sharevic.net data: gap: ws: wss:; style-src 'self' 'unsafe-inline'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.interpolar.ch *.sharevic.net www.google-analytics.com; img-src 'self' www.google-analytics.com data: *.fbcdn.net pbs.twimg.com media.licdn.com *.cdninstagram.com *.googleusercontent.com *.akamaihd.net www.google-analytics.com;"
