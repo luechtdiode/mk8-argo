@@ -216,18 +216,27 @@ function toggleHarborMirror() {
   then
     cp original-dockerio-host.toml /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml
     rm -f ./original-dockerio-host.toml
-  else 
+
+    sudo microk8s stop
+    sudo microk8s start
+    waitForDeployment traefik traefik
+    waitForDeployment harbor harbor-registry
+    waitForDeployment harbor harbor-core
+    waitForDeployment harbor harbor-portal
+    waitForDeployment harbor harbor-jobservice
+  else if [[ ! askn "Should harbor-mirror be used fom now on?" ]]
     cp /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml ./original-dockerio-host.toml
     nano harbor-mirror-host.toml
     cp harbor-mirror-host.toml /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml
+    
+    sudo microk8s stop
+    sudo microk8s start
+    waitForDeployment traefik traefik
+    waitForDeployment harbor harbor-registry
+    waitForDeployment harbor harbor-core
+    waitForDeployment harbor harbor-portal
+    waitForDeployment harbor harbor-jobservice
   fi
-  sudo microk8s stop
-  sudo microk8s start
-  waitForDeployment traefik traefik
-  waitForDeployment harbor harbor-registry
-  waitForDeployment harbor harbor-core
-  waitForDeployment harbor harbor-portal
-  waitForDeployment harbor harbor-jobservice
 }
 
 function installArgo() {
