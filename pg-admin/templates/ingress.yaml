@@ -16,7 +16,7 @@ spec:
       middlewares:
       - name: secure
         namespace: traefik
---
+---
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
