@@ -1,22 +1,3 @@
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: https-route-pg-admin
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`pg-admin.mars.stargate`)
-      kind: Rule
-      priority: 5 
-      services:
-        - kind: Service
-          name: pg-admin
-          port: http
-      middlewares:
-      - name: secure
-        namespace: traefik
----
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
