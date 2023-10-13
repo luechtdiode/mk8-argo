@@ -3,7 +3,7 @@ apiVersion: networking.k8s.io/v1
 metadata:
   name: pg-admin-route
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
   ingressClassName: traefik
   rules:
