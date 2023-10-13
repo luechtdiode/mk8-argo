@@ -9,15 +9,6 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - http:
-        paths:
-          - path: /pg-admin
-            pathType: Prefix
-            backend:
-              service:
-                name: pg-admin
-                port:
-                  name: http
     - host: pg-admin.mars.stargate
       http:
         paths:
