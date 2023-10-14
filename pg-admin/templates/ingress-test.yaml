@@ -12,7 +12,7 @@ spec:
     - name: pg-admin
       port: http
   tls:
-    certResolver: cf-staging
+    certResolver: "cf-staging"
     domains:
-      - main: mars.interpolar.ch
-        sans: *.mars.interpolar.ch
+      - main: "mars.interpolar.ch"
+        sans: "*.mars.interpolar.ch"
