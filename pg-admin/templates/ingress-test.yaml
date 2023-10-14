@@ -17,13 +17,3 @@ spec:
                 name: pg-admin
                 port:
                   name: http
-    - host: pg-admin.mws.interpolar.ch
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: pg-admin
-                port:
-                  name: http
