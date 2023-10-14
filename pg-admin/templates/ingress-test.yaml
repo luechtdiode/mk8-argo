@@ -1,25 +1,18 @@
-kind: Ingress
-apiVersion: networking.k8s.io/v1
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
   name: pg-admin-route-localtls
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
-  ingressClassName: traefik
-  rules:
-    - host: pg-admin.mars.interpolar.ch
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: pg-admin
-                port:
-                  name: http
-      tls:
-        certResolver: cf-staging
-        domains:
-          - main: "mars.interpolar.ch"
-            sans:
-              - "*.mars.interpolar.ch"
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`pg-admin.mars.interpolar.ch`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: pg-admin
+      port: http
+  tls:
+    certResolver: cf-staging
+    domains:
+      - main: mars.interpolar.ch
+        sans:
