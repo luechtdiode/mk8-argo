@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: pg-admin.localmars.net
+    - host: pg-admin.mars.interpolar.ch
       http:
         paths:
           - path: /
@@ -17,7 +17,7 @@ spec:
                 name: pg-admin
                 port:
                   name: http
-    - host: pg-admin.localmws.net
+    - host: pg-admin.mws.interpolar.ch
       http:
         paths:
           - path: /
