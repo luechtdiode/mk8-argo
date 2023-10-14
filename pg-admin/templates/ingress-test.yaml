@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: pg-admin.interpolar.ch
+    - host: pg-admin.mars.interpolar.ch
       http:
         paths:
           - path: /
