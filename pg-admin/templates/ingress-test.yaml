@@ -15,4 +15,4 @@ spec:
     certResolver: cf-staging
     domains:
       - main: mars.interpolar.ch
-        sans:
+        sans: *.mars.interpolar.ch
