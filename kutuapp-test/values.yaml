@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: 735-optimize-gearchange-turn10-dc99203
+    tag: v2r3b3-beta2
   network:
     metrics:
       servicePort: 3000
