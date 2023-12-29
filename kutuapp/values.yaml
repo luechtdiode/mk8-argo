@@ -26,7 +26,7 @@ kutuapp-waf:
       cpu: 0.2
       memory: 32Mi
     limits:
-      cpu: 1.00
+      cpu: 3.00
       memory: 128Mi
   volumeMounts:
     - name: nginx-config
@@ -54,8 +54,8 @@ kutuapp:
       cpu: 0.50
       memory: 1.5Gi
     limits:
-      cpu: 3.00
-      memory: 4.0Gi
+      cpu: 15.00
+      memory: 10.0Gi
   livenessProbe:
     initialDelaySeconds: 15
     timeoutSeconds: 5
