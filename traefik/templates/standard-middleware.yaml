@@ -64,18 +64,18 @@ metadata:
   name: max-connections
 spec:
   inFlightReq:
-    amount: 1600
+    amount: 2500
 ---
-# Here, an average of 100 requests per second is allowed.
-# In addition, a burst of 140 requests is allowed.
+# Here, an average of 400 requests per second is allowed.
+# In addition, a burst of 800 requests is allowed.
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: ratelimit
 spec:
   rateLimit:
-    average: 200
-    burst: 500
+    average: 400
+    burst: 800
 ---
 # Latency Check
 apiVersion: traefik.containo.us/v1alpha1
