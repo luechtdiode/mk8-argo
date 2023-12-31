@@ -7,8 +7,8 @@ spec:
     middlewares:
     - name: compress
     - name: limited-body
-    - name: max-connections
-    - name: ratelimit
+    #- name: max-connections
+    #- name: ratelimit
     - name: circuitbreaker    
     - name: security-response-header
 ---  
