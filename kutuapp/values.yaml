@@ -4,7 +4,7 @@ routes:
     port: 5858
     portSecure: 5858
   - name: kutuapp
-    domain: kutuapp.interpolar.ch
+    domain: kutuapp-prod.interpolar.ch
     port: 5757
     portSecure: 5757
 
