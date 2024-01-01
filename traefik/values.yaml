@@ -42,11 +42,6 @@ traefik:
         storage: /certs/acme.json        
        
     env:
-      - name: CF_API_EMAIL
-        valueFrom:
-          secretKeyRef:
-            key: dns_cloudflare_email
-            name: acme-provider-email-secret
       - name: CF_DNS_API_TOKEN
         valueFrom:
           secretKeyRef:
