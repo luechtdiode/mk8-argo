@@ -33,13 +33,7 @@ traefik:
         dnsChallenge:
           provider: cloudflare
           resolvers: 1.1.1.1
-        storage: /certs/acme-stageing.json
-      cf-production-backup:
-        caserver: https://acme-v02.api.letsencrypt.org/directory
-        dnsChallenge:
-          provider: cloudflare
-          resolvers: 1.1.1.1
-        storage: /certs/acme.json        
+        storage: /certs/acme-stageing1.json       
       cf-production:
         caserver: https://acme-v02.api.letsencrypt.org/directory
         dnsChallenge:
