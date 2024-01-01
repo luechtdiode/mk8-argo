@@ -9,7 +9,7 @@ spec:
     - name: limited-body
     #- name: max-connections
     #- name: ratelimit
-    - name: circuitbreaker    
+    #- name: circuitbreaker    
     - name: security-response-header
 ---  
 apiVersion: traefik.containo.us/v1alpha1
