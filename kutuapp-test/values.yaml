@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: try-new-gc-j21-zgc-gen-22cefad
+    tag: try-new-gc-j21-zgc-gen-c5ecb37
   network:
     metrics:
       servicePort: 3000
