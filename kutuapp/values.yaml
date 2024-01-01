@@ -40,7 +40,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r3b3
+    tag: v2r3b4-alpha2
   network:
     metrics:
       servicePort: 3000
@@ -54,8 +54,8 @@ kutuapp:
       cpu: 0.50
       memory: 1.5Gi
     limits:
-      cpu: 15.00
-      memory: 10.0Gi
+      #cpu: 15.00
+      memory: 4.0Gi
   livenessProbe:
     initialDelaySeconds: 15
     timeoutSeconds: 5
