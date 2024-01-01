@@ -1,15 +1,15 @@
 routes:
-  - name: kutuapp-waf
+  - name: kutuapp-sharevic
     domain: kutuapp.sharevic.net
-    port: 5858
-    portSecure: 5858
-  - name: kutuapp
-    domain: kutuapp-prod.interpolar.ch
+    port: 5757
+    portSecure: 5757
+  - name: kutuapp-interpolar
+    domain: kutuapp.interpolar.ch
     port: 5757
     portSecure: 5757
 
 kutuapp-waf:
-  replicaCount: 3
+  replicaCount: 0
   image:
     repository: luechtdiode/nginx-naxsi
     tag: v1.0.1
@@ -40,7 +40,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r3b4-alpha2
+    tag: try-new-gc-j21-zgc-gen-c5ecb37
   network:
     metrics:
       servicePort: 3000
