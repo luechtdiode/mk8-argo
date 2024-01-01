@@ -1,15 +1,15 @@
 routes:
-  - name: kutuapp-sharevic
+  - name: kutuapp
     domain: kutuapp.sharevic.net
     port: 5757
     portSecure: 5757
-  - name: kutuapp-interpolar
+  - name: kutuapp-waf
     domain: kutuapp.interpolar.ch
-    port: 5757
-    portSecure: 5757
+    port: 5858
+    portSecure: 5858
 
 kutuapp-waf:
-  replicaCount: 0
+  replicaCount: 3
   image:
     repository: luechtdiode/nginx-naxsi
     tag: v1.0.1
