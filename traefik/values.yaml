@@ -41,11 +41,11 @@ traefik:
           resolvers: 1.1.1.1
         storage: /certs/acme.json        
       cf-production:
-        caserver: https://acme-staging-v02.api.letsencrypt.org/directory
+        caserver: https://acme-v02.api.letsencrypt.org/directory
         dnsChallenge:
           provider: cloudflare
           resolvers: 1.1.1.1
-        storage: /certs/acme2.json
+        storage: /certs/acme1.json
         
     env:
       - name: CF_DNS_API_TOKEN
