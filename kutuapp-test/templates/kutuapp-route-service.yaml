@@ -33,7 +33,12 @@ spec:
   entryPoints:
     - websecure
   routes:
+    {{- if .headervalue }}
+    - match: "Host(`{{ trimPrefix "https://" .domain }}`) && HeadersRegexp(`{{.headername}}`, `{{.headervalue}}`)"
+    {{- end }}
+    {{- if not .headervalue }}
     - match: Host(`{{ trimPrefix "https://" .domain }}`)
+    {{- end }}
       kind: Rule
       priority: 5 
       services:
