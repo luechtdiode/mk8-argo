@@ -11,8 +11,8 @@ routes:
     domain: test-kutuapp.sharevic.net
     port: 5757
     portSecure: 5757
-    headername: `x-accesstoken`
-    headervalue: `^[\w-]*\.[\w-]*\.[\w-]*$`
+    headername: x-accesstoken
+    headervalue: ^[\w-]*\.[\w-]*\.[\w-]*$
 
 kutuapp:
   replicaCount: 1
