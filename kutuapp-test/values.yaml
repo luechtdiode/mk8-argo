@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: cleanups-a8438d7
+    tag: cleanups-28a3f32
   network:
     metrics:
       servicePort: 3000
