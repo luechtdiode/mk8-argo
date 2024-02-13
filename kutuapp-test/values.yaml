@@ -88,11 +88,11 @@ kutuapp:
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
-    - name: DONATION_LINK
+    - name: X_DONATION_LINK
       value: "https://donate.stripe.com/4gwcMV1jE3RZ2U8dQQ"
-    - name: DONATION_PRICE
+    - name: X_DONATION_PRICE
       value: "0.50"
-    - name: DONATION_BEGIN
+    - name: X_DONATION_BEGIN
       value: "2024-01-01"
     - name: X_SMTP_SENDERAPPNAME
       value: KuTu App Testsystem
