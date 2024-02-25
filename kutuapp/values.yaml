@@ -40,7 +40,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r3b8
+    tag: cleanups-2c96300
   network:
     metrics:
       servicePort: 3000
@@ -97,6 +97,12 @@ kutuapp:
         secretKeyRef:
           name: kutu-postgres-secret
           key: password
+    - name: X_DONATION_LINK
+      value: "https://kutuapp.zahls.ch/de/pay?cid=2eaa5545&donation[preselect_amount]=:betrag"
+    - name: X_DONATION_PRICE
+      value: "0.50"
+    - name: X_DONATION_BEGIN
+      value: "2024-01-01"
   defaultAffinityRules:
     enabled: false
   persistence:
