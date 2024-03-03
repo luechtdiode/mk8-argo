@@ -88,14 +88,14 @@ kutuapp:
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
-    - name: X_DONATION_LINK2
-      value: "https://donate.stripe.com/4gwcMV1jE3RZ2U8dQQ"
-    - name: X_DONATION_LINK
-      value: "https://kutuapp.zahls.ch/de/pay?cid=2eaa5545&donation[preselect_amount]=:betrag"
-    - name: X_DONATION_PRICE
-      value: "0.50"
-    - name: X_DONATION_BEGIN
-      value: "2024-01-01"
+    #- name: X_DONATION_LINK2
+    #  value: "https://donate.stripe.com/4gwcMV1jE3RZ2U8dQQ"
+    #- name: X_DONATION_LINK
+    #  value: "https://kutuapp.zahls.ch/de/pay?cid=2eaa5545&donation[preselect_amount]=:betrag"
+    #- name: X_DONATION_PRICE
+    #  value: "0.50"
+    #- name: X_DONATION_BEGIN
+    #  value: "2024-01-01"
     - name: X_SMTP_SENDERAPPNAME
       value: KuTu App Testsystem
     - name: X_KUTU_SECRET
