@@ -102,7 +102,7 @@ kutuapp:
     - name: X_DONATION_PRICE
       value: "0.50"
     - name: X_DONATION_BEGIN
-      value: "2024-01-01"
+      value: "2024-03-15"
   defaultAffinityRules:
     enabled: false
   persistence:
