@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: tg-allgaeu-wkIVAK-adaption-0281f9a
+    tag: master-00e35ef
   network:
     metrics:
       servicePort: 3000
