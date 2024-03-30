@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: master-00e35ef
+    tag: v2r3b10
   network:
     metrics:
       servicePort: 3000
