@@ -40,7 +40,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r3b10u2-beta1
+    tag: v2r3b11-beta1
   network:
     metrics:
       servicePort: 3000
@@ -102,7 +102,7 @@ kutuapp:
     - name: X_DONATION_PRICE
       value: "0.50"
     - name: X_DONATION_BEGIN
-      value: "2024-03-25"
+      value: "2024-04-04"
   defaultAffinityRules:
     enabled: false
   persistence:
