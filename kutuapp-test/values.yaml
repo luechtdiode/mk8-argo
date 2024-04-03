@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: wettkampf-metadata-4376943
+    tag: wettkampf-metadata-26b12dd
   network:
     metrics:
       servicePort: 3000
