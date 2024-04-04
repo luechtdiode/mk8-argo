@@ -21,8 +21,8 @@ spec:
     middlewares:
     #- name: http-redirect 
     - name: standard
-    - name: more-security-response-header
-    - name: x-fwd-proto-https
+    #- name: more-security-response-header
+    #- name: x-fwd-proto-https
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
@@ -31,7 +31,7 @@ metadata:
 spec:
   redirectScheme:
     scheme: https
-    permanent: true
+    #permanent: true
 ---    
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
