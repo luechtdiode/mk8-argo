@@ -16,9 +16,9 @@ storj-s3-gateway:
     type: NodePort        
   resources:
     requests:
-      memory: 4Gi
+      memory: 0.5Gi
     limits:
-      memory: 10Gi
+      memory: 1Gi
   #podSecurityContext:    
   #  runAsUser: 77777
   #  runAsGroup: 7777

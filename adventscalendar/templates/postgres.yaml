@@ -26,10 +26,11 @@ spec:
             name: postgres-config
       containers:
         - resources:
-            limits:
-              memory: 1Gi
             requests:
-              cpu: 2.00
+              cpu: 0.125
+              memory: 8Mi
+            limits:
+              cpu: 0.5
               memory: 64Mi
           readinessProbe:
             exec:

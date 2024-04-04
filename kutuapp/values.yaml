@@ -1,40 +1,9 @@
 routes:
   - name: kutuapp
     domain: kutuapp.sharevic.net
+    localdomain: kutuapp.mws.stargate
     port: 5757
     portSecure: 5757
-  - name: kutuapp-waf
-    domain: kutuapp.interpolar.ch
-    port: 5858
-    portSecure: 5858
-
-kutuapp-waf:
-  replicaCount: 3
-  image:
-    repository: luechtdiode/nginx-naxsi
-    tag: v1.0.1
-  defaultAffinityRules:
-    enabled: false
-  network:
-    http:
-      containerPort: 80
-      servicePort: 5858
-  service:
-    type: NodePort
-  resources:
-    requests:
-      cpu: 0.2
-      memory: 32Mi
-    limits:
-      cpu: 3.00
-      memory: 128Mi
-  volumeMounts:
-    - name: nginx-config
-      mountPath: /etc/nginx
-  volumes:
-    - name: nginx-config
-      configMap:
-        name: nginx-cm
 
 kutuapp:
   replicaCount: 1
@@ -55,7 +24,7 @@ kutuapp:
       memory: 1.5Gi
     limits:
       #cpu: 15.00
-      memory: 4.0Gi
+      memory: 1.5Gi
   livenessProbe:
     initialDelaySeconds: 15
     timeoutSeconds: 5
@@ -74,10 +43,12 @@ kutuapp:
     httpGet:
       path: /
       port: 5757
-  envFrom:
-    - secretRef:
-        name: smtp-secret
+  #envFrom:
+  #  - secretRef:
+  #      name: smtp-secret
   env:
+    - name: X_SMTP_SENDERAPPNAME
+      value: KuTu App Prodsystem
     - name: X_KUTU_SECRET
       valueFrom:
         secretKeyRef:

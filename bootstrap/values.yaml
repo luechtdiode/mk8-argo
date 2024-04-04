@@ -1,5 +1,5 @@
 repository: https://github.com/luechtdiode/mk8-argo.git
-branch: mk8-128
+branch: mk8-128-preview
 bootstrap:
  - name: sealed-secrets
  # - name: openebs
@@ -14,17 +14,17 @@ bootstrap:
  - name: storj
  - name: pg-admin
  - name: kmgetubs19
- - name: kutuapp-test
-   monitoring: true
+ #- name: kutuapp-test
+ #  monitoring: true
  - name: kutuapp
    monitoring: true
  - name: sharevic
- - name: mbq
- - name: quarkus-starter
- - name: adventscalendar-test
-   monitoring: true
+ #- name: mbq
+ #- name: quarkus-starter
+ #- name: adventscalendar-test
+ #  monitoring: true
  - name: adventscalendar
    monitoring: true
- - name: argo-workflows
- - name: argo-events
- - name: argo-events-playground-test
+ #- name: argo-workflows
+ #- name: argo-events
+ #- name: argo-events-playground-test

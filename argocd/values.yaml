@@ -56,7 +56,7 @@ argo-cd:
             hs.status = "Healthy"
             hs.message = "Controller doesn't report resource status"
             return hs
-      url: 'https://argo.interpolar.ch'
+      url: 'https://argo.interpolar.ch:8443'
 
     repositories:
       luechtiode-devops:
