@@ -1,5 +1,5 @@
 repository: https://github.com/luechtdiode/mk8-argo.git
-branch: mk8-128
+branch: mk8-128-preview
 bootstrap:
  - name: sealed-secrets
  # - name: openebs
