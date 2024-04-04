@@ -19,10 +19,10 @@ metadata:
 spec:
   chain:
     middlewares:
-    #- name: http-redirect 
+    - name: http-redirect 
     - name: standard
     #- name: more-security-response-header
-    #- name: x-fwd-proto-https
+    - name: x-fwd-proto-https
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
