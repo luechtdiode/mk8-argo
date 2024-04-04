@@ -2984,7 +2984,7 @@ monitoring:
 
       ## External URL at which Prometheus will be reachable.
       ##
-      externalUrl: https://prometheus.interpolar.ch/
+      externalUrl: https://prometheus.interpolar.ch:8443/
 
       ## Define which Nodes the Pods are scheduled on.
       ## ref: https://kubernetes.io/docs/user-guide/node-selection/

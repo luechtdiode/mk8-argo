@@ -1,6 +1,7 @@
 routes:
   - name: kutuapp
     domain: kutuapp.sharevic.net
+    localdomain: kutuapp.mws.stargate
     port: 5757
     portSecure: 5757
   - name: kutuapp-waf
@@ -74,10 +75,12 @@ kutuapp:
     httpGet:
       path: /
       port: 5757
-  envFrom:
-    - secretRef:
-        name: smtp-secret
+  #envFrom:
+  #  - secretRef:
+  #      name: smtp-secret
   env:
+    - name: X_SMTP_SENDERAPPNAME
+      value: KuTu App Prodsystem
     - name: X_KUTU_SECRET
       valueFrom:
         secretKeyRef:

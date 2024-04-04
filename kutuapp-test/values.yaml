@@ -9,6 +9,7 @@ routes:
     portSecure: 5757
   - name: kutuapp
     domain: test-kutuapp.sharevic.net
+    localdomain: test-kutuapp.mws.stargate
     port: 5757
     portSecure: 5757
 
@@ -80,9 +81,9 @@ kutuapp:
     httpGet:
       path: /
       port: 5757
-  envFrom:
-    - secretRef:
-        name: smtp-secret
+  #envFrom:
+  #  - secretRef:
+  #      name: smtp-secret
   env:
     - name: _NAMESPACE
       valueFrom:
