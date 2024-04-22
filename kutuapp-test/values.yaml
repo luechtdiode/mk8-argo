@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r3b11
+    tag: 890-missing-barren-951d1ea
   network:
     metrics:
       servicePort: 3000
