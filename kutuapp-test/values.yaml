@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: improve-donation-mail-730d3ed
+    tag: master-fe1a34d
   network:
     metrics:
       servicePort: 3000
