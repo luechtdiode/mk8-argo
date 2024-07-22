@@ -9,6 +9,11 @@ routes:
     dns_resolver: "cf-production"
     port: 8069
     portSecure: 8069
+  - name: odoo11-waf
+    domain: www.kmgetubs19.ch
+    dns_resolver: "cf-production"
+    port: 8069
+    portSecure: 8069
 
 odoo11-waf:
   replicaCount: 1
