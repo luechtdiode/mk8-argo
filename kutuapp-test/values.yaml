@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: km2024-learnings-15a1543
+    tag: v2r3b14-alpha8
   network:
     metrics:
       servicePort: 3000
