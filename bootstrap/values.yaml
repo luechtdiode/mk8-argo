@@ -21,3 +21,4 @@ bootstrap:
  - name: sharevic
  - name: mbq
  - name: quarkus-starter
+ - name: adventscalendar-test
