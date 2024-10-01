@@ -4,7 +4,7 @@ metadata:
   name: lang-cm
 data:
   de-DE.json: |-
-  {{ .Files.Get "../files/de-DE.json" | indent 4}}
+  {{ .Files.Get "files/de-DE.json" | indent 4}}
 
   en-US.json: |-
-  {{ .Files.Get "../files/en-US.json" | indent 4}}
+  {{ .Files.Get "files/en-US.json" | indent 4}}
