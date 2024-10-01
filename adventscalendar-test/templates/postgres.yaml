@@ -21,6 +21,9 @@ spec:
         - name: postgres-data
           persistentVolumeClaim:
             claimName: adventscalendar-data
+        - name: postgres-config
+          configMap:
+            name: postgres-config
       containers:
         - resources:
             limits:
@@ -65,6 +68,8 @@ spec:
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/pgsql/
+            - name: postgres-config
+              mountPath: /docker-entrypoint-initdb.d/
           terminationMessagePolicy: File
           image: postgres:17-alpine
       restartPolicy: Always
