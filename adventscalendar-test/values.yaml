@@ -14,7 +14,7 @@ adventscalendar-frontend:
   replicaCount: 1
   image:
     repository: ghcr.io/mrcode97/windoworganizer-frontend
-    tag: 0639e0a1557597697a72e58970959aa4c3bc5b885aa00554c9cec9e31d43e5fc
+    tag: sha256-0639e0a1557597697a72e58970959aa4c3bc5b885aa00554c9cec9e31d43e5fc
   network:
     http:
       servicePort: 3000
@@ -71,7 +71,7 @@ adventscalendar-backend:
   replicaCount: 1
   image:
     repository: ghcr.io/mrcode97/windoworganizer-backend
-    tag: 7a2434506970048f38436653eb872aee3f3c94f64f4cbf2d4a5afed4327b820f
+    tag: sha256-75bd8a24409959ae8ba58ff02aa831149d0cc0b24473856914ea385c742ce17c
   network:
     http:
       servicePort: 7007
