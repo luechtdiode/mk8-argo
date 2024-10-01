@@ -55,7 +55,7 @@ adventscalendar-frontend:
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
-    - REACT_APP_BACKEND_URL:
+    - name: REACT_APP_BACKEND_URL
       value: https://testbackend.adventscalendar.org
   defaultAffinityRules:
     enabled: false
