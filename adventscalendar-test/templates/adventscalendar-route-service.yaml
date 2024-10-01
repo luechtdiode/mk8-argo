@@ -9,7 +9,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`{{ trimPrefix "http://" .localdomain }}`) && {{ .path }}`
+    - match: Host(`{{ trimPrefix "http://" .localdomain }}`) && {{ .path }}
       kind: Rule
       priority: 5
       services:
