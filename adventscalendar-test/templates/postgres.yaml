@@ -50,12 +50,12 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: adventscalendar-postgres-secret
+                  name: dbsecret
                   key: user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: adventscalendar-postgres-secret
+                  name: dbsecret
                   key: password
           ports:
             - name: postgres
