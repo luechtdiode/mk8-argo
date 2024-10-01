@@ -110,7 +110,7 @@ adventscalendar-backend:
     - name: JWT_SECRET
       valueFrom:
         secretKeyRef:
-          name: adventscalendar-postgres-secret
+          name: dbsecret
           key: jwtsecret
     - name: DB
       value: adventscalendar
@@ -119,12 +119,12 @@ adventscalendar-backend:
     - name: DB_USER
       valueFrom:
         secretKeyRef:
-          name: adventscalendar-postgres-secret
+          name: dbsecret
           key: user
     - name: DB_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: adventscalendar-postgres-secret
+          name: dbsecret
           key: password
   defaultAffinityRules:
     enabled: false
