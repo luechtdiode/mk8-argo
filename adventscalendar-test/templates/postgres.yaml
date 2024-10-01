@@ -51,7 +51,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: dbsecret
-                  key: user
+                  key: username
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:

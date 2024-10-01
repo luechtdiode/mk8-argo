@@ -120,7 +120,7 @@ adventscalendar-backend:
       valueFrom:
         secretKeyRef:
           name: dbsecret
-          key: user
+          key: username
     - name: DB_PASSWORD
       valueFrom:
         secretKeyRef:
