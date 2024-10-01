@@ -4,13 +4,13 @@ routes:
     localdomain: test-adventscalendar.mars.stargate
     port: 3000
     portSecure: 3000
-    path: '/'
+    path: '!Path(`/api`)'
   - name: adventscalendar-backend
     domain: test.advents-calendar.org
     localdomain: testbackend-adventscalendar.mars.stargate
     port: 7007
     portSecure: 7007
-    path: '/api'
+    path: 'Path(`/api`)'
 
 adventscalendar-frontend:
   replicaCount: 1
