@@ -134,4 +134,4 @@ spec:
     stsIncludeSubdomains: true
     stsPreload: true
     stsSeconds: 31536000
-    contentSecurityPolicy: "default-src 'self' *.interpolar.ch *.sharevic.net *.advents-calendar.org data: gap: ws: wss:; style-src 'self' 'unsafe-inline'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.interpolar.ch *.sharevic.net *.advents-calendar.org www.google-analytics.com; img-src 'self' www.google-analytics.com *.openstreetmap.org data: *.openstreetmap.org *.fbcdn.net pbs.twimg.com media.licdn.com *.cdninstagram.com *.googleusercontent.com *.akamaihd.net www.google-analytics.com;"
+    contentSecurityPolicy: "default-src 'self' *.interpolar.ch *.sharevic.net *.advents-calendar.org data: *.openstreetmap.org gap: ws: wss:; style-src 'self' 'unsafe-inline'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.interpolar.ch *.sharevic.net *.advents-calendar.org www.google-analytics.com; img-src 'self' www.google-analytics.com *.openstreetmap.org data: *.openstreetmap.org *.fbcdn.net pbs.twimg.com media.licdn.com *.cdninstagram.com *.googleusercontent.com *.akamaihd.net www.google-analytics.com;"
