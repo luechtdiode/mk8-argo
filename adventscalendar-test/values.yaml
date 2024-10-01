@@ -71,7 +71,7 @@ adventscalendar-backend:
   replicaCount: 1
   image:
     repository: ghcr.io/mrcode97/windoworganizer-backend
-    tag: sha256-ee3ecb64b1acc53f195d6f8b1e93ad56c128c5bec66ba9a3e1fd437fc3c124b1
+    tag: sha256-cf2a608eb3c3a7fb745a61c3e36d87f4aaf7c44cb35ff0fbe863e643cb177a34
   network:
     http:
       servicePort: 7007
