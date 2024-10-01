@@ -91,7 +91,7 @@ adventscalendar-backend:
     successThreshold: 1
     failureThreshold: 4
     httpGet:
-      path: /
+      path: /api/calendars
       port: 7007
   readynessProbe:
     initialDelaySeconds: 5
@@ -100,7 +100,7 @@ adventscalendar-backend:
     successThreshold: 1
     failureThreshold: 4
     httpGet:
-      path: /
+      path: /api/calendars
       port: 7007
   env:
     - name: _NAMESPACE
