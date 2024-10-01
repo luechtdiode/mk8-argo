@@ -1,5 +1,5 @@
 routes:
-  - name: adventscalenda-frontend
+  - name: adventscalendar-frontend
     domain: test.advents-calendar.org
     localdomain: test-adventscalendar.mars.stargate
     port: 3000
