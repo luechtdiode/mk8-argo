@@ -1,0 +1,78 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: postgres
+  labels:
+    app: adventscalendar
+    component: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adventscalendar
+      component: postgres
+  template:
+    metadata:
+      labels:
+        app: adventscalendar
+        component: postgres
+    spec:
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: adventscalendar-data
+      containers:
+        - resources:
+            limits:
+              memory: 1Gi
+            requests:
+              cpu: 2.00
+              memory: 64Mi
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - '-c'
+                - '-e'
+                - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB -q && [ $? == 0 ]
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 10
+          terminationMessagePath: /dev/termination-log
+          name: postgres
+          env:
+            - name: PGDATA
+              value: /var/lib/pgsql/data           
+            - name: POSTGRES_DB
+              value: adventscalendar
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: adventscalendar-postgres-secret
+                  key: user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: adventscalendar-postgres-secret
+                  key: password
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/pgsql/
+          terminationMessagePolicy: File
+          image: postgres:17-alpine
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

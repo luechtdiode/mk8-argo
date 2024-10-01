@@ -1,0 +1,79 @@
+{{ range .Values.routes }}
+{{- if .localdomain }}    
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: http-route-{{ .domain }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`{{ trimPrefix "http://" .localdomain }}`)
+      kind: Rule
+      priority: 5
+      services:
+        - kind: Service
+          {{- if .host }}
+          name: app-passthrough-{{ .domain }}
+          {{- end}}
+          {{- if not .host }}
+          name: {{ .name }}
+          {{- end }}
+          port: {{ .port }}
+      middlewares:
+        - name: standard
+          namespace: traefik
+{{- end }}          
+{{- if .portSecure }}      
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: https-route-{{ .domain }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`{{ trimPrefix "https://" .domain }}`)
+      kind: Rule
+      priority: 5 
+      services:
+      - kind: Service
+        {{- if .host }}
+        name: app-passthrough-{{ .domain }}
+        {{- end}}
+        {{- if not .host }}
+        name: {{ .name }}
+        {{- end }}
+        port: {{ .portSecure }}
+      middlewares:
+        - name: secure
+          namespace: traefik
+      {{- if .host }}
+        - name: app-passthrough-{{ .domain }}-header
+      {{- end }}
+{{- end }}        
+{{- if .host }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: app-passthrough-{{ .domain }}-header
+spec:
+  headers:
+    customRequestHeaders:
+      Forwarded: for=unknown;host={{ .domain }};proto=https
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: app-passthrough-{{ .domain }}
+spec:
+  type: ExternalName
+  externalName: {{ .host }}
+  ports:
+  - port: {{ .portSecure }}
+{{- end }}  
+{{ end }}
+
