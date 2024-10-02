@@ -16,8 +16,7 @@ adventscalendar-frontend:
   replicaCount: 1
   image:
     repository: ghcr.io/mrcode97/windoworganizer-frontend
-    tag: ghaction-build-dockerfiles
-    pullPolicy: Always
+    tag: 0.1.0
   network:
     http:
       servicePort: 3000
@@ -74,8 +73,7 @@ adventscalendar-backend:
   replicaCount: 1
   image:
     repository: ghcr.io/mrcode97/windoworganizer-backend
-    tag: ghaction-build-dockerfiles
-    pullPolicy: Always
+    tag: 0.1.0
   network:
     http:
       servicePort: 7007
