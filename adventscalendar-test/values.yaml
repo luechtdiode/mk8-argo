@@ -63,10 +63,10 @@ adventscalendar-frontend:
     enabled: false
   volumeMounts:
   - mountPath: /adventscalendar/lang/de-DE.json
-    subpath: de-DE.json
+    subPath: de-DE.json
     name: lang-cm
   - mountPath: /adventscalendar/lang/en-US.json
-    subpath: en-US.json
+    subPath: en-US.json
     name: lang-cm
   volumes:
     - name: lang-cm
