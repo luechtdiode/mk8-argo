@@ -62,10 +62,10 @@ adventscalendar-frontend:
   defaultAffinityRules:
     enabled: false
   volumeMounts:
-  - mountPath: /adventscalendar/lang  
+  - mountPath: /adventscalendar/lang/de-DE.json
     subpath: de-DE.json
     name: lang-cm
-  - mountPath: /adventscalendar/lang
+  - mountPath: /adventscalendar/lang/en-US.json
     subpath: en-US.json
     name: lang-cm
   volumes:
