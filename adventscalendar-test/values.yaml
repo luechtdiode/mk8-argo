@@ -16,7 +16,7 @@ adventscalendar-frontend:
   replicaCount: 1
   image:
     repository: ghcr.io/mrcode97/windoworganizer-frontend
-    tag: 0.1.1-test1
+    tag: 0.1.1-test2
   network:
     http:
       servicePort: 3000
@@ -62,11 +62,8 @@ adventscalendar-frontend:
   defaultAffinityRules:
     enabled: false
   volumeMounts:
-  - mountPath: /adventscalendar/lang/de-DE.json
-    subPath: de-DE.json
-    name: lang-cm
-  - mountPath: /adventscalendar/lang/en-US.json
-    subPath: en-US.json
+  - mountPath: /adventscalendar/lang/vars.json
+    subPath: vars.json
     name: lang-cm
   volumes:
     - name: lang-cm
@@ -77,7 +74,7 @@ adventscalendar-backend:
   replicaCount: 1
   image:
     repository: ghcr.io/mrcode97/windoworganizer-backend
-    tag: 0.1.0
+    tag: 0.1.1-test2
   network:
     http:
       servicePort: 7007
