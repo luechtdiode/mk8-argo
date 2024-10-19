@@ -16,7 +16,7 @@ adventscalendar-frontend:
   replicaCount: 1
   image:
     repository: ghcr.io/mrcode97/windoworganizer-frontend
-    tag: 0.1.1-test4
+    tag: 0.1.1-test5
   network:
     http:
       servicePort: 3000
