@@ -6,7 +6,7 @@ routes:
     portSecure: 3000
     path: '!PathPrefix(`/api`)'
   - name: adventscalendar-backend
-    domain: test.advents-calendar.org
+    domain: advents-calendar.org
     localdomain: backend-adventscalendar.mars.stargate
     port: 7007
     portSecure: 7007
@@ -58,7 +58,7 @@ adventscalendar-frontend:
         fieldRef:
           fieldPath: metadata.namespace
     - name: REACT_APP_BACKEND_URL
-      value: https://test.advents-calendar.org
+      value: https://advents-calendar.org
   defaultAffinityRules:
     enabled: false
   volumeMounts:
