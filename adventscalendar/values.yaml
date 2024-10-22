@@ -1,0 +1,133 @@
+routes:
+  - name: adventscalendar-frontend
+    domain: advents-calendar.org
+    localdomain: adventscalendar.mars.stargate
+    port: 3000
+    portSecure: 3000
+    path: '!PathPrefix(`/api`)'
+  - name: adventscalendar-backend
+    domain: test.advents-calendar.org
+    localdomain: backend-adventscalendar.mars.stargate
+    port: 7007
+    portSecure: 7007
+    path: 'PathPrefix(`/api`)'
+
+adventscalendar-frontend:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/mrcode97/windoworganizer-frontend
+    tag: 1.0.0
+  network:
+    http:
+      servicePort: 3000
+      # ingress:
+      #  host: advents-calendar.org
+  service:
+    type: ClusterIP
+  resources:
+    requests:
+      cpu: 0.125
+      memory: 128Mi
+    limits:
+      #cpu: 3.0
+      memory: 512Mi
+  livenessProbe:
+    initialDelaySeconds: 5
+    timeoutSeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 4
+    httpGet:
+      path: /
+      port: 3000
+  readynessProbe:
+    initialDelaySeconds: 5
+    timeoutSeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 4
+    httpGet:
+      path: /
+      port: 3000
+  #envFrom:
+  #  - secretRef:
+  #      name: smtp-secret
+  env:
+    - name: _NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    - name: REACT_APP_BACKEND_URL
+      value: https://test.advents-calendar.org
+  defaultAffinityRules:
+    enabled: false
+  volumeMounts:
+  - mountPath: /adventscalendar/lang/vars.json
+    subPath: vars.json
+    name: lang-cm
+  volumes:
+    - name: lang-cm
+      configMap:
+        name: lang-cm
+
+adventscalendar-backend:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/mrcode97/windoworganizer-backend
+    tag: 1.0.0
+  network:
+    http:
+      servicePort: 7007
+  service:
+    type: ClusterIP
+  resources:
+    requests:
+      cpu: 0.125
+      memory: 128Mi
+    limits:
+      #cpu: 3.0
+      memory: 512Mi
+  livenessProbe:
+    initialDelaySeconds: 5
+    timeoutSeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 4
+    httpGet:
+      path: /api/calendars
+      port: 7007
+  readynessProbe:
+    initialDelaySeconds: 5
+    timeoutSeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 4
+    httpGet:
+      path: /api/calendars
+      port: 7007
+  env:
+    - name: _NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    - name: JWT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: dbsecret
+          key: jwtsecret
+    - name: DB
+      value: adventscalendar
+    - name: DB_HOST
+      value: postgres
+    - name: DB_USER
+      valueFrom:
+        secretKeyRef:
+          name: dbsecret
+          key: username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: dbsecret
+          key: password
+  defaultAffinityRules:
+    enabled: false
