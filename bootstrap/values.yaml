@@ -22,3 +22,4 @@ bootstrap:
  - name: mbq
  - name: quarkus-starter
  - name: adventscalendar-test
+ - name: adventscalendar
