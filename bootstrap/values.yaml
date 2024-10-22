@@ -22,4 +22,6 @@ bootstrap:
  - name: mbq
  - name: quarkus-starter
  - name: adventscalendar-test
+   monitoring: true
  - name: adventscalendar
+   monitoring: true
