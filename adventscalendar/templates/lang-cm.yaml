@@ -26,4 +26,4 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: lang-cm
-  namespace: adventscalendar-test
+  namespace: adventscalendar
