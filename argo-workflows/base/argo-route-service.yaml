@@ -11,8 +11,8 @@ spec:
       priority: 5
       services:
         - kind: Service
-          name: web
-          port: 2746
+          name: argo-server
+          port: web
       middlewares:
         - name: standard
           namespace: traefik
