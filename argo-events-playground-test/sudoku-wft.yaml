@@ -9,11 +9,24 @@ spec:
     - name: path
       # the value will get overridden by event payload from test-dep
       value: ""
+    - name: context
+      # the value will get overridden by event payload from test-dep
+      value: ""
   templates:
+  - name: print-context
+    inputs:
+      parameters:
+        - name: path
+        - name: context
+    container:
+      image: ghcr.io/luechtdiode/sudoku:0.0.3
+      command: ["/bin/sh", "-c"]
+      args: ["echo {{ inputs.parameters.context }}"]
   - name: sudoku
     inputs:
       parameters:
       - name: path
+      - name: context
       artifacts:
         - name: sudoku-input
           path: /sudoku/input

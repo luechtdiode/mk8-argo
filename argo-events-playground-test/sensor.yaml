@@ -27,6 +27,9 @@ spec:
                   - name: path
                     # the value will get overridden by event payload from test-dep
                     value: ""
+                  - name: context
+                    # the value will get overridden by event payload from test-dep
+                    value: ""
                 workflowTemplateRef:
                   name: workflow-template-sudoku
           # The container args from the workflow are overridden by the s3 notification key
@@ -35,3 +38,7 @@ spec:
                 dependencyName: test-dep
                 dataKey: notification.0.s3.object.key
               dest: spec.arguments.parameters.0.value
+            - src:
+                dependencyName: test-context
+                dataKey: notification
+              dest: spec.arguments.parameters.1.value
