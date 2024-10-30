@@ -34,7 +34,7 @@ spec:
           s3:
             endpoint: s3.apps.baloise.dev:443
             bucket: test
-            key: output
+            key: output2
             accessKeySecret:
               name: artifacts-minio
               key: accesskey
