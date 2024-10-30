@@ -1,0 +1,37 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: http-route-workflows-local
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`http://workflows.mars.stargate`)
+      kind: Rule
+      priority: 5
+      services:
+        - kind: Service
+          name: web
+          port: 2746
+      middlewares:
+        - name: standard
+          namespace: traefik
+---
+#apiVersion: traefik.containo.us/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: http-route-workflows
+#spec:
+#  entryPoints:
+#    - websecure
+#  routes:
+#    - match: Host(`http://workflows.interpolar.ch`)
+#      kind: Rule
+#      priority: 5
+#      services:
+#      - kind: Service
+#        name: web
+#        port: 2746
+#      middlewares:
+#        - name: secure
+#          namespace: traefik

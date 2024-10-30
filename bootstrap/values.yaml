@@ -25,3 +25,5 @@ bootstrap:
    monitoring: true
  - name: adventscalendar
    monitoring: true
+ - name: argo-workflows
+ - name: argo-events
