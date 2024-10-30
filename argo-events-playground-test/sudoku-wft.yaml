@@ -15,24 +15,17 @@ spec:
   templates:
   - name: main
     steps:
-    - - name: hello1            # hello1 is run before the following steps
+    - - name: step-solve-sudoku
         template: sudoku
-    - - name: hello2a           # double dash => run after previous step
+    - - name: step-print-context
         template: print-context
   - name: print-context
-    inputs:
-      parameters:
-        - name: path
-        - name: context
     container:
       image: ghcr.io/luechtdiode/sudoku:0.0.3
       command: ["/bin/sh", "-c"]
       args: ["echo {{ workflow.parameters.context }}"]
   - name: sudoku
     inputs:
-      parameters:
-      - name: path
-      - name: context
       artifacts:
         - name: sudoku-input
           path: /sudoku/input
