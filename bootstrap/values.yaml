@@ -27,3 +27,4 @@ bootstrap:
    monitoring: true
  - name: argo-workflows
  - name: argo-events
+ - name: argo-events-playground-test

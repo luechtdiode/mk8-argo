@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: workflow-template-sudoku
+spec:
+  entrypoint: sudoku
+  arguments:
+    parameters:
+    - name: path
+      # the value will get overridden by event payload from test-dep
+      value: ""
+  templates:
+  - name: sudoku
+    inputs:
+      parameters:
+      - name: path
+      artifacts:
+        - name: sudoku-input
+          path: /sudoku/input
+          s3:
+            endpoint: s3.apps.baloise.dev:443
+            bucket: test
+            key: input
+            accessKeySecret:
+              name: artifacts-minio
+              key: accesskey
+            secretKeySecret:
+              name: artifacts-minio
+              key: secretkey
+    outputs:
+      artifacts:
+        - name: sudoku-output
+          path: /tmp/
+          s3:
+            endpoint: s3.apps.baloise.dev:443
+            bucket: test
+            key: output
+            accessKeySecret:
+              name: artifacts-minio
+              key: accesskey
+            secretKeySecret:
+              name: artifacts-minio
+              key: secretkey
+          archive:
+            none: {}
+    container:
+      image: ghcr.io/luechtdiode/sudoku:0.0.3
+      command: ["/bin/sh", "-c"]
+      args: ["java -cp .:app.jar:libs/* ch.seidel.sudoku.Sudoku /sudoku/{{inputs.parameters.path}} /tmp/"]
