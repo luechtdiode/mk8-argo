@@ -3,7 +3,7 @@ kind: WorkflowTemplate
 metadata:
   name: workflow-template-sudoku
 spec:
-  entrypoint: sudoku
+  entrypoint: main
   arguments:
     parameters:
     - name: path
@@ -13,6 +13,12 @@ spec:
       # the value will get overridden by event payload from test-dep
       value: ""
   templates:
+  - name: main
+    steps:
+    - - name: hello1            # hello1 is run before the following steps
+        template: sudoku
+    - - name: hello2a           # double dash => run after previous step
+        template: print-context
   - name: print-context
     inputs:
       parameters:
@@ -21,7 +27,7 @@ spec:
     container:
       image: ghcr.io/luechtdiode/sudoku:0.0.3
       command: ["/bin/sh", "-c"]
-      args: ["echo {{ inputs.parameters.context }}"]
+      args: ["echo {{ workflow.parameters.context }}"]
   - name: sudoku
     inputs:
       parameters:
@@ -59,4 +65,4 @@ spec:
     container:
       image: ghcr.io/luechtdiode/sudoku:0.0.3
       command: ["/bin/sh", "-c"]
-      args: ["java -cp .:app.jar:libs/* ch.seidel.sudoku.Sudoku /sudoku/{{inputs.parameters.path}} /tmp/"]
+      args: ["java -cp .:app.jar:libs/* ch.seidel.sudoku.Sudoku /sudoku/{{workflow.parameters.path}} /tmp/"]
