@@ -21,7 +21,7 @@ spec:
               metadata:
                 generateName: sudoku-
               spec:
-                entrypoint: sudoku
+                entrypoint: main
                 arguments:
                   parameters:
                   - name: path
