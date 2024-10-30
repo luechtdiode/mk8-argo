@@ -20,6 +20,7 @@ argo-cd:
     rbac:
       policy.csv: |
         g, niiku, role:readonly
+        g, mebagel, role:readonly
         g, luechtdiode, role:admin
       policy.default: ''
       scopes: '[preferred_username, groups, email]'
@@ -35,6 +36,8 @@ argo-cd:
             config:
               clientID: Iv1.696e329182673296
               clientSecret: $GITHUB_CLIENT_SECRET
+      kustomize.buildOptions: --load-restrictor LoadRestrictionsNone
+      kustomize.buildOptions.v4.4.0: --output /tmp
       resource.customizations: |
         bitnami.com/SealedSecret:
           health.lua: |
