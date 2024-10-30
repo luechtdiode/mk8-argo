@@ -6,7 +6,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`http://workflows.mars.stargate`)
+    - match: Host(`workflows.mars.stargate`)
       kind: Rule
       priority: 5
       services:
@@ -25,7 +25,7 @@ spec:
 #  entryPoints:
 #    - websecure
 #  routes:
-#    - match: Host(`http://workflows.interpolar.ch`)
+#    - match: Host(`workflows.interpolar.ch`)
 #      kind: Rule
 #      priority: 5
 #      services:
