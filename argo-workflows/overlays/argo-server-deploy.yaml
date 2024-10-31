@@ -13,12 +13,7 @@ spec:
         app: argo-server
     spec:
       containers:
-        - args:
-            - server
-            - --secure=false
-            - --auth-mode
-            - client
-          name: argo-server
+        - name: argo-server
           readinessProbe:
             httpGet:
               path: /
