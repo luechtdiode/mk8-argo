@@ -5,6 +5,7 @@ namespace: argo-workflows
 resources:
   - base/argo-default-crb.yaml
   - base/argo-route-service.yaml
+  - base/argo-sso-cm.yaml
   - base/install.yaml
 
 patchesStrategicMerge:
