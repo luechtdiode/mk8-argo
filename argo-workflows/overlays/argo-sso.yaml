@@ -1,17 +1,3 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: argo-server
-  namespace: argo
-spec:
-  template:
-    spec:
-      containers:
-        - name: argo-server
-          args:
-            - server
-            - --auth-mode=sso
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
