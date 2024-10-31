@@ -5,6 +5,7 @@ resources:
 - base/install.yaml
 - base/argo-default-crb.yaml
 - base/argo-route-service.yaml
+- base/argo-workflows-sso-sealedsecret.yaml
 patches:
 - path: overlays/argo-server-deploy.yaml
 - path: overlays/argo-binding-crb.yaml
