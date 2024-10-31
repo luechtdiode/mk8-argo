@@ -1,5 +1,5 @@
 apiVersion: traefik.io/v1alpha1
-kind: ServerTransport
+kind: ServersTransport
 metadata:
   name: argo-transport
   namespace: argo
