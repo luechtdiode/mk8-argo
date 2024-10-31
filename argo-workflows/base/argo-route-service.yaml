@@ -17,21 +17,21 @@ spec:
         - name: standard
           namespace: traefik
 ---
-#apiVersion: traefik.containo.us/v1alpha1
-#kind: IngressRoute
-#metadata:
-#  name: http-route-workflows
-#spec:
-#  entryPoints:
-#    - websecure
-#  routes:
-#    - match: Host(`workflows.interpolar.ch`)
-#      kind: Rule
-#      priority: 5
-#      services:
-#      - kind: Service
-#        name: web
-#        port: 2746
-#      middlewares:
-#        - name: secure
-#          namespace: traefik
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: http-route-workflows
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`workflows.interpolar.ch`)
+      kind: Rule
+      priority: 5
+      services:
+        - kind: Service
+          name: argo-server
+          port: web
+      middlewares:
+        - name: secure
+          namespace: traefik
