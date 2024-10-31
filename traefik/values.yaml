@@ -91,9 +91,9 @@ traefik:
             - main: "interpolar.ch"
               sans:
                 - "*.interpolar.ch"
-            - main: "sharevic.ch"
+            - main: "sharevic.net"
               sans:
-                - "*.sharevic.ch"
+                - "*.sharevic.net"
 
     tlsOptions:
       default:
