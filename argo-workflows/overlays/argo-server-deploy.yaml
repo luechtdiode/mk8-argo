@@ -15,7 +15,9 @@ spec:
       containers:
         - args:
             - server
+            - --secure=false
             - --auth-mode=sso
+            - client
           name: argo-server
           readinessProbe:
             httpGet:
