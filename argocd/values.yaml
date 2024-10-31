@@ -36,7 +36,7 @@ argo-cd:
       dex.config: |
         staticClients:
           # This is the OIDC client ID in plaintext
-          - id: argowf-workflows-sso
+          - id: argo-workflows-sso
             name: Argo Workflow
             redirectURIs:
               - https://workflows.interpolar.ch/oauth2/callback
