@@ -10,4 +10,5 @@ patches:
 - path: overlays/argo-server-deploy.yaml
 - path: overlays/argo-binding-crb.yaml
 - path: overlays/argo-server-binding-crb.yaml
+- path: overlays/argo-service.yaml
 - path: overlays/argo-sso.yaml
