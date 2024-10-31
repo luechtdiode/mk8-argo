@@ -1,15 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: argo-workflows
-
 resources:
-  - base/argo-default-crb.yaml
-  - base/argo-route-service.yaml
-  - base/argo-sso-cm.yaml
-  - base/install.yaml
-
-patchesStrategicMerge:
-  - overlays/argo-server-deploy.yaml
-  - overlays/argo-binding-crb.yaml
-  - overlays/argo-server-binding-crb.yaml
-  - overlays/argo-sso.yaml
+- base/install.yaml
+- base/argo-default-crb.yaml
+- base/argo-route-service.yaml
+patches:
+- path: overlays/argo-server-deploy.yaml
+- path: overlays/argo-binding-crb.yaml
+- path: overlays/argo-server-binding-crb.yaml
+- path: overlays/argo-sso.yaml
