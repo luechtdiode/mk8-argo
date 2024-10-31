@@ -48,5 +48,5 @@ spec:
             # The requesters prinicipalId is used to name the output-folder, where the solved sudoku will be stored
             - src:
                 dependencyName: test-dep
-                dataKey: notification.userIdentity.principalId
+                dataKey: notification.0.userIdentity.principalId
               dest: spec.arguments.parameters.2.value
