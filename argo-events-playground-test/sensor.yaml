@@ -24,21 +24,29 @@ spec:
                 entrypoint: main
                 arguments:
                   parameters:
+                  - name: bucket
+                    # the value will get overridden by event payload from test-dep
+                    value: ""
                   - name: path
                     # the value will get overridden by event payload from test-dep
                     value: ""
-                  - name: context
+                  - name: requester
                     # the value will get overridden by event payload from test-dep
                     value: ""
                 workflowTemplateRef:
                   name: workflow-template-sudoku
-          # The container args from the workflow are overridden by the s3 notification key
           parameters:
+            # The container args from the workflow are overridden by the s3 notification key
             - src:
                 dependencyName: test-dep
-                dataKey: notification.0.s3.object.key
+                dataKey: notification.0.s3.bucket.name
               dest: spec.arguments.parameters.0.value
             - src:
                 dependencyName: test-dep
-                dataKey: notification
+                dataKey: notification.0.s3.object.key
               dest: spec.arguments.parameters.1.value
+            # The requesters prinicipalId is used to name the output-folder, where the solved sudoku will be stored
+            - src:
+                dependencyName: test-dep
+                dataKey: notification.userIdentity.principalId
+              dest: spec.arguments.parameters.2.value

@@ -6,10 +6,13 @@ spec:
   entrypoint: main
   arguments:
     parameters:
+    - name: bucket
+      # the value will get overridden by event payload from test-dep
+      value: ""
     - name: path
       # the value will get overridden by event payload from test-dep
       value: ""
-    - name: context
+    - name: requester
       # the value will get overridden by event payload from test-dep
       value: ""
   templates:
@@ -18,12 +21,12 @@ spec:
     - - name: step-solve-sudoku
         template: sudoku
     - - name: step-print-context
-        template: print-context
-  - name: print-context
+        template: print-requester
+  - name: print-requester
     container:
       image: ghcr.io/luechtdiode/sudoku:0.0.3
       command: ["/bin/sh", "-c"]
-      args: ["echo {{ workflow.parameters.context }}"]
+      args: ["echo {{ workflow.parameters.requester }}"]
   - name: sudoku
     inputs:
       artifacts:
@@ -31,7 +34,7 @@ spec:
           path: /sudoku/input
           s3:
             endpoint: s3.apps.baloise.dev:443
-            bucket: test
+            bucket: {{ workflow.parameters.bucket}}
             key: input
             accessKeySecret:
               name: artifacts-minio
@@ -45,8 +48,8 @@ spec:
           path: /tmp/
           s3:
             endpoint: s3.apps.baloise.dev:443
-            bucket: test
-            key: output2
+            bucket: {{ workflow.parameters.bucket}}
+            key: {{ replace( workflow.parameters.requester? ?? "anonymous", " ", "_") | lower() }}
             accessKeySecret:
               name: artifacts-minio
               key: accesskey
