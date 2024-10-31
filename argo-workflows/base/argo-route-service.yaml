@@ -1,3 +1,11 @@
+apiVersion: traefik.io/v1alpha1
+kind: ServerTransport
+metadata:
+  name: argo-transport
+  namespace: argo
+spec:
+  insecureSkipVerify: true
+---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
