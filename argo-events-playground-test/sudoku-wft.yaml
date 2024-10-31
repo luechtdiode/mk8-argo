@@ -34,7 +34,7 @@ spec:
           path: /sudoku/input
           s3:
             endpoint: s3.apps.baloise.dev:443
-            bucket: {{ workflow.parameters.bucket}}
+            bucket: {{ workflow.parameters.bucket }}
             key: input
             accessKeySecret:
               name: artifacts-minio
@@ -49,7 +49,7 @@ spec:
           s3:
             endpoint: s3.apps.baloise.dev:443
             bucket: {{ workflow.parameters.bucket }}
-            key: {{ replace( workflow.parameters.requester? ?? "anonymous", " ", "_") | lower() }}
+            key: {{ replace( workflow.parameters.requester, " ", "_") | lower() }}
             accessKeySecret:
               name: artifacts-minio
               key: accesskey
