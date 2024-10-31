@@ -18,17 +18,26 @@ spec:
   templates:
   - name: main
     steps:
+    - - name: step-map-requester-to-outputname
+        template: map-requester-to-outputname
     - - name: step-solve-sudoku
         template: sudoku
-    - - name: step-print-context
-        template: print-requester
-  - name: print-requester
-    container:
+        arguments:
+          parameters:
+            - name: path
+              value: "{{steps.step-map-requester-to-outputname.outputs.result}}"
+
+  - name: map-requester-to-outputname
+    script:
       image: ghcr.io/luechtdiode/sudoku:0.0.3
       command: ["/bin/sh", "-c"]
-      args: ["echo {{ workflow.parameters.requester }}"]
+      source: |
+        echo '{{ workflow.parameters.requester }}' | sed -e 's/[^A-Za-z0-9._-]/_/g'
+
   - name: sudoku
     inputs:
+      parameters:
+        - name: path
       artifacts:
         - name: sudoku-input
           path: /sudoku/input
@@ -49,7 +58,7 @@ spec:
           s3:
             endpoint: s3.apps.baloise.dev:443
             bucket: {{ workflow.parameters.bucket }}
-            key: {{ lower(replace( workflow.parameters.requester, ' ', '_')) }}
+            key: {{ input.parameters.path }}
             accessKeySecret:
               name: artifacts-minio
               key: accesskey
