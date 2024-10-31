@@ -48,7 +48,7 @@ spec:
           path: /tmp/
           s3:
             endpoint: s3.apps.baloise.dev:443
-            bucket: {{ workflow.parameters.bucket}}
+            bucket: {{ workflow.parameters.bucket }}
             key: {{ replace( workflow.parameters.requester? ?? "anonymous", " ", "_") | lower() }}
             accessKeySecret:
               name: artifacts-minio
