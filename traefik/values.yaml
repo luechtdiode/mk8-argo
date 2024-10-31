@@ -39,7 +39,7 @@ traefik:
         dnsChallenge:
           provider: cloudflare
           resolvers: 1.1.1.1
-          delayBeforeCheck: 10s
+          delayBeforeCheck: 30s
         storage: /certs/acme1.json
         
     env:
@@ -87,6 +87,14 @@ traefik:
           # this is the name of a TLSOption definition
           options: "default"
           certResolver: "cf-production"
+          domains:
+            - main: "interpolar.ch"
+              sans:
+                - "*.interpolar.ch"
+            - main: "sharevic.ch"
+              sans:
+                - "*.sharevic.ch"
+
     tlsOptions:
       default:
         minVersion: VersionTLS12
