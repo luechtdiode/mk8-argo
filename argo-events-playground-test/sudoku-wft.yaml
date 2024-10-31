@@ -48,8 +48,8 @@ spec:
           path: /tmp/
           s3:
             endpoint: s3.apps.baloise.dev:443
-            bucket: "{{ workflow.parameters.bucket }}"
-            key: '{{ replace( workflow.parameters.requester, " ", "_") | lower() }}'
+            bucket: {{ workflow.parameters.bucket }}
+            key: {{ replace( workflow.parameters.requester, " ", "_") | lower() }}
             accessKeySecret:
               name: artifacts-minio
               key: accesskey
