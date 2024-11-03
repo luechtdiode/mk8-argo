@@ -70,6 +70,12 @@ function ns_dbrestore()
     kutuapp)
       db_restore kutuapp kutuadmin ${2:-kutuapp} ${3:-kutuapp}
     ;;
+    adventscalendar-test)
+      db_restore adventscalendar-test adventscalendar ${2:-adventscalendar} ${3:-adventscalendar}
+    ;;
+    adventscalendar)
+      db_restore adventscalendar adventscalendar ${2:-adventscalendar} ${3:-adventscalendar}
+    ;;
   esac
 }
 
@@ -84,6 +90,8 @@ function ns_dbrestore()
         db_backup_prepare
         db_backup kutuapp kutuadmin kutuapp
         db_backup kutuapp-test kutuadmin kutuapp
+        db_backup adventscalendar adventscalendar adventscalendar
+        db_backup adventscalendar-test adventscalendar adventscalendar
         db_backup kmgetubs19 odoo
         pvc_backup traefik
         cloudsync up
@@ -93,12 +101,16 @@ function ns_dbrestore()
         db_backup_prepare
         db_backup kutuapp kutuadmin kutuapp
         db_backup kutuapp-test kutuadmin kutuapp
+        db_backup adventscalendar adventscalendar adventscalendar
+        db_backup adventscalendar-test adventscalendar adventscalendar
         db_backup kmgetubs19 odoo
         pvc_backup traefik
         pvc_backup harbor
         pvc_backup kmgetubs19
         pvc_backup kutuapp-test
         pvc_backup kutuapp
+        pvc_backup adventscalendar-test
+        pvc_backup adventscalendar
         pvc_backup sharevic
         pvc_backup pg-admin
         cluster_backup
@@ -119,6 +131,8 @@ function ns_dbrestore()
       dbbackup)
         db_backup kutuapp kutuadmin kutuapp
         db_backup kutuapp-test kutuadmin kutuapp
+        db_backup adventscalendar adventscalendar adventscalendar
+        db_backup adventscalendar-test adventscalendar adventscalendar
         db_backup kmgetubs19 odoo
         ;;
       dbrestore)
