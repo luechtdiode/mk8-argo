@@ -1,3 +1,4 @@
+{{- if not .Values.templates.skippodmonitor }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -6,7 +7,7 @@ metadata:
   labels:
     grafana_dashboard: "1"
 data:
-  traefik-grafana-dashboard.json: |-
+  traefik-mk8-grafana-dashboard.json: |-
     {{`
     {
       "annotations": {
@@ -1236,10 +1237,8 @@ data:
       "schemaVersion": 37,
       "style": "dark",
       "tags": [
-        "traefik",
-        "load-balancer",
-        "docker",
-        "prometheus"
+        "mk8",
+        "traefik"
       ],
       "templating": {
         "list": [
@@ -1416,3 +1415,4 @@ data:
       "weekStart": ""
     }
     `}}
+{{- end }}

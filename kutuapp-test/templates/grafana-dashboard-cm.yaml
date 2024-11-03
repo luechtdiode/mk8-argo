@@ -1048,7 +1048,11 @@ data:
       "refresh": "10s",
       "schemaVersion": 37,
       "style": "dark",
-      "tags": [],
+      "tags": [
+        "mk8",
+        "kutuapp",
+        "test"
+      ],
       "templating": {
         "list": [
           {

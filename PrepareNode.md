@@ -24,3 +24,11 @@ Define snap-channel for microk8s
 ```
 sudo snap refresh microk8s --channel=latest/stable
 ```
+
+Disable sleep-mode for ubuntu-server
+------------------------------------
+see https://en-wiki.ikoula.com/en/Disable_Ubuntu_sleep_mode
+
+```
+systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+```

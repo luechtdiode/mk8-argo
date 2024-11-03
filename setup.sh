@@ -22,7 +22,7 @@ then
   git pull
   cd ..
 else
-  git clone -b mk8-126 --single-branch https://github.com/luechtdiode/mk8-argo.git
+  git clone -b mk8-128 --single-branch https://github.com/luechtdiode/mk8-argo.git
 fi
 
 sudo microk8s stop
@@ -33,6 +33,8 @@ wait
 
 source ./mk8-argo/createzfspool.sh
 source ./mk8-argo/bootstrap.sh
+sudo snap install kubectl --classic
+sudo snap install jq
 
 # detach zfspv-pool
 zfsDetachPool
@@ -58,16 +60,21 @@ then
   sleep 30s
 fi
 # snap info microk8s
-sudo snap install microk8s --classic --channel=1.26/stable
+sudo snap install microk8s --classic --channel=1.28/stable
 sudo microk8s status --wait-ready
 sudo usermod -a -G microk8s $USER
+
+cp /var/snap/microk8s/current/args/containerd-template.toml ./original-containerd-template.toml
 
 if [[ -e csr.conf.template ]]
 then
   cp /var/snap/microk8s/current/certs/csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template.bak
   cp csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template
 else
+  cp /var/snap/microk8s/current/certs/csr.conf.template ./csr.conf.template
   nano /var/snap/microk8s/current/certs/csr.conf.template
+  cp /var/snap/microk8s/current/certs/csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template.bak
+  cp csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template
 fi
 
 sudo microk8s refresh-certs --cert ca.crt
@@ -77,9 +84,9 @@ sudo microk8s config > ~/.kube/config
 admintoken=$(cat ~/.kube/config | grep token:)
 
 echo "alias kubectl='microk8s kubectl'" > ~/.bash_aliases
-echo "alias helm='microk8s helm3'" > ~/.bash_aliases
-source ~/.bash_aliases
+echo "alias helm='microk8s helm3'" >> ~/.bash_aliases
 source ~/.bashrc
+source ~/.bash_aliases
 
 sudo microk8s enable community
 sudo microk8s enable rbac
@@ -94,9 +101,9 @@ if [ -z "$NIC_IPS" ]; then
 else
   echo "Automatic passing $NIC_IPS to metallb ..."
   { echo "$NIC_IPS"; } | sudo microk8s enable metallb
-  
+
   if [ -z "$(kubectl describe IPAddressPool -n metallb-system | grep Name: | awk '{print $2}')" ]
-  then    
+  then
     until kubectl wait pod -l app=metallb -n metallb-system --for condition=Ready --timeout=180s
     do
       if askp "should be waited for readyness of metal loadbalancer?"
@@ -119,7 +126,7 @@ sudo microk8s enable dashboard
 wait
 sudo microk8s status --wait-ready
 
-until microk8s kubectl wait pod -l k8s-app=kubernetes-dashboard -n kube-system --for condition=Ready --timeout=180s
+until kubectl wait pod -l k8s-app=kubernetes-dashboard -n kube-system --for condition=Ready --timeout=180s
 do
   if askp "should be waited for readyness of kubernetes-dashboard?"
   then
@@ -128,7 +135,7 @@ do
     break;
   fi
 done
-microk8s kubectl patch svc kubernetes-dashboard -n kube-system -p '{"spec": {"type": "NodePort"}}'
+kubectl patch svc kubernetes-dashboard -n kube-system -p '{"spec": {"type": "NodePort"}}'
 
 sudo iptables -P FORWARD ACCEPT
 sudo ufw allow in on cni0 && sudo ufw allow out on cni0
@@ -176,8 +183,9 @@ else
   echo uplink already installed
 fi
 
-kubectl apply -f ./mk8-argo/admin-user-sa.yaml
-kubectl apply -f ./mk8-argo/admin-cluster-rolebinding.yaml
+cd mk8-argo
+  admintoken=$(installAdmin)
+cd ..
 
 if ! askn "should zfs/zpool be cleared?"
 then
@@ -199,6 +207,7 @@ then
     setup
   cd ..
 fi
+# sudo microk8s enable cis-hardening
 
 echo "Admin $admintoken"
 echo "Dashboard Service NodePort"

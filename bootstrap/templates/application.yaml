@@ -13,10 +13,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    helm:
-      valueFiles:
-        - values.yaml
-    path: {{ .name }} 
+    path: {{ .name }}
     repoURL: {{ $.Values.repository }}
     targetRevision: {{ $.Values.branch }}
   syncPolicy:

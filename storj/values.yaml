@@ -1,8 +1,13 @@
 storj-s3-gateway:
   replicaCount: 1
   image:
-    repository: storjlabs/gateway
-    tag: latest
+    # repository: docker.io/storjlabs/gateway
+    # tag: latest (fixed at 14.08.2023)
+    repository: docker.io/storjlabs/gateway@sha256
+    tag: 053863bb84a5ec33ce2b8addf550c15109fdefa634cc252aaef3ec4801f8ad47
+    # repository: docker.io/storjlabs/gateway
+    # tag: latest
+    # pullPolicy: Always
   args: [ "run" ]
   network:
     http:
@@ -11,7 +16,7 @@ storj-s3-gateway:
     type: NodePort        
   resources:
     requests:
-      memory: 10Gi
+      memory: 4Gi
     limits:
       memory: 10Gi
   #podSecurityContext:    

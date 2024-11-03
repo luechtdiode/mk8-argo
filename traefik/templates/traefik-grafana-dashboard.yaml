@@ -1,3 +1,4 @@
+{{- if not .Values.templates.skippodmonitor }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -1500,7 +1501,10 @@ data:
       "refresh": false,
       "schemaVersion": 37,
       "style": "dark",
-      "tags": [],
+      "tags": [
+        "mk8",
+        "traefik"
+      ],
       "templating": {
         "list": [
           {
@@ -1582,7 +1586,8 @@ data:
       "timezone": "",
       "title": "Traefik Dashboard",
       "uid": "n5bu_kv4s",
-      "version": 3,
+      "version": 4,
       "weekStart": ""
     }
     `}}
+{{- end }}

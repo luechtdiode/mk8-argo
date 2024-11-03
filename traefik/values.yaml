@@ -33,20 +33,16 @@ traefik:
         dnsChallenge:
           provider: cloudflare
           resolvers: 1.1.1.1
-        storage: /certs/acme-stageing.json
+        storage: /certs/acme-stageing1.json       
       cf-production:
         caserver: https://acme-v02.api.letsencrypt.org/directory
         dnsChallenge:
           provider: cloudflare
           resolvers: 1.1.1.1
-        storage: /certs/acme.json        
-       
+          delayBeforeCheck: 30s
+        storage: /certs/acme1.json
+        
     env:
-      - name: CF_API_EMAIL
-        valueFrom:
-          secretKeyRef:
-            key: dns_cloudflare_email
-            name: acme-provider-email-secret
       - name: CF_DNS_API_TOKEN
         valueFrom:
           secretKeyRef:
@@ -91,6 +87,14 @@ traefik:
           # this is the name of a TLSOption definition
           options: "default"
           certResolver: "cf-production"
+          domains:
+            - main: "interpolar.ch"
+              sans:
+                - "*.interpolar.ch"
+            - main: "sharevic.net"
+              sans:
+                - "*.sharevic.net"
+
     tlsOptions:
       default:
         minVersion: VersionTLS12

@@ -1,0 +1,29 @@
+apiVersion: v1
+data:
+  vars.json: |
+    {
+      "public": {
+        "pages": {
+          "impressum": {
+            "company": "IG Adventskalender Kleinhüningen",
+            "street": "Gärtnerstrasse 122",
+            "postalcode": "4057 Basel",
+            "country": "Schweiz",
+            "providername": "Roland Seidel",
+            "provideraddress": "Gärtnerstrasse 122, CH 4057 Basel",
+            "providercontact": "+41 61 632 04 65",
+            "lawtext": "Diese Website unterliegt dem Schweizer Recht. Alle Streitigkeiten, die sich aus der Nutzung dieser Website ergeben, unterliegen der Gerichtsbarkeit der Gerichte in Basel, Schweiz."
+          }
+        },
+        "assets": {
+          "impressum": {
+            "link": "tel:+41 61 632 04 65"
+          }
+        }
+      }
+    }
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: lang-cm
+  namespace: adventscalendar

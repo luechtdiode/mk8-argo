@@ -52,7 +52,7 @@ function mk8_restart() {
 }
 
 function cleanupNamespaces() {
-  if askp "should argo, sealed-secrets and traefik namespace be cleaned?"
+  if askp "should argo, sealed-secrets harbor and traefik namespace be cleaned?"
   then
     # cleanup
     helm -n argocd uninstall argocd
@@ -63,6 +63,12 @@ function cleanupNamespaces() {
 
     helm -n traefik uninstall traefik
     kubectl delete namespace traefik
+
+    helm -n harbor uninstall harbor
+    kubectl delete namespace harbor
+
+    rm -f original-containerd-template.toml
+    rm -f original-dockerio-host.toml
   fi
 }
 
@@ -78,7 +84,10 @@ function installOpenEBSCRD() {
 function installAdmin() {
   kubectl apply -f admin-user-sa.yaml
   kubectl apply -f admin-cluster-rolebinding.yaml
-  kubectl -n kube-system get secret $(kubectl -n kube-system get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
+  kubectl apply -f admin-user-secret-accesstoken.yaml
+  sleep 10
+  #kubectl -n kube-system get secret $(kubectl -n kube-system get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
+  kubectl -n kube-system get secret admin-user-secret -o go-template="{{.data.token | base64decode}}"
 }
 
 function installSealedSecrets() {
@@ -103,6 +112,15 @@ function restoreSecrets() {
   cd ..
 }
 
+function restorePreArgoAppStates() {
+  if askp "restore pre argo apps (traefik, harbor) pvcs?"
+  then
+    cd backuprestore
+    ./main.sh restore traefik
+    # ./main.sh restore harbor
+    cd ..
+  fi
+}
 function restoreAppStates() {
   if askp "restore pvcs?"
   then
@@ -142,6 +160,87 @@ function installTraefik() {
   cd ..
 }
 
+function installHarbor() {
+  # harbor
+  cd harbor
+  helm repo add harbor https://helm.goharbor.io
+  helm repo update
+  helm dependencies update
+
+  kubectl create namespace harbor
+  helm install -n harbor harbor . -f values.yaml
+
+  waitForDeployment harbor harbor-registry
+  waitForDeployment harbor harbor-core
+  waitForDeployment harbor harbor-portal
+  waitForDeployment harbor harbor-jobservice
+  cd ..
+}
+
+function extractDockerSecretsImpl() {
+    cp /var/snap/microk8s/current/args/containerd-template.toml original-container-template.toml
+    kubectl apply -f docker-registry-sealedsecret.yaml
+    
+    secret="$(kubectl get secret docker-registry-secret -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode)"
+    while [ -z "$secret" ]
+    do
+      echo "wait for existing docker-registry-secret ($secret)"
+      sleep 10
+      secret="$(kubectl get secret docker-registry-secret -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode)"
+    done
+    username=$(echo $secret | jq .[][].username)
+    password=$(echo $secret | jq .[][].password)
+    plugins='plugins."io.containerd.grpc.v1.cri".registry.configs."registry-1.docker.io".auth'
+    echo """
+  [$plugins]
+    username = $username
+    password = $password
+""" >> /var/snap/microk8s/current/args/containerd-template.toml
+    mk8_restart
+}
+
+function extractDockerSecrets() {
+  if [[ -e original-containerd-template.toml ]]
+  then
+    cat /var/snap/microk8s/current/args/containerd-template.toml
+    if ! askn "hopefully, the creds are set already. Should they be added manually?"
+    then
+      extractDockerSecretsImpl
+    fi
+  else
+    extractDockerSecretsImpl
+  fi
+}
+
+function toggleHarborMirror() {
+  if [[ -e original-dockerio-host.toml ]]
+  then
+    cp original-dockerio-host.toml /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml
+    rm -f ./original-dockerio-host.toml
+
+    sudo microk8s stop
+    sudo microk8s start
+    waitForDeployment traefik traefik
+    waitForDeployment harbor harbor-registry
+    waitForDeployment harbor harbor-core
+    waitForDeployment harbor harbor-portal
+    waitForDeployment harbor harbor-jobservice
+  elif ! askn "Should harbor-mirror be used fom now on?"
+  then
+    cp /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml ./original-dockerio-host.toml
+    nano harbor-mirror-host.toml
+    cp harbor-mirror-host.toml /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml
+
+    sudo microk8s stop
+    sudo microk8s start
+    waitForDeployment traefik traefik
+    waitForDeployment harbor harbor-registry
+    waitForDeployment harbor harbor-core
+    waitForDeployment harbor harbor-portal
+    waitForDeployment harbor harbor-jobservice
+  fi
+}
+
 function installArgo() {
   # argocd
   cd argocd
@@ -162,6 +261,7 @@ function boostrapViaArgo() {
   helm template bootstrap/ | kubectl apply -f -
 
   echo "argo-cd works via git-ops now"
+  waitForDeployment traefik traefik
   waitForDeployment sharevic sharevic-waf
   waitForDeployment kmgetubs19 odoo11
   waitForDeployment kutuapp-test kutuapp
@@ -173,8 +273,12 @@ function setup() {
   cleanupNamespaces
   installSealedSecrets
   restoreSecrets
+  extractDockerSecrets
   #installOpenEBSCRD
   installTraefik
+  #installHarbor
+  restorePreArgoAppStates
+  #toggleHarborMirror
   installArgo
   boostrapViaArgo
   restoreAppStates
@@ -190,8 +294,11 @@ echo "
     cleanupNamespaces
     installSealedSecrets
     restoreSecrets
+    extractDockerSecrets
     installOpenEBSCRD
     installTraefik
+    installHarbor
+    toggleHarborMirror
     installArgo
     boostrapViaArgo
     restoreAppStates

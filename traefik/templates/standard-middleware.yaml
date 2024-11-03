@@ -7,9 +7,9 @@ spec:
     middlewares:
     - name: compress
     - name: limited-body
-    - name: max-connections
-    - name: ratelimit
-    - name: circuitbreaker    
+    #- name: max-connections
+    #- name: ratelimit
+    #- name: circuitbreaker    
     - name: security-response-header
 ---  
 apiVersion: traefik.containo.us/v1alpha1
@@ -21,7 +21,7 @@ spec:
     middlewares:
     #- name: http-redirect 
     - name: standard
-    #- name: more-security-response-header
+    - name: more-security-response-header
     - name: x-fwd-proto-https
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -64,18 +64,18 @@ metadata:
   name: max-connections
 spec:
   inFlightReq:
-    amount: 1600
+    amount: 5000
 ---
-# Here, an average of 100 requests per second is allowed.
-# In addition, a burst of 140 requests is allowed.
+# Here, an average of 400 requests per second is allowed.
+# In addition, a burst of 800 requests is allowed.
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: ratelimit
 spec:
   rateLimit:
-    average: 100
-    burst: 140
+    average: 400
+    burst: 800
 ---
 # Latency Check
 apiVersion: traefik.containo.us/v1alpha1
@@ -84,7 +84,9 @@ metadata:
   name: circuitbreaker
 spec:
   circuitBreaker:
-    expression: LatencyAtQuantileMS(50.0) > 1500 || ResponseCodeRatio(500, 600, 0, 600) > 0.50
+    # expression: LatencyAtQuantileMS(50.0) > 4000 || ResponseCodeRatio(500, 600, 0, 600) > 0.50 || NetworkErrorRatio() > 0.30
+    # expression: LatencyAtQuantileMS(50.0) > 4000 || ResponseCodeRatio(500, 600, 0, 600) > 0.50
+    expression: LatencyAtQuantileMS(50.0) > 4000 || ResponseCodeRatio(500, 600, 0, 600) > 0.80
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
@@ -132,4 +134,4 @@ spec:
     stsIncludeSubdomains: true
     stsPreload: true
     stsSeconds: 31536000
-    contentSecurityPolicy: "default-src 'self' *.interpolar.ch *.sharevic.net data: gap: ws: wss:; style-src 'self' 'unsafe-inline'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.interpolar.ch *.sharevic.net www.google-analytics.com; img-src 'self' www.google-analytics.com data: *.fbcdn.net pbs.twimg.com media.licdn.com *.cdninstagram.com *.googleusercontent.com *.akamaihd.net www.google-analytics.com;"
+    contentSecurityPolicy: "default-src 'self' *.interpolar.ch *.sharevic.net *.advents-calendar.org data: *.openstreetmap.org gap: ws: wss:; style-src 'self' 'unsafe-inline'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.interpolar.ch *.sharevic.net *.advents-calendar.org www.google-analytics.com; img-src 'self' www.google-analytics.com *.openstreetmap.org data: *.openstreetmap.org *.fbcdn.net pbs.twimg.com media.licdn.com *.cdninstagram.com *.googleusercontent.com *.akamaihd.net www.google-analytics.com;"

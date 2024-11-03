@@ -1,8 +1,8 @@
 routes:
-  - name: kutuapp
+  - name: kutuapp-waf
     domain: kutuapp-test.interpolar.ch
-    port: 5757
-    portSecure: 5757
+    port: 5858
+    portSecure: 5858
   - name: kutuapp
     domain: kutuapp-test.sharevic.net
     port: 5757
@@ -11,14 +11,40 @@ routes:
     domain: test-kutuapp.sharevic.net
     port: 5757
     portSecure: 5757
-    headername: x-accesstoken
-    headervalue: ^[\w-]*\.[\w-]*\.[\w-]*$
+
+kutuapp-waf:
+  replicaCount: 3
+  image:
+    repository: luechtdiode/nginx-naxsi
+    tag: v1.0.1
+  defaultAffinityRules:
+    enabled: false
+  network:
+    http:
+      containerPort: 80
+      servicePort: 5858
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 32Mi
+    limits:
+      cpu: 1.00
+      memory: 32Mi
+  volumeMounts:
+    - name: nginx-config
+      mountPath: /etc/nginx
+  volumes:
+    - name: nginx-config
+      configMap:
+        name: nginx-cm
 
 kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: fix-client-form-validation-a4ef788
+    tag: master-6673d75
   network:
     metrics:
       servicePort: 3000
@@ -34,23 +60,23 @@ kutuapp:
       cpu: 0.125
       memory: 1.5Gi
     limits:
-      cpu: 0.5
-      memory: 2.0Gi
+      #cpu: 3.0
+      memory: 4.0Gi
   livenessProbe:
-    initialDelaySeconds: 15
+    initialDelaySeconds: 5
     timeoutSeconds: 5
     periodSeconds: 10
     successThreshold: 1
-    failureThreshold: 10
+    failureThreshold: 4
     httpGet:
       path: /metrics
       port: 5757
   readynessProbe:
-    initialDelaySeconds: 15
+    initialDelaySeconds: 5
     timeoutSeconds: 5
     periodSeconds: 10
     successThreshold: 1
-    failureThreshold: 10
+    failureThreshold: 4
     httpGet:
       path: /
       port: 5757
@@ -62,6 +88,14 @@ kutuapp:
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
+    #- name: X_DONATION_LINK2
+    #  value: "https://donate.stripe.com/4gwcMV1jE3RZ2U8dQQ"
+    #- name: X_DONATION_LINK
+    #  value: "https://kutuapp.zahls.ch/de/pay?cid=2eaa5545&donation[preselect_amount]=:betrag"
+    #- name: X_DONATION_PRICE
+    #  value: "0.50"
+    #- name: X_DONATION_BEGIN
+    #  value: "2024-01-01"
     - name: X_SMTP_SENDERAPPNAME
       value: KuTu App Testsystem
     - name: X_KUTU_SECRET

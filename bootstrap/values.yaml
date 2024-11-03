@@ -1,10 +1,11 @@
 repository: https://github.com/luechtdiode/mk8-argo.git
-branch: mk8-126
+branch: mk8-128
 bootstrap:
  - name: sealed-secrets
  # - name: openebs
  - name: traefik
    monitoring: true
+ #- name: harbor
  - name: argocd
  - name: prometheus
    monitoring: true
@@ -20,3 +21,10 @@ bootstrap:
  - name: sharevic
  - name: mbq
  - name: quarkus-starter
+ - name: adventscalendar-test
+   monitoring: true
+ - name: adventscalendar
+   monitoring: true
+ - name: argo-workflows
+ - name: argo-events
+ - name: argo-events-playground-test

@@ -124,6 +124,11 @@ function pvc_restore()
   done;
 
   echo "--------------------------------"
+  for deployment in $deployments
+  do
+    echo "resetting pod-scaling to 1 replicas for $namespace / $deployment ..."
+    kubectl scale --replicas=1 --timeout=3m deployment/$deployment -n $namespace
+  done;
   kubectl patch application $namespace -n argocd --type merge --patch "$(cat scripts/enable-sync-patch.yaml)"
   kubectl patch application bootstrap -n argocd --type merge --patch "$(cat scripts/enable-sync-patch.yaml)"
   echo "================================"

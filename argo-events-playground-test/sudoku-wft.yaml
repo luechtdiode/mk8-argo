@@ -1,0 +1,73 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: workflow-template-sudoku
+spec:
+  entrypoint: main
+  arguments:
+    parameters:
+    - name: bucket
+      # the value will get overridden by event payload from test-dep
+      value: ""
+    - name: path
+      # the value will get overridden by event payload from test-dep
+      value: ""
+    - name: requester
+      # the value will get overridden by event payload from test-dep
+      value: ""
+  templates:
+  - name: main
+    steps:
+    - - name: step-map-requester-to-outputname
+        template: map-requester-to-outputname
+    - - name: step-solve-sudoku
+        template: sudoku
+        arguments:
+          parameters:
+            - name: path
+              value: "{{steps.step-map-requester-to-outputname.outputs.result}}"
+
+  - name: map-requester-to-outputname
+    script:
+      image: ghcr.io/luechtdiode/sudoku:0.0.3
+      command: ["/bin/sh", "-c"]
+      source: |
+        echo '{{ workflow.parameters.requester }}' | sed -e 's/[^A-Za-z0-9._-]/_/g'
+
+  - name: sudoku
+    inputs:
+      parameters:
+        - name: path
+      artifacts:
+        - name: sudoku-input
+          path: /sudoku/input
+          s3:
+            endpoint: s3.apps.baloise.dev:443
+            bucket: "{{ workflow.parameters.bucket }}"
+            key: input
+            accessKeySecret:
+              name: artifacts-minio
+              key: accesskey
+            secretKeySecret:
+              name: artifacts-minio
+              key: secretkey
+    outputs:
+      artifacts:
+        - name: sudoku-output
+          path: /tmp/
+          s3:
+            endpoint: s3.apps.baloise.dev:443
+            bucket: "{{ workflow.parameters.bucket }}"
+            key: "{{ inputs.parameters.path }}"
+            accessKeySecret:
+              name: artifacts-minio
+              key: accesskey
+            secretKeySecret:
+              name: artifacts-minio
+              key: secretkey
+          archive:
+            none: {}
+    container:
+      image: ghcr.io/luechtdiode/sudoku:0.0.3
+      command: ["/bin/sh", "-c"]
+      args: ["java -cp .:app.jar:libs/* ch.seidel.sudoku.Sudoku /sudoku/{{workflow.parameters.path}} /tmp/"]

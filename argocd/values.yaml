@@ -14,12 +14,19 @@ argo-cd:
     envFrom:
       - secretRef:
           name: argocd-dex-github-secret
+    env:
+      - name: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: argo-workflows-sso
+            key: client-secret
 
   ## Argo Configs
   configs:
     rbac:
       policy.csv: |
         g, niiku, role:readonly
+        g, mebagel, role:readonly
         g, luechtdiode, role:admin
       policy.default: ''
       scopes: '[preferred_username, groups, email]'
@@ -27,6 +34,13 @@ argo-cd:
       admin.enabled: 'false'
       statusbadge.enabled: 'true'
       dex.config: |
+        staticClients:
+          # This is the OIDC client ID in plaintext
+          - id: argo-workflows-sso
+            name: Argo Workflow
+            redirectURIs:
+              - https://workflows.interpolar.ch/oauth2/callback
+            secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET        
         connectors:
           # GitHub
           - type: github
