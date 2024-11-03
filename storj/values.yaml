@@ -3,8 +3,10 @@ storj-s3-gateway:
   image:
     # repository: docker.io/storjlabs/gateway
     # tag: latest (fixed at 14.08.2023)
-    repository: docker.io/storjlabs/gateway@sha256
-    tag: 053863bb84a5ec33ce2b8addf550c15109fdefa634cc252aaef3ec4801f8ad47
+    #repository: docker.io/storjlabs/gateway@sha256
+    #tag: 053863bb84a5ec33ce2b8addf550c15109fdefa634cc252aaef3ec4801f8ad47
+    repository: storjlabs/gateway
+    tag: 04b9c76-go1.22.5
     # repository: docker.io/storjlabs/gateway
     # tag: latest
     # pullPolicy: Always
