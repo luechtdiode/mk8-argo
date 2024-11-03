@@ -22,7 +22,7 @@ then
   git pull
   cd ..
 else
-  git clone -b mk8-128 --single-branch https://github.com/luechtdiode/mk8-argo.git
+  git clone -b mk8-131 --single-branch https://github.com/luechtdiode/mk8-argo.git
 fi
 
 sudo microk8s stop
@@ -60,7 +60,7 @@ then
   sleep 30s
 fi
 # snap info microk8s
-sudo snap install microk8s --classic --channel=1.28/stable
+sudo snap install microk8s --classic --channel=1.31/stable
 sudo microk8s status --wait-ready
 sudo usermod -a -G microk8s $USER
 
