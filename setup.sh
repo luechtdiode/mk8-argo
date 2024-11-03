@@ -44,6 +44,7 @@ installed=$(sudo snap remove microk8s)
 echo "$installed"
 sudo rm -rf $(pwd)/.kube
 mkdir $(pwd)/.kube
+sudo usermod -a -G microk8s $USER
 sudo chown -f -R $USER $(pwd)/.kube
 
 # install iscsi for openebs storage-drivers
@@ -68,13 +69,13 @@ cp /var/snap/microk8s/current/args/containerd-template.toml ./original-container
 
 if [[ -e csr.conf.template ]]
 then
-  cp /var/snap/microk8s/current/certs/csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template.bak
-  cp csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template
+  sudo cp /var/snap/microk8s/current/certs/csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template.bak
+  sudo cp csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template
 else
-  cp /var/snap/microk8s/current/certs/csr.conf.template ./csr.conf.template
-  nano /var/snap/microk8s/current/certs/csr.conf.template
-  cp /var/snap/microk8s/current/certs/csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template.bak
-  cp csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template
+  sudo cp /var/snap/microk8s/current/certs/csr.conf.template ./csr.conf.template
+  sudo nano csr.conf.template
+  sudo cp /var/snap/microk8s/current/certs/csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template.bak
+  sudo cp csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template
 fi
 
 sudo microk8s refresh-certs --cert ca.crt
