@@ -15,6 +15,10 @@ spec:
     - name: requester
       # the value will get overridden by event payload from test-dep
       value: ""
+  workflowMetadata:
+    annotations:
+      workflows.argoproj.io/title: 'Resolve Sudoku' # defaults to `metadata.name` if not specified
+      workflows.argoproj.io/description: 'Source: {{ workflow.parameters.bucket }}/{{ workflow.parameters.path }}, Requestor: {{ workflow.parameters.requester }}'
   templates:
   - name: main
     steps:
