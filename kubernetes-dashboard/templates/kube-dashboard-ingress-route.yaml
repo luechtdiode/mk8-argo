@@ -11,8 +11,8 @@ spec:
       match: Host(`kube.interpolar.ch`)
       priority: 10
       services:
-        - name: kubernetes-dashboard
-          port: 443
+        - name: kubernetes-dashboard-kong-proxy
+          port: kong-proxy
       middlewares:
         - name: secure
           namespace: traefik
@@ -20,8 +20,8 @@ spec:
       match: Host(`kube.interpolar.ch`) && Headers(`Content-Type`, `application/grpc`)
       priority: 11
       services:
-        - name: kubernetes-dashboard
-          port: 443
+        - name: kubernetes-dashboard-kong-proxy
+          port: kong-proxy
           scheme: h2c
       middlewares:
         - name: secure
