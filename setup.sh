@@ -165,7 +165,7 @@ fi
 if [[ ! -f ~/.config/storj/uplink/access.json ]]; then
   sudo apt install unzip
   # install storj uplink (interactiv) https://github.com/storj/storj/releases/download/<version or latest>/identity_linux_arm64.zip
-  curl -L https://github.com/storj/storj/releases/download/v1.68.2/uplink_linux_amd64.zip -o uplink_linux_amd64.zip
+  curl -L https://github.com/storj/storj/releases/download/v1.116.5/uplink_linux_amd64.zip -o uplink_linux_amd64.zip
   unzip -o uplink_linux_amd64.zip && rm uplink_linux_amd64.zip
   sudo install -m 755 uplink /usr/local/bin/uplink
 
