@@ -195,9 +195,18 @@ function extractDockerSecretsImpl() {
   [$plugins]
     username = $username
     password = $password
+
+  #[plugins."io.containerd.grpc.v1.cri".registry.configs."harbor.interpolar.ch:8443".auth]
+  #  username = "admin"
+  #  password = $(kubectl -n harbor get secret harbor-user-secret -o go-template="{{.data.HARBOR_ADMIN_PASSWORD | base64decode}}")
+  
+  #[plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+  #  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."harbor.interpolar.ch"]
+  #    endpoint = ["https://harbor.interpolar.ch:8443", ]    
 """ >> /var/snap/microk8s/current/args/containerd-template.toml
     mk8_restart
 }
+
 
 function extractDockerSecrets() {
   if [[ -e original-containerd-template.toml ]]
