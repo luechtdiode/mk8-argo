@@ -1006,7 +1006,11 @@ monitoring:
     ##
     defaultDashboardsEditable: true
 
-    adminPassword: prom-operator
+    # adminPassword: prom-operator
+    admin:
+      existingSecret: prometheus-grafana-secret
+      userKey: admin-user
+      passwordKey: admin-password
 
     rbac:
       ## If true, Grafana PSPs will be created
