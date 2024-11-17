@@ -50,21 +50,21 @@ harbor:
         traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         kubernetes.io/ingress.class: traefik
-      harbor:
-        # harbor ingress-specific annotations
-        annotations: {}
-        # harbor ingress-specific labels
-        labels: {}
+      labels: {}
     clusterIP:
       # The name of ClusterIP service
       name: harbor
-      # Annotations on the ClusterIP service
-      annotations: {}
+      # The ip address of the ClusterIP service (leave empty for acquiring dynamic ip)
+      staticClusterIP: ""
       ports:
         # The service port Harbor listens on when serving HTTP
         httpPort: 80
         # The service port Harbor listens on when serving HTTPS
         httpsPort: 443
+      # Annotations on the ClusterIP service
+      annotations: {}
+      # ClusterIP-specific labels
+      labels: {}
     nodePort:
       # The name of NodePort service
       name: harbor
@@ -79,6 +79,10 @@ harbor:
           port: 443
           # The node port Harbor listens on when serving HTTPS
           nodePort: 30003
+      # Annotations on the nodePort service
+      annotations: {}
+      # nodePort-specific labels
+      labels: {}
     loadBalancer:
       # The name of LoadBalancer service
       name: harbor
@@ -89,7 +93,10 @@ harbor:
         httpPort: 80
         # The service port Harbor listens on when serving HTTPS
         httpsPort: 443
+      # Annotations on the loadBalancer service
       annotations: {}
+      # loadBalancer-specific labels
+      labels: {}
       sourceRanges: []
 
   # The external URL for Harbor core service. It is used to
@@ -106,6 +113,169 @@ harbor:
   #
   # If Harbor is deployed behind the proxy, set it as the URL of proxy
   externalURL: https://harbor.interpolar.ch
+
+  # The persistence is enabled by default and a default StorageClass
+  # is needed in the k8s cluster to provision volumes dynamically.
+  # Specify another StorageClass in the "storageClass" or set "existingClaim"
+  # if you already have existing persistent volumes to use
+  #
+  # For storing images and charts, you can also use "azure", "gcs", "s3",
+  # "swift" or "oss". Set it in the "imageChartStorage" section
+  persistence:
+    enabled: true
+    # Setting it to "keep" to avoid removing PVCs during a helm delete
+    # operation. Leaving it empty will delete PVCs after the chart deleted
+    # (this does not apply for PVCs that are created for internal database
+    # and redis components, i.e. they are never deleted automatically)
+    resourcePolicy: "keep"
+    persistentVolumeClaim:
+      registry:
+        # Use the existing PVC which must be created manually before bound,
+        # and specify the "subPath" if the PVC is shared with other components
+        existingClaim: "registry-storage"
+        # Specify the "storageClass" used to provision the volume. Or the default
+        # StorageClass will be used (the default).
+        # Set it to "-" to disable dynamic provisioning
+        storageClass: ""
+        subPath: "registry"
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        annotations: {}
+      jobservice:
+        jobLog:
+          existingClaim: "registry-storage"
+          storageClass: ""
+          subPath: "job"
+          accessMode: ReadWriteOnce
+          size: 1Gi
+          annotations: {}
+      # If external database is used, the following settings for database will
+      # be ignored
+      database:
+        existingClaim: "registry-storage"
+        storageClass: ""
+        subPath: "pg"
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        annotations: {}
+      # If external Redis is used, the following settings for Redis will
+      # be ignored
+      redis:
+        existingClaim: "registry-storage"
+        storageClass: ""
+        subPath: "redis"
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        annotations: {}
+      trivy:
+        existingClaim: "registry-storage"
+        storageClass: ""
+        subPath: "trivy"
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        annotations: {}
+    # Define which storage backend is used for registry to store
+    # images and charts. Refer to
+    # https://github.com/distribution/distribution/blob/release/2.8/docs/configuration.md#storage
+    # for the detail.
+    imageChartStorage:
+      # Specify whether to disable `redirect` for images and chart storage, for
+      # backends which not supported it (such as using minio for `s3` storage type), please disable
+      # it. To disable redirects, simply set `disableredirect` to `true` instead.
+      # Refer to
+      # https://github.com/distribution/distribution/blob/release/2.8/docs/configuration.md#redirect
+      # for the detail.
+      disableredirect: false
+      # Specify the "caBundleSecretName" if the storage service uses a self-signed certificate.
+      # The secret must contain keys named "ca.crt" which will be injected into the trust store
+      # of registry's containers.
+      # caBundleSecretName:
+
+      # Specify the type of storage: "filesystem", "azure", "gcs", "s3", "swift",
+      # "oss" and fill the information needed in the corresponding section. The type
+      # must be "filesystem" if you want to use persistent volumes for registry
+      type: filesystem
+      filesystem:
+        rootdirectory: /storage
+        #maxthreads: 100
+      azure:
+        accountname: accountname
+        accountkey: base64encodedaccountkey
+        container: containername
+        #realm: core.windows.net
+        # To use existing secret, the key must be AZURE_STORAGE_ACCESS_KEY
+        existingSecret: ""
+      gcs:
+        bucket: bucketname
+        # The base64 encoded json file which contains the key
+        encodedkey: base64-encoded-json-key-file
+        #rootdirectory: /gcs/object/name/prefix
+        #chunksize: "5242880"
+        # To use existing secret, the key must be GCS_KEY_DATA
+        existingSecret: ""
+        useWorkloadIdentity: false
+      s3:
+        # Set an existing secret for S3 accesskey and secretkey
+        # keys in the secret should be REGISTRY_STORAGE_S3_ACCESSKEY and REGISTRY_STORAGE_S3_SECRETKEY for registry
+        #existingSecret: ""
+        region: us-west-1
+        bucket: bucketname
+        #accesskey: awsaccesskey
+        #secretkey: awssecretkey
+        #regionendpoint: http://myobjects.local
+        #encrypt: false
+        #keyid: mykeyid
+        #secure: true
+        #skipverify: false
+        #v4auth: true
+        #chunksize: "5242880"
+        #rootdirectory: /s3/object/name/prefix
+        #storageclass: STANDARD
+        #multipartcopychunksize: "33554432"
+        #multipartcopymaxconcurrency: 100
+        #multipartcopythresholdsize: "33554432"
+      swift:
+        authurl: https://storage.myprovider.com/v3/auth
+        username: username
+        password: password
+        container: containername
+        # keys in existing secret must be REGISTRY_STORAGE_SWIFT_PASSWORD, REGISTRY_STORAGE_SWIFT_SECRETKEY, REGISTRY_STORAGE_SWIFT_ACCESSKEY
+        existingSecret: ""
+        #region: fr
+        #tenant: tenantname
+        #tenantid: tenantid
+        #domain: domainname
+        #domainid: domainid
+        #trustid: trustid
+        #insecureskipverify: false
+        #chunksize: 5M
+        #prefix:
+        #secretkey: secretkey
+        #accesskey: accesskey
+        #authversion: 3
+        #endpointtype: public
+        #tempurlcontainerkey: false
+        #tempurlmethods:
+      oss:
+        accesskeyid: accesskeyid
+        accesskeysecret: accesskeysecret
+        region: regionname
+        bucket: bucketname
+        # key in existingSecret must be REGISTRY_STORAGE_OSS_ACCESSKEYSECRET
+        existingSecret: ""
+        #endpoint: endpoint
+        #internal: false
+        #encrypt: false
+        #secure: true
+        #chunksize: 10M
+        #rootdirectory: rootdirectory
+
+  # The initial password of Harbor admin. Change it from portal after launching Harbor
+  # or give an existing secret for it
+  # key in secret is given via (default to HARBOR_ADMIN_PASSWORD)
+  existingSecretAdminPassword: harbor-user-secret
+  existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
+  # harborAdminPassword: "Harbor12345"
 
   # The internal TLS used for harbor components secure communicating. In order to enable https
   # in each component tls cert files need to provided in advance.
@@ -170,158 +340,6 @@ harbor:
     ipv4:
       enabled: true
 
-  # The persistence is enabled by default and a default StorageClass
-  # is needed in the k8s cluster to provision volumes dynamically.
-  # Specify another StorageClass in the "storageClass" or set "existingClaim"
-  # if you already have existing persistent volumes to use
-  #
-  # For storing images and charts, you can also use "azure", "gcs", "s3",
-  # "swift" or "oss". Set it in the "imageChartStorage" section
-  persistence:
-    enabled: true
-    # Setting it to "keep" to avoid removing PVCs during a helm delete
-    # operation. Leaving it empty will delete PVCs after the chart deleted
-    # (this does not apply for PVCs that are created for internal database
-    # and redis components, i.e. they are never deleted automatically)
-    resourcePolicy: "keep"
-    persistentVolumeClaim:
-      registry:
-        # Use the existing PVC which must be created manually before bound,
-        # and specify the "subPath" if the PVC is shared with other components
-        existingClaim: "registry-storage"
-        # Specify the "storageClass" used to provision the volume. Or the default
-        # StorageClass will be used (the default).
-        # Set it to "-" to disable dynamic provisioning
-        storageClass: ""
-        subPath: "registry"
-        accessMode: ReadWriteOnce
-        size: 10Gi
-        annotations: {}
-      jobservice:
-        jobLog:
-          existingClaim: "registry-storage"
-          storageClass: ""
-          subPath: "job"
-          accessMode: ReadWriteOnce
-          size: 1Gi
-          annotations: {}
-      # If external database is used, the following settings for database will
-      # be ignored
-      database:
-        existingClaim: "registry-storage"
-        storageClass: ""
-        subPath: "pg"
-        accessMode: ReadWriteOnce
-        size: 1Gi
-        annotations: {}
-      # If external Redis is used, the following settings for Redis will
-      # be ignored
-      redis:
-        existingClaim: "registry-storage"
-        storageClass: ""
-        subPath: "redis"
-        accessMode: ReadWriteOnce
-        size: 1Gi
-        annotations: {}
-      trivy:
-        existingClaim: "registry-storage"
-        storageClass: ""
-        subPath: "trivy"
-        accessMode: ReadWriteOnce
-        size: 5Gi
-        annotations: {}
-    # Define which storage backend is used for registry to store
-    # images and charts. Refer to
-    # https://github.com/distribution/distribution/blob/main/docs/configuration.md#storage
-    # for the detail.
-    imageChartStorage:
-      # Specify whether to disable `redirect` for images and chart storage, for
-      # backends which not supported it (such as using minio for `s3` storage type), please disable
-      # it. To disable redirects, simply set `disableredirect` to `true` instead.
-      # Refer to
-      # https://github.com/distribution/distribution/blob/main/docs/configuration.md#redirect
-      # for the detail.
-      disableredirect: false
-      # Specify the "caBundleSecretName" if the storage service uses a self-signed certificate.
-      # The secret must contain keys named "ca.crt" which will be injected into the trust store
-      # of registry's containers.
-      # caBundleSecretName:
-
-      # Specify the type of storage: "filesystem", "azure", "gcs", "s3", "swift",
-      # "oss" and fill the information needed in the corresponding section. The type
-      # must be "filesystem" if you want to use persistent volumes for registry
-      type: filesystem
-      filesystem:
-        rootdirectory: /storage
-        #maxthreads: 100
-      azure:
-        accountname: accountname
-        accountkey: base64encodedaccountkey
-        container: containername
-        #realm: core.windows.net
-        # To use existing secret, the key must be AZURE_STORAGE_ACCESS_KEY
-        existingSecret: ""
-      gcs:
-        bucket: bucketname
-        # The base64 encoded json file which contains the key
-        encodedkey: base64-encoded-json-key-file
-        #rootdirectory: /gcs/object/name/prefix
-        #chunksize: "5242880"
-        # To use existing secret, the key must be GCS_KEY_DATA
-        existingSecret: ""
-        useWorkloadIdentity: false
-      s3:
-        # Set an existing secret for S3 accesskey and secretkey
-        # keys in the secret should be REGISTRY_STORAGE_S3_ACCESSKEY and REGISTRY_STORAGE_S3_SECRETKEY for registry
-        #existingSecret: ""
-        region: us-west-1
-        bucket: bucketname
-        #accesskey: awsaccesskey
-        #secretkey: awssecretkey
-        #regionendpoint: http://myobjects.local
-        #encrypt: false
-        #keyid: mykeyid
-        #secure: true
-        #skipverify: false
-        #v4auth: true
-        #chunksize: "5242880"
-        #rootdirectory: /s3/object/name/prefix
-        #storageclass: STANDARD
-        #multipartcopychunksize: "33554432"
-        #multipartcopymaxconcurrency: 100
-        #multipartcopythresholdsize: "33554432"
-      swift:
-        authurl: https://storage.myprovider.com/v3/auth
-        username: username
-        password: password
-        container: containername
-        #region: fr
-        #tenant: tenantname
-        #tenantid: tenantid
-        #domain: domainname
-        #domainid: domainid
-        #trustid: trustid
-        #insecureskipverify: false
-        #chunksize: 5M
-        #prefix:
-        #secretkey: secretkey
-        #accesskey: accesskey
-        #authversion: 3
-        #endpointtype: public
-        #tempurlcontainerkey: false
-        #tempurlmethods:
-      oss:
-        accesskeyid: accesskeyid
-        accesskeysecret: accesskeysecret
-        region: regionname
-        bucket: bucketname
-        #endpoint: endpoint
-        #internal: false
-        #encrypt: false
-        #secure: true
-        #chunksize: 10M
-        #rootdirectory: rootdirectory
-
   imagePullPolicy: IfNotPresent
 
   # Use this set to assign a list of default pullSecrets
@@ -336,13 +354,6 @@ harbor:
 
   # debug, info, warning, error or fatal
   logLevel: info
-
-  # The initial password of Harbor admin. Change it from portal after launching Harbor
-  # or give an existing secret for it
-  # key in secret is given via (default to HARBOR_ADMIN_PASSWORD)
-  existingSecretAdminPassword: harbor-user-secret
-  existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
-  # harborAdminPassword: "Harbor12345"
 
   # The name of the secret which contains key named "ca.crt". Setting this enables the
   # download link on portal to download the CA certificate when the certificate isn't
@@ -378,6 +389,98 @@ harbor:
   # Set uaaSecretName below to provide a pre-created secret that
   # contains a base64 encoded CA Certificate named `ca.crt`.
   # uaaSecretName:
+
+  metrics:
+    enabled: false
+    core:
+      path: /metrics
+      port: 8001
+    registry:
+      path: /metrics
+      port: 8001
+    jobservice:
+      path: /metrics
+      port: 8001
+    exporter:
+      path: /metrics
+      port: 8001
+    ## Create prometheus serviceMonitor to scrape harbor metrics.
+    ## This requires the monitoring.coreos.com/v1 CRD. Please see
+    ## https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/getting-started.md
+    ##
+    serviceMonitor:
+      enabled: false
+      additionalLabels: {}
+      # Scrape interval. If not set, the Prometheus default scrape interval is used.
+      interval: ""
+      # Metric relabel configs to apply to samples before ingestion.
+      metricRelabelings:
+        []
+        # - action: keep
+      #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
+      #   sourceLabels: [__name__]
+      # Relabel configs to apply to samples before ingestion.
+      relabelings:
+        []
+        # - sourceLabels: [__meta_kubernetes_pod_node_name]
+        #   separator: ;
+        #   regex: ^(.*)$
+        #   targetLabel: nodename
+      #   replacement: $1
+      #   action: replace
+
+  trace:
+    enabled: false
+    # trace provider: jaeger or otel
+    # jaeger should be 1.26+
+    provider: jaeger
+    # set sample_rate to 1 if you wanna sampling 100% of trace data; set 0.5 if you wanna sampling 50% of trace data, and so forth
+    sample_rate: 1
+    # namespace used to differentiate different harbor services
+    # namespace:
+    # attributes is a key value dict contains user defined attributes used to initialize trace provider
+    # attributes:
+    #   application: harbor
+    jaeger:
+      # jaeger supports two modes:
+      #   collector mode(uncomment endpoint and uncomment username, password if needed)
+      #   agent mode(uncomment agent_host and agent_port)
+      endpoint: http://hostname:14268/api/traces
+      # username:
+      # password:
+      # agent_host: hostname
+      # export trace data by jaeger.thrift in compact mode
+      # agent_port: 6831
+    otel:
+      endpoint: hostname:4318
+      url_path: /v1/traces
+      compression: false
+      insecure: true
+      # timeout is in seconds
+      timeout: 10
+
+  # cache layer configurations
+  # if this feature enabled, harbor will cache the resource
+  # `project/project_metadata/repository/artifact/manifest` in the redis
+  # which help to improve the performance of high concurrent pulling manifest.
+  cache:
+    # default is not enabled.
+    enabled: false
+    # default keep cache for one day.
+    expireHours: 24
+
+  ## set Container Security Context to comply with PSP restricted policy if necessary
+  ## each of the conatiner will apply the same security context
+  ## containerSecurityContext:{} is initially an empty yaml that you could edit it on demand, we just filled with a common template for convenience
+  containerSecurityContext:
+    privileged: false
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    runAsNonRoot: true
+    capabilities:
+      drop:
+        - ALL
 
   # If service exposed via "ingress", the Nginx will not be used
   nginx:
@@ -439,8 +542,17 @@ harbor:
     podAnnotations: {}
     ## Additional deployment labels
     podLabels: {}
+    ## Additional service annotations
+    serviceAnnotations: {}
     ## The priority class to run the pod as
     priorityClassName:
+    # containers to be run before the controller's container starts.
+    initContainers: []
+    # Example:
+    #
+    # - name: wait
+    #   image: busybox
+    #   command: [ 'sh', '-c', "sleep 20" ]
 
   core:
     image:
@@ -476,6 +588,15 @@ harbor:
     podLabels: {}
     ## Additional service annotations
     serviceAnnotations: {}
+    ## The priority class to run the pod as
+    priorityClassName:
+    # containers to be run before the controller's container starts.
+    initContainers: []
+    # Example:
+    #
+    # - name: wait
+    #   image: busybox
+    #   command: [ 'sh', '-c', "sleep 20" ]
     ## User settings configuration json string
     configureUserSettings:
     # The provider for updating project quota(usage), there are 2 options, redis or db.
@@ -487,10 +608,13 @@ harbor:
     # the scenario of high concurrent pushing to same project, no improvment for other scenes.
     quotaUpdateProvider: db # Or redis
     # Secret is used when core server communicates with other components.
-    # If a secret key is not specified, Helm will generate one.
+    # If a secret key is not specified, Helm will generate one. Alternatively set existingSecret to use an existing secret
     # Must be a string of 16 chars.
     secret: ""
     # Fill in the name of a kubernetes secret if you want to use your own
+    # If using existingSecret, the key must be secret
+    existingSecret: ""
+    # Fill the name of a kubernetes secret if you want to use your own
     # TLS certificate and private key for token encryption/decryption.
     # The secret must contain keys named:
     # "tls.key" - the private key
@@ -502,29 +626,12 @@ harbor:
     image:
       repository: goharbor/harbor-jobservice
       # tag: dev
-    replicas: 1
-    revisionHistoryLimit: 10
     # set the service account to be used, default if left empty
     serviceAccountName: ""
     # mount the service account token
     automountServiceAccountToken: false
-    maxJobWorkers: 10
-    # The logger for jobs: "file", "database" or "stdout"
-    jobLoggers:
-      - file
-      # - database
-      # - stdout
-    # The jobLogger sweeper duration (ignored if `jobLogger` is `stdout`)
-    loggerSweeperDuration: 14 #days
-    notification:
-      webhook_job_max_retry: 3
-      webhook_job_http_client_timeout: 3 # in seconds
-    reaper:
-      # the max time to wait for a task to finish, if unfinished after max_update_hours, the task will be mark as error, but the task will continue to run, default value is 24
-      max_update_hours: 24
-      # the max time for execution in running state without new task created
-      max_dangling_hours: 168
-
+    replicas: 1
+    revisionHistoryLimit: 10
     # resources:
     #   requests:
     #     memory: 256Mi
@@ -543,18 +650,41 @@ harbor:
     podAnnotations: {}
     ## Additional deployment labels
     podLabels: {}
+    ## The priority class to run the pod as
+    priorityClassName:
+    # containers to be run before the controller's container starts.
+    initContainers: []
+    # Example:
+    #
+    # - name: wait
+    #   image: busybox
+    #   command: [ 'sh', '-c', "sleep 20" ]
+    maxJobWorkers: 10
+    # The logger for jobs: "file", "database" or "stdout"
+    jobLoggers:
+      - file
+      # - database
+      # - stdout
+    # The jobLogger sweeper duration (ignored if `jobLogger` is `stdout`)
+    loggerSweeperDuration: 14 #days
+    notification:
+      webhook_job_max_retry: 3
+      webhook_job_http_client_timeout: 3 # in seconds
+    reaper:
+      # the max time to wait for a task to finish, if unfinished after max_update_hours, the task will be mark as error, but the task will continue to run, default value is 24
+      max_update_hours: 24
+      # the max time for execution in running state without new task created
+      max_dangling_hours: 168
     # Secret is used when job service communicates with other components.
     # If a secret key is not specified, Helm will generate one.
     # Must be a string of 16 chars.
     secret: ""
-    ## The priority class to run the pod as
-    priorityClassName:
+    # Use an existing secret resource
+    existingSecret: ""
+    # Key within the existing secret for the job service secret
+    existingSecretKey: JOBSERVICE_SECRET
 
   registry:
-    # set the service account to be used, default if left empty
-    serviceAccountName: ""
-    # mount the service account token
-    automountServiceAccountToken: false
     registry:
       image:
         repository: goharbor/registry-photon
@@ -574,6 +704,10 @@ harbor:
       #    memory: 256Mi
       #    cpu: 100m
       extraEnvVars: []
+    # set the service account to be used, default if left empty
+    serviceAccountName: ""
+    # mount the service account token
+    automountServiceAccountToken: false
     replicas: 1
     revisionHistoryLimit: 10
     nodeSelector: {}
@@ -591,12 +725,23 @@ harbor:
     podLabels: {}
     ## The priority class to run the pod as
     priorityClassName:
+    # containers to be run before the controller's container starts.
+    initContainers: []
+    # Example:
+    #
+    # - name: wait
+    #   image: busybox
+    #   command: [ 'sh', '-c', "sleep 20" ]
     # Secret is used to secure the upload state from client
     # and registry storage backend.
-    # See: https://github.com/distribution/distribution/blob/main/docs/configuration.md#http
+    # See: https://github.com/distribution/distribution/blob/release/2.8/docs/configuration.md#http
     # If a secret key is not specified, Helm will generate one.
     # Must be a string of 16 chars.
     secret: ""
+    # Use an existing secret resource
+    existingSecret: ""
+    # Key within the existing secret for the registry service secret
+    existingSecretKey: REGISTRY_HTTP_SECRET
     # If true, the registry returns relative URLs in Location headers. The client is responsible for resolving the correct URL.
     relativeurls: false
     credentials:
@@ -606,6 +751,7 @@ harbor:
       existingSecret: ""
       # Login and password in htpasswd string format. Excludes `registry.credentials.username`  and `registry.credentials.password`. May come in handy when integrating with tools like argocd or flux. This allows the same line to be generated each time the template is rendered, instead of the `htpasswd` function from helm, which generates different lines each time because of the salt.
       # htpasswdString: $apr1$XLefHzeG$Xl4.s00sMSCCcMyJljSZb0 # example string
+      htpasswdString: ""
     middleware:
       enabled: false
       type: cloudFront
@@ -640,6 +786,36 @@ harbor:
     automountServiceAccountToken: false
     # replicas the number of Pod replicas
     replicas: 1
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1Gi
+    extraEnvVars: []
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    # Spread Pods across failure-domains like regions, availability zones or nodes
+    topologySpreadConstraints: []
+    # - maxSkew: 1
+    #   topologyKey: topology.kubernetes.io/zone
+    #   nodeTaintsPolicy: Honor
+    #   whenUnsatisfiable: DoNotSchedule
+    ## Additional deployment annotations
+    podAnnotations: {}
+    ## Additional deployment labels
+    podLabels: {}
+    ## The priority class to run the pod as
+    priorityClassName:
+    # containers to be run before the controller's container starts.
+    initContainers: []
+    # Example:
+    #
+    # - name: wait
+    #   image: busybox
+    #   command: [ 'sh', '-c', "sleep 20" ]
     # debugMode the flag to enable Trivy debug mode with more verbose scanning log
     debugMode: false
     # vulnType a comma-separated list of vulnerability types. Possible values are `os` and `library`.
@@ -672,6 +848,10 @@ harbor:
     # If the value is set to `true` you have to manually download the `trivy.db` file and mount it in the
     # `/home/scanner/.cache/trivy/db/trivy.db` path.
     skipUpdate: false
+    # skipJavaDBUpdate If the flag is enabled you have to manually download the `trivy-java.db` file and mount it in the
+    # `/home/scanner/.cache/trivy/java-db/trivy-java.db` path
+    #
+    skipJavaDBUpdate: false
     # The offlineScan option prevents Trivy from sending API requests to identify dependencies.
     #
     # Scanning JAR files and pom.xml may require Internet access for better detection, but this option tries to avoid it.
@@ -680,52 +860,23 @@ harbor:
     # It would work if all the dependencies are in local.
     # This option doesn’t affect DB download. You need to specify skipUpdate as well as offlineScan in an air-gapped environment.
     offlineScan: false
-    # Comma-separated list of what security issues to detect. Possible values are `vuln`, `config` and `secret`. Defaults to `vuln`.
+    # Comma-separated list of what security issues to detect. Defaults to `vuln`.
     securityCheck: "vuln"
     # The duration to wait for scan completion
     timeout: 5m0s
-    resources:
-      requests:
-        cpu: 200m
-        memory: 512Mi
-      limits:
-        cpu: 1
-        memory: 1Gi
-    extraEnvVars: []
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    # Spread Pods across failure-domains like regions, availability zones or nodes
-    topologySpreadConstraints: []
-    # - maxSkew: 1
-    #   topologyKey: topology.kubernetes.io/zone
-    #   nodeTaintsPolicy: Honor
-    #   whenUnsatisfiable: DoNotSchedule
-    ## Additional deployment annotations
-    podAnnotations: {}
-    ## Additional deployment labels
-    podLabels: {}
-    ## The priority class to run the pod as
-    priorityClassName:
 
   database:
     # if external database is used, set "type" to "external"
     # and fill the connection information in "external" section
     type: internal
     internal:
+      image:
+        repository: goharbor/harbor-db
+        # tag: dev
       # set the service account to be used, default if left empty
       serviceAccountName: ""
       # mount the service account token
       automountServiceAccountToken: false
-      image:
-        repository: goharbor/harbor-db
-        # tag: dev
-      # The initial superuser password for internal database
-      password: "changeit"
-      # The size limit for Shared memory, pgSQL use it for shared_buffer
-      # More details see:
-      # https://github.com/goharbor/harbor/issues/15034
-      shmSizeLimit: 512Mi
       # resources:
       #  requests:
       #    memory: 256Mi
@@ -742,6 +893,19 @@ harbor:
       affinity: {}
       ## The priority class to run the pod as
       priorityClassName:
+      # containers to be run before the controller's container starts.
+      extrInitContainers: []
+      # Example:
+      #
+      # - name: wait
+      #   image: busybox
+      #   command: [ 'sh', '-c', "sleep 20" ]
+      # The initial superuser password for internal database
+      password: "changeit"
+      # The size limit for Shared memory, pgSQL use it for shared_buffer
+      # More details see:
+      # https://github.com/goharbor/harbor/issues/15034
+      shmSizeLimit: 512Mi
       initContainer:
         migrator: {}
         # resources:
@@ -774,7 +938,7 @@ harbor:
     maxIdleConns: 100
     # The maximum number of open connections to the database per pod (core+exporter).
     # If it <= 0, then there is no limit on the number of open connections.
-    # Note: the default number of connections is 1024 for postgre of harbor.
+    # Note: the default number of connections is 1024 for harbor's postgres.
     maxOpenConns: 900
     ## Additional deployment annotations
     podAnnotations: {}
@@ -786,13 +950,13 @@ harbor:
     # and fill the connection information in "external" section
     type: internal
     internal:
+      image:
+        repository: goharbor/redis-photon
+        # tag: dev
       # set the service account to be used, default if left empty
       serviceAccountName: ""
       # mount the service account token
       automountServiceAccountToken: false
-      image:
-        repository: goharbor/redis-photon
-        # tag: dev
       # resources:
       #  requests:
       #    memory: 256Mi
@@ -803,6 +967,13 @@ harbor:
       affinity: {}
       ## The priority class to run the pod as
       priorityClassName:
+      # containers to be run before the controller's container starts.
+      initContainers: []
+      # Example:
+      #
+      # - name: wait
+      #   image: busybox
+      #   command: [ 'sh', '-c', "sleep 20" ]
       # # jobserviceDatabaseIndex defaults to "1"
       # # registryDatabaseIndex defaults to "2"
       # # trivyAdapterIndex defaults to "5"
@@ -841,6 +1012,12 @@ harbor:
     podLabels: {}
 
   exporter:
+    image:
+      repository: goharbor/harbor-exporter
+      # tag: dev
+    serviceAccountName: ""
+    # mount the service account token
+    automountServiceAccountToken: false
     replicas: 1
     revisionHistoryLimit: 10
     # resources:
@@ -851,101 +1028,16 @@ harbor:
     podAnnotations: {}
     ## Additional deployment labels
     podLabels: {}
-    serviceAccountName: ""
-    # mount the service account token
-    automountServiceAccountToken: false
-    image:
-      repository: goharbor/harbor-exporter
-      # tag: dev
     nodeSelector: {}
     tolerations: []
     affinity: {}
     # Spread Pods across failure-domains like regions, availability zones or nodes
     topologySpreadConstraints: []
+    ## The priority class to run the pod as
+    priorityClassName:
     # - maxSkew: 1
     #   topologyKey: topology.kubernetes.io/zone
     #   nodeTaintsPolicy: Honor
     #   whenUnsatisfiable: DoNotSchedule
     cacheDuration: 23
     cacheCleanInterval: 14400
-    ## The priority class to run the pod as
-    priorityClassName:
-
-  metrics:
-    enabled: false
-    core:
-      path: /metrics
-      port: 8001
-    registry:
-      path: /metrics
-      port: 8001
-    jobservice:
-      path: /metrics
-      port: 8001
-    exporter:
-      path: /metrics
-      port: 8001
-    ## Create prometheus serviceMonitor to scrape harbor metrics.
-    ## This requires the monitoring.coreos.com/v1 CRD. Please see
-    ## https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/getting-started.md
-    ##
-    serviceMonitor:
-      enabled: false
-      additionalLabels: {}
-      # Scrape interval. If not set, the Prometheus default scrape interval is used.
-      interval: ""
-      # Metric relabel configs to apply to samples before ingestion.
-      metricRelabelings:
-        []
-        # - action: keep
-        #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
-        #   sourceLabels: [__name__]
-      # Relabel configs to apply to samples before ingestion.
-      relabelings:
-        []
-        # - sourceLabels: [__meta_kubernetes_pod_node_name]
-        #   separator: ;
-        #   regex: ^(.*)$
-        #   targetLabel: nodename
-        #   replacement: $1
-        #   action: replace
-
-  trace:
-    enabled: false
-    # trace provider: jaeger or otel
-    # jaeger should be 1.26+
-    provider: jaeger
-    # set sample_rate to 1 if you wanna sampling 100% of trace data; set 0.5 if you wanna sampling 50% of trace data, and so forth
-    sample_rate: 1
-    # namespace used to differentiate different harbor services
-    # namespace:
-    # attributes is a key value dict contains user defined attributes used to initialize trace provider
-    # attributes:
-    #   application: harbor
-    jaeger:
-      # jaeger supports two modes:
-      #   collector mode(uncomment endpoint and uncomment username, password if needed)
-      #   agent mode(uncomment agent_host and agent_port)
-      endpoint: http://hostname:14268/api/traces
-      # username:
-      # password:
-      # agent_host: hostname
-      # export trace data by jaeger.thrift in compact mode
-      # agent_port: 6831
-    otel:
-      endpoint: hostname:4318
-      url_path: /v1/traces
-      compression: false
-      insecure: true
-      # timeout is in seconds
-      timeout: 10
-
-  # cache layer configurations
-  # if this feature enabled, harbor will cache the resource
-  # `project/project_metadata/repository/artifact/manifest` in the redis
-  # which help to improve the performance of high concurrent pulling manifest.
-  cache:
-    # default is not enabled.
-    enabled: false
-    # default keep cache for one day.
-    expireHours: 24
