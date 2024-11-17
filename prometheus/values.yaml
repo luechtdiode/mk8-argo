@@ -385,7 +385,6 @@ monitoring:
       enabled: true
 
       annotations:
-        traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         kubernetes.io/ingress.class: traefik
 
@@ -1030,7 +1029,6 @@ monitoring:
       ## Annotations for Grafana Ingress
       ##
       annotations:
-        traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         kubernetes.io/ingress.class: traefik
       # kubernetes.io/tls-acme: "true"
@@ -3344,7 +3342,6 @@ monitoring:
       # ingressClassName: nginx
 
       annotations:
-        traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         kubernetes.io/ingress.class: traefik
 
@@ -4996,7 +4993,6 @@ blackbox-exporter:
     enabled: false
     className: "traefik"
     annotations:
-      traefik.ingress.kubernetes.io/router.middlewares: traefik-secure@kubernetescrd
       traefik.ingress.kubernetes.io/router.entrypoints: websecure
     hosts: 
       - host: blackbox.interpolar.ch
