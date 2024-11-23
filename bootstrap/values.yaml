@@ -13,7 +13,7 @@ bootstrap:
  #- name: velero
  - name: storj
  - name: pg-admin
- - name: kmgetubs19
+ #- name: kmgetubs19
  #- name: kutuapp-test
  #  monitoring: true
  - name: kutuapp
