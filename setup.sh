@@ -5,9 +5,9 @@ Preparation Microk8s Setup
 ==========================
 The following input will be asked by the script:
 * ip-range for metallb,                  could be injected by env.NIC_IPS ($NIC_IPS)
-* restore from backup at date            could be injected by env.BACKUP_DATE
+* restore from backup at date            could be injected by env.BACKUP_DATE ($BACKUP_DATE)
 * csr template variables (cn, dns, ip's)
-* storj-accessgrantname,                 could be injected by env.ACCESSNAME
+* storj-accessgrantname,                 could be injected by env.ACCESSNAME ($ACCESSNAME)
 * storj-accessgrant,                     could be injected by env.ACCESSGRANT
 
 usage: bash -i setup.sh
@@ -42,10 +42,13 @@ zfsDetachPool
 # setup micok8s from ground up
 installed=$(sudo snap remove microk8s)
 echo "$installed"
-sudo rm -rf $(pwd)/.kube
+
+# cleanup touched container-template files
+[[ -e original-container-template.toml ]] && sudo rm -f original-container-template.toml
+[[ -e container-template.toml ]] && sudo rm -f container-template.toml
+
+sudo rm -rf ~/.kube
 mkdir $(pwd)/.kube
-sudo usermod -a -G microk8s $USER
-sudo chown -f -R $USER $(pwd)/.kube
 
 # install iscsi for openebs storage-drivers
 sudo apt-get update
@@ -64,8 +67,8 @@ fi
 sudo snap install microk8s --classic --channel=1.31/stable
 sudo microk8s status --wait-ready
 sudo usermod -a -G microk8s $USER
-
-cp /var/snap/microk8s/current/args/containerd-template.toml ./original-containerd-template.toml
+sudo chown -f -R $USER ~/.kube
+wait
 
 if [[ -e csr.conf.template ]]
 then
@@ -93,8 +96,7 @@ sudo microk8s enable community
 sudo microk8s enable rbac
 sudo microk8s enable helm3
 sudo microk8s enable dns
-
-mk8_restart
+wait
 
 if [ -z "$NIC_IPS" ]; then
   echo "No NIC_IPS for metallb provided. Please interact with the cli ..."
@@ -103,20 +105,9 @@ else
   echo "Automatic passing $NIC_IPS to metallb ..."
   { echo "$NIC_IPS"; } | sudo microk8s enable metallb
 
-  if [ -z "$(kubectl describe IPAddressPool -n metallb-system | grep Name: | awk '{print $2}')" ]
-  then
-    until kubectl wait pod -l app=metallb -n metallb-system --for condition=Ready --timeout=180s
-    do
-      if askp "should be waited for readyness of metal loadbalancer?"
-      then
-        echo "waiting next 180s ..."
-      else
-        break;
-      fi
-    done
-    # Create a IP Adresspool
-    cat mk8-argo/metallb-system/metallb-ippool.yaml | sed 's|{{ .Values.nic-ips }}|'$NIC_IPS'|g' | kubectl apply -f -
-  fi
+  waitForDeployment metallb-system controller
+  # Create a IP Adresspool
+  cat mk8-argo/metallb-system/metallb-ippool.yaml | sed 's|{{ .Values.nic-ips }}|'$NIC_IPS'|g' | kubectl apply -f -
 fi
 
 sudo microk8s enable ingress
@@ -126,16 +117,7 @@ sudo microk8s enable hostpath-storage
 sudo microk8s enable dashboard
 wait
 sudo microk8s status --wait-ready
-
-until kubectl wait pod -l k8s-app=kubernetes-dashboard -n kube-system --for condition=Ready --timeout=180s
-do
-  if askp "should be waited for readyness of kubernetes-dashboard?"
-  then
-    echo "waiting next 180s ..."
-  else
-    break;
-  fi
-done
+waitForDeployment kube-system kubernetes-dashboard 
 kubectl patch svc kubernetes-dashboard -n kube-system -p '{"spec": {"type": "NodePort"}}'
 
 sudo iptables -P FORWARD ACCEPT

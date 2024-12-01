@@ -726,6 +726,10 @@ traefik:
           - main: "sharevic.net"
             sans:
               - "*.sharevic.net"
+          - main: "kmgetubs19.ch"
+          - main: "advents-calendar.org"
+            sans:
+              - "*.advents-calendar.org"
       # -- One can apply Middlewares on an entrypoint
       # https://doc.traefik.io/traefik/middlewares/overview/
       # https://doc.traefik.io/traefik/routing/entrypoints/#middlewares
