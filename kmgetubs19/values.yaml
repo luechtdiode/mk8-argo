@@ -16,7 +16,7 @@ routes:
     portSecure: 8069
 
 odoo11-waf:
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: luechtdiode/nginx-naxsi
     tag: v1.0.0
@@ -42,7 +42,7 @@ odoo11-waf:
         name: nginx-cm
 
 odoo11:
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: docker.io/library/odoo@sha256
     tag: e56217f82eb5579e1b54f37b18396f4b1666d42be8b1cfced85dc4383c33cb49
