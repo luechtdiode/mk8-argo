@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: pg-admin.mws.stargate
+    - host: pg-admin.mars.stargate
       http:
         paths:
           - path: /
