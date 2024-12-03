@@ -22,7 +22,7 @@ then
   git pull
   cd ..
 else
-  git clone -b mk8-131 --single-branch https://github.com/luechtdiode/mk8-argo.git
+  git clone -b mk8-131-8443 --single-branch https://github.com/luechtdiode/mk8-argo.git
 fi
 
 sudo microk8s stop
