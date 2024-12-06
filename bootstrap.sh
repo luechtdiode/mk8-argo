@@ -135,6 +135,8 @@ function restoreAppStates() {
     ./main.sh restore kutuapp-test kutuapp-data
     ./main.sh restore kutuapp kutuapp-data
     ./main.sh restore sharevic
+    ./main.sh restore adventscalendar-test
+    ./main.sh restore adventscalendar
     cd ..
   fi
 }
@@ -146,6 +148,8 @@ function restoreAppDBStates() {
     ./main.sh dbrestore kmgetubs19
     ./main.sh dbrestore kutuapp-test
     ./main.sh dbrestore kutuapp
+    ./main.sh dbrestore adventscalendar-test
+    ./main.sh dbrestore adventscalendar
     cd ..
   fi
 }
@@ -256,6 +260,13 @@ function toggleHarborMirror() {
   fi
 }
 
+function installMinio() {
+  cd minio-operator
+  sudo microk8s enable minio
+  kubectl apply -f routes.yaml
+  cd ..
+}
+
 function installArgo() {
   # argocd
   cd argocd
@@ -298,6 +309,7 @@ function setup() {
   boostrapViaArgo
   restoreAppStates
   restoreAppDBStates
+  installMinio
 }
 
 echo "
@@ -318,5 +330,6 @@ echo "
     boostrapViaArgo
     restoreAppStates
     restoreAppDBStates
+    installMinio
   ------------------------
 "

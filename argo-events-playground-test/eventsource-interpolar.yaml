@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: EventSource
 metadata:
-  name: minio
+  name: s3-sudoku
 spec:
   minio:
-    test:
+    sudoku:
       filter:
         prefix: "input"
         suffix: ".txt"
       # bucket information
       bucket:
         # name of the bucket
-        name: test
+        name: sudoku
       # s3 service endpoint
-      endpoint: s3.apps.baloise.dev:443
+      endpoint: s3-api.interpolar.ch:443
       # list of events to subscribe to
       # Visit https://docs.minio.io/docs/minio-bucket-notification-guide.html
       events:
@@ -25,10 +25,10 @@ spec:
         # Key within the K8s secret whose corresponding value (must be base64 encoded) is access key
         key: accesskey
         # Name of the K8s secret that contains the access key
-        name: artifacts-minio
+        name: artifacts-s3
       # secretKey contains information about K8s secret that stores the secret key
       secretKey:
         # Key within the K8s secret whose corresponding value (must be base64 encoded) is secret key
         key: secretkey
         # Name of the K8s secret that contains the secret key
-        name: artifacts-minio
+        name: artifacts-s3

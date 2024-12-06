@@ -43,31 +43,33 @@ spec:
       parameters:
         - name: path
       artifacts:
-        - name: sudoku-input
+        - name: input
           path: /sudoku/input
           s3:
-            endpoint: s3.apps.baloise.dev:443
+            #endpoint: s3.apps.baloise.dev:443
+            endpoint: s3-api.interpolar.ch:443
             bucket: "{{ workflow.parameters.bucket }}"
             key: input
             accessKeySecret:
-              name: artifacts-minio
+              name: artifacts-s3
               key: accesskey
             secretKeySecret:
-              name: artifacts-minio
+              name: artifacts-s3
               key: secretkey
     outputs:
       artifacts:
-        - name: sudoku-output
+        - name: output
           path: /tmp/
           s3:
-            endpoint: s3.apps.baloise.dev:443
+            #endpoint: s3.apps.baloise.dev:443
+            endpoint: s3-api.interpolar.ch:443
             bucket: "{{ workflow.parameters.bucket }}"
             key: "{{ inputs.parameters.path }}"
             accessKeySecret:
-              name: artifacts-minio
+              name: artifacts-s3
               key: accesskey
             secretKeySecret:
-              name: artifacts-minio
+              name: artifacts-s3
               key: secretkey
           archive:
             none: {}
