@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: ng-update-cabca64
+    tag: ng-update-870e243
   network:
     metrics:
       servicePort: 3000
