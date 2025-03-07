@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: 1080-evaluate-apache-pekko-as-akka-replacement-07fb29b
+    tag: 1080-evaluate-apache-pekko-as-akka-replacement-e679e4d
   network:
     metrics:
       servicePort: 3000
