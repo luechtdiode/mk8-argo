@@ -40,7 +40,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: master-20cd20d
+    tag: master-e6f7136
   network:
     metrics:
       servicePort: 3000
