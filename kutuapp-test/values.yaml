@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: fr.davit-pekko-http-metrics-prometheus_2.13-2.0.0-33ba10e
+    tag: v2r3b19-NKL-Alpha5
   network:
     metrics:
       servicePort: 3000
