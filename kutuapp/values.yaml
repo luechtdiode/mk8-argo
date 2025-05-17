@@ -40,7 +40,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r3b19-NKL-Alpha7
+    tag: summed-scores-e8a90cb
   network:
     metrics:
       servicePort: 3000
