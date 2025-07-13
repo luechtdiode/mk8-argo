@@ -45,6 +45,7 @@ kutuapp:
   image:
     repository: luechtdiode/kutuapp
     tag: v2r3b20-alpha12-strukturierte-notenerfassung
+    pullPolicy: Always
   network:
     metrics:
       servicePort: 3000
