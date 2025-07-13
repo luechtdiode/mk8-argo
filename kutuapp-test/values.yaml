@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: 1136-steuerung-der-resultatanzeige-59a589e
+    tag: v2r3b20-alpha11-strukturierte-notenerfassung
   network:
     metrics:
       servicePort: 3000
