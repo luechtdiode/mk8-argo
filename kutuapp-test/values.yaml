@@ -44,7 +44,8 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: strukturierte-notenerfassung-c92fc09
+    tag: v2r3b20-alpha15
+    # strukturierte-notenerfassung-c92fc09
     pullPolicy: Always
   network:
     metrics:
