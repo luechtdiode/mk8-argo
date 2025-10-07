@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: musicplayer-f8a5f22
+    tag: musicplayer-4b26290
     pullPolicy: Always
   network:
     metrics:
