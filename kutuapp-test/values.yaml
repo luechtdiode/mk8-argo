@@ -44,7 +44,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r3b22
+    tag: migration-scala3-52fcaba
     pullPolicy: Always
   network:
     metrics:
