@@ -85,10 +85,13 @@ sudo microk8s refresh-certs --cert ca.crt
 sudo microk8s refresh-certs --cert server.crt
 sudo microk8s refresh-certs --cert front-proxy-client.crt
 sudo microk8s config > ~/.kube/config
+sudo chmod 600 ~/.kube/config
+export KUBECONFIG=$HOME/.kube/config
+
 admintoken=$(cat ~/.kube/config | grep token:)
 
-echo "alias kubectl='microk8s kubectl'" > ~/.bash_aliases
-echo "alias helm='microk8s helm3'" >> ~/.bash_aliases
+echo "alias kubectl='microk8s.kubectl'" > ~/.bash_aliases
+echo "alias helm='microk8s.helm3'" >> ~/.bash_aliases
 source ~/.bashrc
 source ~/.bash_aliases
 

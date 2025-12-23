@@ -1,6 +1,9 @@
 #!/bin/bash
 
-alias helm=microk8s.helm3
+#alias helm=microk8s.helm3
+function helm() {
+  sudo microk8s.helm3 "$@"
+}
 
 function askn() {
   read -t 15 -p "$1 (y/N)? " answer
