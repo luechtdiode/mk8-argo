@@ -103,7 +103,7 @@ if [ -z "$NIC_IPS" ]; then
   sudo microk8s enable metallb
 else
   echo "Automatic passing $NIC_IPS to metallb ..."
-  { echo "$NIC_IPS"; } | sudo microk8s enable metallb
+  echo $NIC_IPS | sudo microk8s enable metallb
 
   waitForDeployment metallb-system controller
   # Create a IP Adresspool
@@ -156,11 +156,12 @@ if [[ ! -f ~/.config/storj/uplink/access.json ]]; then
     echo "No ACCESSNAME and ACCESSGRANT for storj account provided. Please interact with the uplink setup cli ..."
     uplink setup
   else
-  { echo 'n'; echo $accessname; echo $accessgrant; echo 'n'; } | uplink setup
-  # 1) n            With your permission, Storj can automatically collect analytics information from your uplink CLI to help improve the quality and performance of our products. This information is sent only with your consent and is submitted anonymously to Storj Labs: (y/n)
-  # 2) $accessname  Enter name to import as [default: main]:
-  # 3) $accessgrant Enter API key or Access grant:
-  # 4) n            Would you like S3 backwards-compatible Gateway credentials? (y/N):
+    rm -rf ~/.config/storj
+    { echo 'n'; echo $ACCESSNAME; echo $ACCESSGRANT; echo 'n'; } | uplink setup
+    # 1) n            With your permission, Storj can automatically collect analytics information from your uplink CLI to help improve the quality and performance of our products. This information is sent only with your consent and is submitted anonymously to Storj Labs: (y/n)
+    # 2) $accessname  Enter name to import as [default: main]:
+    # 3) $accessgrant Enter API key or Access grant:
+    # 4) n            Would you like S3 backwards-compatible Gateway credentials? (y/N):
   fi
 else
   echo uplink already installed
