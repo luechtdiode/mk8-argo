@@ -162,7 +162,7 @@ function installTraefik() {
   helm dependencies update
 
   kubectl create namespace traefik
-  helm install -n traefik traefik . -f values.yaml --set templates.skippodmonitor=true --set traefik.serviceAccount={}
+  helm install -n traefik traefik . -f values.yaml --set templates.skippodmonitor=true --set traefik.serviceAccount.name="traefik"
 
   waitForDeployment traefik traefik
   cd ..
@@ -289,10 +289,11 @@ function boostrapViaArgo() {
   echo "argo-cd works via git-ops now"
   waitForDeployment traefik traefik
   waitForDeployment sharevic sharevic-waf
-  waitForDeployment kmgetubs19 odoo11
+  waitForDeployment kmgetubs19-static
+  #waitForDeployment kmgetubs19 odoo11
   waitForDeployment kutuapp-test kutuapp
   waitForDeployment kutuapp kutuapp
-  waitForDeployment mbq mbq
+  #waitForDeployment mbq mbq
 }
 
 function setup() {

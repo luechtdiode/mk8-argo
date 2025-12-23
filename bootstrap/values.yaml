@@ -20,12 +20,12 @@ bootstrap:
  - name: kutuapp
    monitoring: true
  - name: sharevic
- - name: mbq
- - name: quarkus-starter
+ #- name: mbq
+ #- name: quarkus-starter
  - name: adventscalendar-test
    monitoring: true
  - name: adventscalendar
    monitoring: true
- - name: argo-workflows
- - name: argo-events
- - name: argo-events-playground-test
+ #- name: argo-workflows
+ #- name: argo-events
+ #- name: argo-events-playground-test
