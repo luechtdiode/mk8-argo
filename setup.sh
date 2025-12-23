@@ -106,7 +106,7 @@ if [ -z "$NIC_IPS" ]; then
   sudo microk8s enable metallb
 else
   echo "Automatic passing $NIC_IPS to metallb ..."
-  { echo "$NIC_IPS"; } | sudo microk8s enable metallb
+  echo $NIC_IPS | sudo microk8s enable metallb
 
   waitForDeployment metallb-system controller
   # Create a IP Adresspool
