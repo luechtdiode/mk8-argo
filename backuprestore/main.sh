@@ -2,7 +2,7 @@
 cd "$(dirname "$0")"
 
 PVCROOT=/var/snap/microk8s/common/var/openebs/local
-kubectl="$(which microk8s) kubectl"
+kubectl="$(which microk8s).kubectl"
 uplink=$(which uplink)
 
 echo "kubectl found at $kubectl"
