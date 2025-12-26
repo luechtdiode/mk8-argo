@@ -1,0 +1,75 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio-route-api
+  namespace: minio-operator
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: s3-api.interpolar.ch
+      http:
+        paths:
+          - backend:
+              service:
+                name: minio
+                port:
+                  name: http-minio
+            path: /
+            pathType: Prefix
+    - http:
+        paths:
+          - backend:
+              service:
+                name: minio
+                port:
+                  name: http-minio
+            path: /s3-api
+            pathType: Prefix
+    - host: s3-api.mars.stargate
+      http:
+        paths:
+          - backend:
+              service:
+                name: minio
+                port:
+                  name: http-minio
+            path: /
+            pathType: Prefix
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio-route
+  namespace: minio-operator
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: s3.interpolar.ch
+      http:
+        paths:
+          - backend:
+              service:
+                name: microk8s-console
+                port:
+                  name: http-console
+            path: /
+            pathType: Prefix
+    - http:
+        paths:
+          - backend:
+              service:
+                name: microk8s-console
+                port:
+                  name: http-console
+            path: /s3
+            pathType: Prefix
+    - host: s3.mars.stargate
+      http:
+        paths:
+          - backend:
+              service:
+                name: microk8s-console
+                port:
+                  name: http-console
+            path: /
+            pathType: Prefix

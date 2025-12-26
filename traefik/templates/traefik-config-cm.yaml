@@ -13,7 +13,6 @@ data:
       middlewares:
         headers-default:
           headers:
-            #sslRedirect: true
             browserXssFilter: true
             contentTypeNosniff: true
             #forceSTSHeader: true

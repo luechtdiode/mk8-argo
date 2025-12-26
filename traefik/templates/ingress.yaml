@@ -1,6 +1,6 @@
 {{- if .Values.templates.dashboard_hostname }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: traefik-tls-dashboard
@@ -20,7 +20,7 @@ spec:
 {{- end }}
 {{- if .Values.templates.http_redirect.enable }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: traefik-http-redirect

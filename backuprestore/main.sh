@@ -61,9 +61,6 @@ function usage() {
 function ns_dbrestore()
 {
   case $1 in
-    kmgetubs19)
-      db_restore kmgetubs19 odoo ${2:-odoo} ${3:-odoo}
-    ;;
     kutuapp-test)
       db_restore kutuapp-test kutuadmin ${2:-kutuapp} ${3:-kutuapp}
     ;;
@@ -92,7 +89,6 @@ function ns_dbrestore()
         db_backup kutuapp-test kutuadmin kutuapp
         db_backup adventscalendar adventscalendar adventscalendar
         db_backup adventscalendar-test adventscalendar adventscalendar
-        db_backup kmgetubs19 odoo
         pvc_backup traefik
         cloudsync up
         ;;
@@ -103,10 +99,8 @@ function ns_dbrestore()
         db_backup kutuapp-test kutuadmin kutuapp
         db_backup adventscalendar adventscalendar adventscalendar
         db_backup adventscalendar-test adventscalendar adventscalendar
-        db_backup kmgetubs19 odoo
         pvc_backup traefik
         pvc_backup harbor
-        pvc_backup kmgetubs19
         pvc_backup kutuapp-test
         pvc_backup kutuapp
         pvc_backup adventscalendar-test
@@ -133,7 +127,6 @@ function ns_dbrestore()
         db_backup kutuapp-test kutuadmin kutuapp
         db_backup adventscalendar adventscalendar adventscalendar
         db_backup adventscalendar-test adventscalendar adventscalendar
-        db_backup kmgetubs19 odoo
         ;;
       dbrestore)
         ns_dbrestore $2 $3 $4

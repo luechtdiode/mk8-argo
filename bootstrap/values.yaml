@@ -1,5 +1,5 @@
 repository: https://github.com/luechtdiode/mk8-argo.git
-branch: mk8-128
+branch: mk8-131
 bootstrap:
  - name: sealed-secrets
  # - name: openebs
@@ -13,7 +13,8 @@ bootstrap:
  #- name: velero
  - name: storj
  - name: pg-admin
- - name: kmgetubs19
+ #- name: kmgetubs19
+ - name: kmgetubs19-static
  - name: kutuapp-test
    monitoring: true
  - name: kutuapp

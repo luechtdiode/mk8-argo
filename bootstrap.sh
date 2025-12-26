@@ -90,6 +90,10 @@ function installAdmin() {
   kubectl -n kube-system get secret admin-user-secret -o go-template="{{.data.token | base64decode}}"
 }
 
+function getKubeAdminToken() {
+  kubectl -n kubernetes-dashboard get secret admin-user -o go-template="{{.data.token | base64decode}}"
+}
+
 function installSealedSecrets() {
   # sealed-secrets
   cd sealed-secrets
@@ -131,6 +135,8 @@ function restoreAppStates() {
     ./main.sh restore kutuapp-test kutuapp-data
     ./main.sh restore kutuapp kutuapp-data
     ./main.sh restore sharevic
+    ./main.sh restore adventscalendar-test
+    ./main.sh restore adventscalendar
     cd ..
   fi
 }
@@ -142,6 +148,8 @@ function restoreAppDBStates() {
     ./main.sh dbrestore kmgetubs19
     ./main.sh dbrestore kutuapp-test
     ./main.sh dbrestore kutuapp
+    ./main.sh dbrestore adventscalendar-test
+    ./main.sh dbrestore adventscalendar
     cd ..
   fi
 }
@@ -154,7 +162,7 @@ function installTraefik() {
   helm dependencies update
 
   kubectl create namespace traefik
-  helm install -n traefik traefik . -f values.yaml --set templates.skippodmonitor=true
+  helm install -n traefik traefik . -f values.yaml --set templates.skippodmonitor=true --set traefik.serviceAccount={}
 
   waitForDeployment traefik traefik
   cd ..
@@ -178,7 +186,8 @@ function installHarbor() {
 }
 
 function extractDockerSecretsImpl() {
-    cp /var/snap/microk8s/current/args/containerd-template.toml original-container-template.toml
+    sudo cp /var/snap/microk8s/current/args/containerd-template.toml original-container-template.toml
+    sudo cp original-container-template.toml containerd-template.toml
     kubectl apply -f docker-registry-sealedsecret.yaml
     
     secret="$(kubectl get secret docker-registry-secret -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode)"
@@ -191,18 +200,28 @@ function extractDockerSecretsImpl() {
     username=$(echo $secret | jq .[][].username)
     password=$(echo $secret | jq .[][].password)
     plugins='plugins."io.containerd.grpc.v1.cri".registry.configs."registry-1.docker.io".auth'
-    echo """
+    #harbor=$(kubectl -n harbor get secret harbor-user-secret -o go-template="{{.data.HARBOR_ADMIN_PASSWORD | base64decode}}")
+    sudo echo """
   [$plugins]
     username = $username
     password = $password
-""" >> /var/snap/microk8s/current/args/containerd-template.toml
+
+  #[plugins."io.containerd.grpc.v1.cri".registry.configs."harbor.interpolar.ch:8443".auth]
+  #  username = "admin"
+  #  password = "$harbor"e
+  
+  #[plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+  #  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."harbor.interpolar.ch"]
+  #    endpoint = ["https://harbor.interpolar.ch:8443", ]    
+""" >> containerd-template.toml
+    sudo cp containerd-template.toml /var/snap/microk8s/current/args/containerd-template.toml
     mk8_restart
 }
 
 function extractDockerSecrets() {
   if [[ -e original-containerd-template.toml ]]
   then
-    cat /var/snap/microk8s/current/args/containerd-template.toml
+    sudo cat /var/snap/microk8s/current/args/containerd-template.toml
     if ! askn "hopefully, the creds are set already. Should they be added manually?"
     then
       extractDockerSecretsImpl
@@ -239,6 +258,13 @@ function toggleHarborMirror() {
     waitForDeployment harbor harbor-portal
     waitForDeployment harbor harbor-jobservice
   fi
+}
+
+function installMinio() {
+  cd minio-operator
+  sudo microk8s enable minio
+  kubectl apply -f routes.yaml
+  cd ..
 }
 
 function installArgo() {
@@ -283,6 +309,7 @@ function setup() {
   boostrapViaArgo
   restoreAppStates
   restoreAppDBStates
+  installMinio
 }
 
 echo "
@@ -303,5 +330,6 @@ echo "
     boostrapViaArgo
     restoreAppStates
     restoreAppDBStates
+    installMinio
   ------------------------
 "
