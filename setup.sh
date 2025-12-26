@@ -22,7 +22,7 @@ then
   git pull
   cd ..
 else
-  git clone -b mk8-131 --single-branch https://github.com/luechtdiode/mk8-argo.git
+  git clone -b mk8-135 --single-branch https://github.com/luechtdiode/mk8-argo.git
 fi
 
 sudo microk8s stop
@@ -31,13 +31,13 @@ wait
 # backup existing csr.conf.template conaining local coordinates of the node
 [[ -e /var/snap/microk8s/current/certs/csr.conf.template ]] && cp /var/snap/microk8s/current/certs/csr.conf.template csr.conf.template
 
-source ./mk8-argo/createzfspool.sh
+#source ./mk8-argo/createzfspool.sh
 source ./mk8-argo/bootstrap.sh
 sudo snap install kubectl --classic
 sudo snap install jq
 
 # detach zfspv-pool
-zfsDetachPool
+#zfsDetachPool
 
 # setup micok8s from ground up
 installed=$(sudo snap remove microk8s)
@@ -52,19 +52,19 @@ mkdir $(pwd)/.kube
 
 # install iscsi for openebs storage-drivers
 sudo apt-get update
-sudo apt-get install open-iscsi
-if [[ -z $(systemctl status iscsid | grep 'active (running)') ]]
-then
-  sudo systemctl enable --now iscsid
-fi
-wait
+# sudo apt-get install open-iscsi
+# if [[ -z $(systemctl status iscsid | grep 'active (running)') ]]
+# then
+#   sudo systemctl enable --now iscsid
+# fi
+# wait
 
 if ! [[ installed == '*not installed' ]]
 then
   sleep 30s
 fi
 # snap info microk8s
-sudo snap install microk8s --classic --channel=1.31/stable
+sudo snap install microk8s --classic --channel=1.35/stable
 sudo microk8s status --wait-ready
 sudo usermod -a -G microk8s $USER
 sudo chown -f -R $USER ~/.kube
@@ -110,14 +110,14 @@ else
   cat mk8-argo/metallb-system/metallb-ippool.yaml | sed 's|{{ .Values.nic-ips }}|'$NIC_IPS'|g' | kubectl apply -f -
 fi
 
-sudo microk8s enable ingress
+#sudo microk8s enable ingress
 sudo microk8s enable metrics-server
 #sudo microk8s enable openebs
 sudo microk8s enable hostpath-storage
 sudo microk8s enable dashboard
 wait
 sudo microk8s status --wait-ready
-waitForDeployment kube-system kubernetes-dashboard 
+waitForDeployment kubernetes-dashboard kubernetes-dashboard-web
 kubectl patch svc kubernetes-dashboard -n kube-system -p '{"spec": {"type": "NodePort"}}'
 
 sudo iptables -P FORWARD ACCEPT
@@ -170,16 +170,16 @@ cd mk8-argo
   admintoken=$(installAdmin)
 cd ..
 
-if ! askn "should zfs/zpool be cleared?"
-then
-  zfsDestroyPool
-fi
+#if ! askn "should zfs/zpool be cleared?"
+#then
+#  zfsDestroyPool
+#fi
 
 
-if ! askn "should zfs/zpool be prepared?"
-then
-  zfsInitPool
-fi
+#if ! askn "should zfs/zpool be prepared?"
+#then
+#  zfsInitPool
+#fi
 
 mk8_restart
 

@@ -299,7 +299,7 @@ function setup() {
   cleanupNamespaces
   installSealedSecrets
   restoreSecrets
-  extractDockerSecrets
+  #extractDockerSecrets
   #installOpenEBSCRD
   installTraefik
   #installHarbor
