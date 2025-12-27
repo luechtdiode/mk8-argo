@@ -150,7 +150,7 @@ fi
 if [[ ! -f ~/.config/storj/uplink/access.json ]]; then
   sudo apt install unzip
   # install storj uplink (interactiv) https://github.com/storj/storj/releases/download/<version or latest>/identity_linux_arm64.zip
-  curl -L https://github.com/storj/storj/releases/download/v1.116.5/uplink_linux_amd64.zip -o uplink_linux_amd64.zip
+  curl -L https://github.com/storj/storj/releases/download/v1.143.5/uplink_linux_amd64.zip -o uplink_linux_amd64.zip
   unzip -o uplink_linux_amd64.zip && rm uplink_linux_amd64.zip
   sudo install -m 755 uplink /usr/local/bin/uplink
 
@@ -159,11 +159,13 @@ if [[ ! -f ~/.config/storj/uplink/access.json ]]; then
     echo "No ACCESSNAME and ACCESSGRANT for storj account provided. Please interact with the uplink setup cli ..."
     uplink setup
   else
-  { echo 'n'; echo $accessname; echo $accessgrant; echo 'n'; } | uplink setup
-  # 1) n            With your permission, Storj can automatically collect analytics information from your uplink CLI to help improve the quality and performance of our products. This information is sent only with your consent and is submitted anonymously to Storj Labs: (y/n)
-  # 2) $accessname  Enter name to import as [default: main]:
-  # 3) $accessgrant Enter API key or Access grant:
-  # 4) n            Would you like S3 backwards-compatible Gateway credentials? (y/N):
+    rm -rf ~/.config/storj
+    uplink access import $ACCESSNAME $ACCESSGRANT --analytics=false
+    # { echo $ACCESSNAME; echo $ACCESSGRANT; echo 'n'; } | uplink setup --analytics=false
+    # 1) n            With your permission, Storj can automatically collect analytics information from your uplink CLI to help improve the quality and performance of our products. This information is sent only with your consent and is submitted anonymously to Storj Labs: (y/n)
+    # 2) $accessname  Enter name to import as [default: main]:
+    # 3) $accessgrant Enter API key or Access grant:
+    # 4) n            Would you like S3 backwards-compatible Gateway credentials? (y/N):
   fi
 else
   echo uplink already installed
