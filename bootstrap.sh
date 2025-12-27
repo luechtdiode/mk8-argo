@@ -189,10 +189,41 @@ function installHarbor() {
 }
 
 function extractDockerSecretsImpl() {
+    [[ -e ../original-docker-io-hosts.toml ]] && sudo rm -f ../original-docker-io-hosts.toml
+    [[ -e ../docker-io-hosts.toml ]] && sudo rm -f ../docker-io-hosts.toml
+    sudo cp /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml ../original-docker-io-hosts.toml
+    sudo cp ../original-docker-io-hosts.toml ../docker-io-hosts.toml
+    kubectl apply -f docker-registry-sealedsecret.yaml
+    
+    secret="$(kubectl get secret docker-registry-secret -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode)"
+    while [ -z "$secret" ]
+    do
+      echo "wait for existing docker-registry-secret ($secret)"
+      sleep 10
+      secret="$(kubectl get secret docker-registry-secret -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode)"
+    done
+    username=$(echo $secret | jq .[][].username)
+    password=$(echo $secret | jq .[][].password)
+    creds=$(echo -n "$username:$password" | base64)
+    sudo echo """
+server = "https://docker.io"
+[host."https://registry-1.docker.io"]
+  capabilities = ["pull", "resolve"]
+
+  [host."https://registry-1.docker.io".header]
+    Authorization = "Basic $creds"
+""" >> ../docker-io-hosts.toml
+    sudo cp ../docker-io-hosts.toml /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml
+    mk8_restart
+}
+
+function extractDockerSecretsImpl_legacy() {
+    [[ -e original-containerd-template.toml ]] && sudo rm -f original-containerd-template.toml
+    [[ -e containerd-template.toml ]] && sudo rm -f containerd-template.toml
     sudo cp /var/snap/microk8s/current/args/containerd-template.toml original-containerd-template.toml
     sudo cp original-containerd-template.toml containerd-template.toml
     kubectl apply -f docker-registry-sealedsecret.yaml
-    
+
     secret="$(kubectl get secret docker-registry-secret -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode)"
     while [ -z "$secret" ]
     do
@@ -212,19 +243,19 @@ function extractDockerSecretsImpl() {
   #[plugins."io.containerd.grpc.v1.cri".registry.configs."harbor.interpolar.ch:8443".auth]
   #  username = "admin"
   #  password = "$harbor"e
-  
+
   #[plugins."io.containerd.grpc.v1.cri".registry.mirrors]
   #  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."harbor.interpolar.ch"]
-  #    endpoint = ["https://harbor.interpolar.ch:8443", ]    
+  #    endpoint = ["https://harbor.interpolar.ch:8443", ]
 """ >> containerd-template.toml
     sudo cp containerd-template.toml /var/snap/microk8s/current/args/containerd-template.toml
     mk8_restart
 }
 
 function extractDockerSecrets() {
-  if [[ -e original-containerd-template.toml ]]
+  if [[ -e ../docker-io-hosts.toml ]]
   then
-    sudo cat /var/snap/microk8s/current/args/containerd-template.toml
+    sudo cat /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml
     if ! askn "hopefully, the creds are set already. Should they be added manually?"
     then
       extractDockerSecretsImpl
@@ -271,7 +302,7 @@ function installMinio() {
 }
 
 function installArgo() {
-  # argocd
+  # argocd or helm upgrade -n argocd -f values.yaml argocd ./
   cd argocd
   helm repo add argo-cd https://argoproj.github.io/argo-helm
   helm repo update

@@ -20,6 +20,19 @@ argo-cd:
           secretKeyRef:
             name: argo-workflows-sso
             key: client-secret
+  #repoServer:
+  #  dnsPolicy: "None"
+  #  dnsConfig:
+  #    nameservers:
+  #      - 1.1.1.1
+  #      - 8.8.8.8
+
+  #controller:
+  #  dnsPolicy: "None"
+  #  dnsConfig:
+  #    nameservers:
+  #      - 1.1.1.1
+  #      - 8.8.8.8
 
   ## Argo Configs
   configs:
@@ -40,7 +53,7 @@ argo-cd:
             name: Argo Workflow
             redirectURIs:
               - https://workflows.interpolar.ch:8443/oauth2/callback
-            secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET        
+            secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
         connectors:
           # GitHub
           - type: github

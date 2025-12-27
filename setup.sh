@@ -44,8 +44,8 @@ installed=$(sudo snap remove microk8s)
 echo "$installed"
 
 # cleanup touched container-template files
-[[ -e original-container-template.toml ]] && sudo rm -f original-container-template.toml
-[[ -e container-template.toml ]] && sudo rm -f container-template.toml
+#[[ -e original-containerd-template.toml ]] && sudo rm -f original-containerd-template.toml
+#[[ -e containerd-template.toml ]] && sudo rm -f containerd-template.toml
 
 sudo rm -rf ~/.kube
 mkdir $(pwd)/.kube
@@ -69,6 +69,14 @@ sudo microk8s status --wait-ready
 sudo usermod -a -G microk8s $USER
 sudo chown -f -R $USER ~/.kube
 wait
+
+if [[ -e docker-io-hosts.toml ]]
+then
+  sudo cp docker-io-hosts.toml /var/snap/microk8s/current/args/certs.d/docker.io/hosts.toml
+elif  [[ -e containerd-template.toml ]]
+then
+  sudo cp containerd-template.toml /var/snap/microk8s/current/args/containerd-template.toml
+fi
 
 if [[ -e csr.conf.template ]]
 then
@@ -121,7 +129,7 @@ sudo microk8s enable dashboard
 wait
 sudo microk8s status --wait-ready
 waitForDeployment kubernetes-dashboard kubernetes-dashboard-web
-kubectl patch svc kubernetes-dashboard -n kube-system -p '{"spec": {"type": "NodePort"}}'
+kubectl patch svc kubernetes-dashboard-kong-proxy -n kubernetes-dashboard -p '{"spec": {"type": "NodePort"}}'
 
 sudo iptables -P FORWARD ACCEPT
 sudo ufw allow in on cni0 && sudo ufw allow out on cni0
