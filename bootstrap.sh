@@ -165,7 +165,7 @@ function installTraefik() {
   helm dependencies update
 
   kubectl create namespace traefik
-  helm install -n traefik traefik . -f values.yaml --set templates.skippodmonitor=true --set traefik.serviceAccount={}
+  helm install -n traefik traefik . -f values.yaml --set templates.skippodmonitor=true --set traefik.serviceAccount.name=""
 
   waitForDeployment traefik traefik
   cd ..
