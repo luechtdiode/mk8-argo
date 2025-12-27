@@ -292,7 +292,7 @@ function boostrapViaArgo() {
   echo "argo-cd works via git-ops now"
   waitForDeployment traefik traefik
   waitForDeployment sharevic sharevic-waf
-  waitForDeployment kmgetubs19 odoo11
+  waitForDeployment kmgetubs19-static kmgetubs19
   waitForDeployment kutuapp-test kutuapp
   waitForDeployment kutuapp kutuapp
   waitForDeployment mbq mbq

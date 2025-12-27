@@ -1,9 +1,0 @@
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: postgres-config
-  namespace: kmgetubs19
-
-data:
-  init.sql: |
-    --
