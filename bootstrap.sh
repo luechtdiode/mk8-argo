@@ -189,8 +189,8 @@ function installHarbor() {
 }
 
 function extractDockerSecretsImpl() {
-    sudo cp /var/snap/microk8s/current/args/containerd-template.toml original-container-template.toml
-    sudo cp original-container-template.toml containerd-template.toml
+    sudo cp /var/snap/microk8s/current/args/containerd-template.toml original-containerd-template.toml
+    sudo cp original-containerd-template.toml containerd-template.toml
     kubectl apply -f docker-registry-sealedsecret.yaml
     
     secret="$(kubectl get secret docker-registry-secret -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode)"
@@ -302,7 +302,7 @@ function setup() {
   cleanupNamespaces
   installSealedSecrets
   restoreSecrets
-  #extractDockerSecrets
+  extractDockerSecrets
   #installOpenEBSCRD
   installTraefik
   #installHarbor
