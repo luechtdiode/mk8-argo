@@ -166,7 +166,16 @@ function installTraefik() {
 
   kubectl create namespace traefik
   helm install -n traefik traefik . -f values.yaml --set templates.skippodmonitor=true --set traefik.serviceAccount.name=""
-
+  # or upgrade simulation:
+  # 1. Download and install the new CRDs manually FIRST
+  # kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v38.0.1/traefik/crds/traefik.io_ingressroutes.yaml
+  # kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v38.0.1/traefik/crds/traefik.io_middlewares.yaml
+  # kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v38.0.1/traefik/crds/traefik.io_tlsstores.yaml
+  # then simulate upgrade:
+  # helm lint .
+  # helm template traefik . --values values.yaml --validate --set templates.skippodmonitor=true --set traefik.serviceAccount.name=""
+  # helm  upgrade -n traefik traefik . --dry-run --debug --values values.yaml --set templates.skippodmonitor=true --set traefik.serviceAccount.name=""
+  # If no errors, perform upgrade by argo-cd.
   waitForDeployment traefik traefik
   cd ..
 }

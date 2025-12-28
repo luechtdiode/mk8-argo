@@ -6,7 +6,7 @@ metadata:
 data:
   traefik-config.yaml: |
     metrics:
-      prometheus: 
+      prometheus:
         addEntryPointsLabels: true
         addRoutersLabels: true
     http:
@@ -15,8 +15,8 @@ data:
           headers:
             browserXssFilter: true
             contentTypeNosniff: true
+            frameDeny: true
             #forceSTSHeader: true
             #stsIncludeSubdomains: true
             #stsPreload: true
-            #stsSeconds: 15552000
-            customFrameOptionsValue: SAMEORIGIN
+            #stsMaxAge: 15552000

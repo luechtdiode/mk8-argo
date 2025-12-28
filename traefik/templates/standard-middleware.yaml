@@ -5,13 +5,13 @@ metadata:
 spec:
   chain:
     middlewares:
-    - name: compress
-    - name: limited-body
-    #- name: max-connections
-    #- name: ratelimit
-    #- name: circuitbreaker    
-    - name: security-response-header
----  
+      - name: compress
+      - name: limited-body
+      #- name: max-connections
+      #- name: ratelimit
+      #- name: circuitbreaker
+      - name: security-response-header
+---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
@@ -19,10 +19,10 @@ metadata:
 spec:
   chain:
     middlewares:
-    #- name: http-redirect 
-    - name: standard
-    - name: more-security-response-header
-    - name: x-fwd-proto-https
+      #- name: http-redirect
+      - name: standard
+      - name: more-security-response-header
+      - name: x-fwd-proto-https
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -32,7 +32,7 @@ spec:
   redirectScheme:
     scheme: https
     permanent: true
----    
+---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
@@ -40,7 +40,7 @@ metadata:
 spec:
   headers:
     customRequestHeaders:
-      X-Forwarded-Proto: "https"    
+      X-Forwarded-Proto: "https"
 ---
 # Enable gzip compression
 apiVersion: traefik.io/v1alpha1
@@ -49,7 +49,7 @@ metadata:
   name: compress
 spec:
   compress: {}
----  
+---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
@@ -109,19 +109,22 @@ spec:
     contentTypeNosniff: true
     accessControlAllowCredentials: false
     accessControlAllowHeaders:
-    - "x-access-token"
-    - "Authorization"
-    - "DNT"
-    - "User-Agent"
-    - "X-Requested-With"
-    - "If-Modified-Since"
-    - "Cache-Control"
-    - "Content-Type"
-    - "Range"
+      - "x-access-token"
+      - "Authorization"
+      - "DNT"
+      - "User-Agent"
+      - "X-Requested-With"
+      - "If-Modified-Since"
+      - "Cache-Control"
+      - "Content-Type"
+      - "Range"
     accessControlExposeHeaders:
-    - "Content-Length"
-    - "Content-Range"
-    accessControlAllowOriginList: [ "*" ]
+      - "Content-Length"
+      - "Content-Range"
+    accessControlAllowOriginList:
+      - "*"
+    customResponseHeaders:
+      X-Frame-Options: "SAMEORIGIN"
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -129,7 +132,6 @@ metadata:
   name: more-security-response-header
 spec:
   headers:
-    sslRedirect: true  
     forceSTSHeader: true
     stsIncludeSubdomains: true
     stsPreload: true

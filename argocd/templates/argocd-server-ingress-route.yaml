@@ -9,7 +9,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: 'HostRegexp(`{subdomain:argo}.interpolar.ch`)'
+      match: Host(`argo.interpolar.ch`)
       middlewares:
         - name: security-response-header
           namespace: traefik
@@ -21,8 +21,7 @@ spec:
           port: 443
     - kind: Rule
       match: >-
-        Host(`argo.interpolar.ch`) && Headers(`Content-Type`,
-        `application/grpc`)
+        Host(`argo.interpolar.ch`) && Header(`Content-Type`, `application/grpc`)
       middlewares:
         - name: security-response-header
           namespace: traefik

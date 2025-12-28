@@ -12,13 +12,13 @@ spec:
       kind: Rule
       {{- if .Values.templates.dashboard_auth }}
       middlewares:
-      - name: auth
+        - name: auth
       {{- end }}
       services:
-      - name: api@internal
-        kind: TraefikService
-{{- end }}
-{{- if .Values.templates.http_redirect.enable }}
+        - name: api@internal
+          kind: TraefikService
+  {{- end }}
+  {{- if .Values.templates.http_redirect.enable }}
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
@@ -26,19 +26,19 @@ metadata:
   name: traefik-http-redirect
 spec:
   entryPoints:
-  - web
+    - web
   routes:
-  - match: HostRegexp(`{catchall:.*}`)
-    kind: Rule
-    {{- if .Values.templates.http_redirect.priority }}
-    priority: {{ .Values.templates.http_redirect.priority | quote }}
-    {{ else }}
-    priority: 1
-    {{- end }}
-    services:
-    - name: noop@internal
-      kind: TraefikService
-    middlewares:
+    - match: HostRegexp(`{catchall:.*}`)
+      kind: Rule
+      {{- if .Values.templates.http_redirect.priority }}
+      priority: {{ .Values.templates.http_redirect.priority | quote }}
+      {{ else }}
+      priority: 1
+      {{- end }}
+      services:
+        - name: noop@internal
+          kind: TraefikService
+      middlewares:
         - name: http-redirect
-{{- end }}
+  {{- end }}
 

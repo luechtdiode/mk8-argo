@@ -17,7 +17,7 @@ spec:
         - name: secure
           namespace: traefik
     - kind: Rule
-      match: Host(`kube.interpolar.ch`) && Headers(`Content-Type`, `application/grpc`)
+      match: Host(`kube.interpolar.ch`) && Header(`Content-Type`, `application/grpc`)
       priority: 11
       services:
         - name: kubernetes-dashboard-kong-proxy
