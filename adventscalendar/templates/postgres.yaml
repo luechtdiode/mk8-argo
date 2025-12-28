@@ -71,7 +71,7 @@ spec:
             - name: postgres-config
               mountPath: /docker-entrypoint-initdb.d/
           terminationMessagePolicy: File
-          image: postgres:17-alpine
+          image: postgres:18.1-alpine
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
