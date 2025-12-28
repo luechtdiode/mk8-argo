@@ -307,7 +307,7 @@ function installArgo() {
   helm repo add argo-cd https://argoproj.github.io/argo-helm
   helm repo update
   helm dependencies update
-  # kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=v2.9.6
+# kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=v3.2.3
   kubectl create namespace argocd
   helm install -n argocd argocd . -f values.yaml --set installroute=false --set argo-cd.crds.install=true
   waitForDeployment argocd argocd-server

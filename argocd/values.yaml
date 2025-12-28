@@ -3,12 +3,12 @@ installroute: true
 argo-cd:
   ## Custom resource configuration
   crds:
-    # -- Install and upgrade CRDs
+    # -- Install and upgrade CRDs, is overriden by initial helm install flag
     install: false
 
   #global:
   #  image:
-  #    tag: v2.4.9
+  #    tag: v3.2.3
   dex:
     # name: dex-server
     envFrom:
