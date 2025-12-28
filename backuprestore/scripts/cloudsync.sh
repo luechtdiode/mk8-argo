@@ -1,5 +1,8 @@
 source ./scripts/file-incremental-backup-restore.sh
 
+BUCKET_PREFIX=${BUCKET_PREFIX:-$(hostname)}
+echo "Using bucket prefix: $BUCKET_PREFIX"
+
 function findUplinkConfigDir() {
   if [ -z $UPLINK_CONFIG_DIR ];
   then
@@ -78,33 +81,33 @@ function cloudsync() {
 
   case $1 in
     down)
-      BUCKET="sj://mars-${BUCKET_DATE}/"
+      BUCKET="sj://$BUCKET_PREFIX-${BUCKET_DATE}/"
       CLOUD_PATH="$BUCKET$PREFIX"
 
       if [ -z $1 ]
       then
-        LATEST_BACKUP="sj://$(uplink --config-dir $UPLINK_CONFIG_DIR ls | grep mars  | tail -n +2 | awk '{ print $NF }' | sort -r | head -n 1)/"
+        LATEST_BACKUP="sj://$(uplink --config-dir $UPLINK_CONFIG_DIR ls | grep $BUCKET_PREFIX  | tail -n +2 | awk '{ print $NF }' | sort -r | head -n 1)/"
         CLOUD_PATH="$LATEST_BACKUP$PREFIX"
       fi
       _downSync $CLOUD_PATH $CLUSTER_DIR $DB_DIR $BACKUP_DIR
       files_restore $SOURCE $BACKUP_DIR
     ;;
     *)
-      BUCKETLIST="$(uplink --config-dir $UPLINK_CONFIG_DIR ls | grep mars  | tail -n +2 | awk '{ print $NF }' | sort -r | grep -v $BUCKET_YEAR)/"
+      BUCKETLIST="$(uplink --config-dir $UPLINK_CONFIG_DIR ls | grep $BUCKET_PREFIX  | tail -n +2 | awk '{ print $NF }' | sort -r | grep -v $BUCKET_YEAR)/"
       for OBSBCKT in $BUCKETLIST
       do
         echo "test for removal: $OBSBCKT ..."
-        if [[ "$OBSBCKT" =~ ^mars-[0-9]{4}-[0-9]{2}$ ]]; then
+        if [[ "$OBSBCKT" =~ ^$BUCKET_PREFIX-[0-9]{4}-[0-9]{2}$ ]]; then
           echo "removing $OBSBCKT ..."
           uplink --config-dir $UPLINK_CONFIG_DIR rb "sj://$OBSBCKT" --force
         fi
       done
 
-      BUCKETLIST="$(uplink --config-dir $UPLINK_CONFIG_DIR ls | grep mars  | tail -n +2 | awk '{ print $NF }' | sort -r | grep -v $BUCKET_MONTH)/"
+      BUCKETLIST="$(uplink --config-dir $UPLINK_CONFIG_DIR ls | grep $BUCKET_PREFIX  | tail -n +2 | awk '{ print $NF }' | sort -r | grep -v $BUCKET_MONTH)/"
       for OBSBCKT in $BUCKETLIST
       do
         echo "test for removal: $OBSBCKT ..."
-        if [[ "$OBSBCKT" =~ ^mars-[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+        if [[ "$OBSBCKT" =~ ^$BUCKET_PREFIX-[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
           echo "removing $OBSBCKT ..."
           uplink --config-dir $UPLINK_CONFIG_DIR rb "sj://$OBSBCKT" --force
         fi
@@ -115,19 +118,19 @@ function cloudsync() {
       echo "cloud-backup from: $SOURCE ..."
       files_backup $SOURCE $BACKUP_DIR
     
-      BUCKET="sj://mars-${BUCKET_YEAR}/"
+      BUCKET="sj://$BUCKET_PREFIX-${BUCKET_YEAR}/"
       CLOUD_PATH="$BUCKET$PREFIX"
       uplink --config-dir $UPLINK_CONFIG_DIR rb $BUCKET --force
       uplink --config-dir $UPLINK_CONFIG_DIR mb $BUCKET
       _upSync $CLOUD_PATH $CLUSTER_DIR $DB_DIR $BACKUP_DIR
 
-      BUCKET="sj://mars-${BUCKET_MONTH}/"
+      BUCKET="sj://$BUCKET_PREFIX-${BUCKET_MONTH}/"
       CLOUD_PATH="$BUCKET$PREFIX"
       uplink --config-dir $UPLINK_CONFIG_DIR rb $BUCKET --force
       uplink --config-dir $UPLINK_CONFIG_DIR mb $BUCKET
       _upSync $CLOUD_PATH $CLUSTER_DIR $DB_DIR $BACKUP_DIR
 
-      BUCKET="sj://mars-${BUCKET_DATE}/"
+      BUCKET="sj://$BUCKET_PREFIX-${BUCKET_DATE}/"
       CLOUD_PATH="$BUCKET$PREFIX"
       uplink --config-dir $UPLINK_CONFIG_DIR rb $BUCKET --force
       uplink --config-dir $UPLINK_CONFIG_DIR mb $BUCKET
