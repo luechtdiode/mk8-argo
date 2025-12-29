@@ -20,19 +20,6 @@ argo-cd:
           secretKeyRef:
             name: argo-workflows-sso
             key: client-secret
-  #repoServer:
-  #  dnsPolicy: "None"
-  #  dnsConfig:
-  #    nameservers:
-  #      - 1.1.1.1
-  #      - 8.8.8.8
-
-  #controller:
-  #  dnsPolicy: "None"
-  #  dnsConfig:
-  #    nameservers:
-  #      - 1.1.1.1
-  #      - 8.8.8.8
 
   ## Argo Configs
   configs:
@@ -52,7 +39,7 @@ argo-cd:
           - id: argo-workflows-sso
             name: Argo Workflow
             redirectURIs:
-              - https://workflows.interpolar.ch:8443/oauth2/callback
+              - https://workflows.interpolar.ch/oauth2/callback
             secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
         connectors:
           # GitHub
@@ -69,7 +56,7 @@ argo-cd:
             hs.status = "Healthy"
             hs.message = "Controller doesn't report resource status"
             return hs
-      url: 'https://argo.interpolar.ch:8443'
+      url: 'https://argo.interpolar.ch'
 
     repositories:
       luechtiode-devops:
