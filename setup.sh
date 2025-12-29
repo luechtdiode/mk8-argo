@@ -130,7 +130,7 @@ sudo ufw default allow routed
 # install kubeseal
 if [ ! -f /usr/local/bin/kubeseal ]; then
   mkdir tmp
-  wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.19.3/kubeseal-0.19.3-linux-amd64.tar.gz -O - | tar xz -C $(pwd)/tmp
+  wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.34.0/kubeseal-0.34.0-linux-amd64.tar.gz -O - | tar xz -C $(pwd)/tmp
   sudo install -m 755 tmp/kubeseal /usr/local/bin/kubeseal
   rm -rf tmp
 else
