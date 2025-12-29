@@ -6,7 +6,8 @@ storj-s3-gateway:
     #repository: docker.io/storjlabs/gateway@sha256
     #tag: 053863bb84a5ec33ce2b8addf550c15109fdefa634cc252aaef3ec4801f8ad47
     repository: storjlabs/gateway
-    tag: ec6b525-go1.25.3
+    tag: 04b9c76-go1.22.5
+    #tag: 5359faa-v1.11.0-go1.25rc2
     # repository: docker.io/storjlabs/gateway
     # tag: latest
     # pullPolicy: Always
