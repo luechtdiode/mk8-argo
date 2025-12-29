@@ -103,7 +103,7 @@ traefik:
       tls:
         enabled: true
         options: "default"
-        certResolver: "cf-staging"
+        certResolver: "cf-production"
         domains:
           - main: "interpolar.ch"
             sans:
