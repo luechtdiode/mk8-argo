@@ -1,15 +1,12 @@
 routes:
   - name: kmgetubs19
     domain: kmgetubs19.ch
-    dns_resolver: "cf-production"
     port: 80
   - name: kmgetubs19
     domain: kmgetubs19.sharevic.net
-    dns_resolver: "cf-production"
     port: 80
   - name: kmgetubs19
     domain: www.kmgetubs19.ch
-    dns_resolver: "cf-production"
     port: 80
 
 kmgetubs19:

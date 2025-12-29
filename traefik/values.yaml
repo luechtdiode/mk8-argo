@@ -1,10 +1,9 @@
 templates:
-    dashboard_hostname: "traefik.interpolar.ch"
-    dashboard_auth: true
-    authsecretname:  traefik-dashboard-user-secret
-    http_redirect:
-      enable: true
-    dns_resolver: "cf-production"
+  dashboard_hostname: "traefik.interpolar.ch"
+  dashboard_auth: true
+  authsecretname:  traefik-dashboard-user-secret
+  http_redirect:
+    enable: true
 
 traefik:
   # Default values for Traefik

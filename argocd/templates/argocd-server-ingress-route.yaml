@@ -34,5 +34,5 @@ spec:
           port: 443
           scheme: h2c
   #tls:
-  #  certResolver: cf-production
+  #  certResolver: cf-xxx
 {{ end }}

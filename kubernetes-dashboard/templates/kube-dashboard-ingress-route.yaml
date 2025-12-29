@@ -27,5 +27,5 @@ spec:
         - name: secure
           namespace: traefik
   #tls:
-  #  certResolver: cf-production
+  #  certResolver: cf-xxx
 

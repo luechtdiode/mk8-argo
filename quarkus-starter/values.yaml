@@ -1,7 +1,6 @@
 routes:
   - name: quarkus-starter
     domain: quarkus-starter.interpolar.ch
-    dns_resolver: "cf-production"
     port: 8080
 
 quarkus-starter:
