@@ -3,6 +3,7 @@
 *-secret.yaml
 *-secret-content.yaml
 *-secret-private.yaml
+**/backup-*.yaml
 **/private
 *.tar.gz
 .idea
@@ -10,4 +11,5 @@
 uplink
 LICENSE
 admin.config
-/mk8vt/
+**/.kube
+*.log
