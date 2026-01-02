@@ -12,7 +12,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: v2r3b23-scala3-beta3
+    tag: v2r3b23
     pullPolicy: Always
   network:
     metrics:
