@@ -6,7 +6,7 @@ templates:
     enable: true
 
 traefik:
-  fullnameOverride: traefik
+  # fullnameOverride: traefik
 
   core:  # @schema additionalProperties: false
     # -- Can be used to use globally v2 router syntax. Deprecated since v3.4 /!\.
@@ -100,21 +100,21 @@ traefik:
         maxHeaderBytes:  # @schema type:[integer, null]; minimum:0
         # -- See [upstream documentation](https://doc.traefik.io/traefik/security/request-path/#path-sanitization)
         sanitizePath:  # @schema type:[boolean, null]
-      tls:
-        enabled: true
-        options: "default"
-        certResolver: "cf-staging"
-        domains:
-          - main: "interpolar.ch"
-            sans:
-              - "*.interpolar.ch"
-          - main: "sharevic.net"
-            sans:
-              - "*.sharevic.net"
-          - main: "kmgetubs19.ch"
-          - main: "advents-calendar.org"
-            sans:
-              - "*.advents-calendar.org"
+        tls:
+          enabled: true
+          options: "default"
+          certResolver: "cf-staging"
+          domains:
+            - main: "interpolar.ch"
+              sans:
+                - "*.interpolar.ch"
+            - main: "sharevic.net"
+              sans:
+                - "*.sharevic.net"
+            - main: "kmgetubs19.ch"
+            - main: "advents-calendar.org"
+              sans:
+                - "*.advents-calendar.org"
     metrics:
       # -- When using hostNetwork, use another port to avoid conflict with node exporter:
       # https://github.com/prometheus/prometheus/wiki/Default-port-allocations
