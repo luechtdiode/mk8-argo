@@ -12,7 +12,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: master-a608a3f
+    tag: master-ed971ec
     pullPolicy: Always
   network:
     metrics:
