@@ -13,7 +13,7 @@ routes:
     path: 'PathPrefix(`/api`)'
 
 adventscalendar-frontend:
-  replicaCount: 1
+  replicaCount: 0
   image:
     repository: ghcr.io/mrcode97/windoworganizer-frontend
     tag: 1.0.0
@@ -71,7 +71,7 @@ adventscalendar-frontend:
         name: lang-cm
 
 adventscalendar-backend:
-  replicaCount: 1
+  replicaCount: 0
   image:
     repository: ghcr.io/mrcode97/windoworganizer-backend
     tag: 1.0.0
