@@ -12,7 +12,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: 1349-integration-admin-webclient-ca817a3
+    tag: 1349-integration-admin-webclient-2746633
     pullPolicy: Always
   network:
     metrics:
