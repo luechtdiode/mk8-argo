@@ -12,7 +12,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: 1496_admin-web-client-6fa3531
+    tag: 1496_admin-web-client-013b22d
     pullPolicy: Always
   network:
     metrics:
