@@ -68,7 +68,7 @@ kutuapp:
     - name: X_SMTP_SENDERAPPNAME
       value: KuTu App Testsystem
     - name: X_APP_REMOTE_HOSTNAME
-      value: kutuapp-test.sharevic.net
+      value: test-kutuapp.sharevic.net
     - name: X_KUTU_SECRET
       valueFrom:
         secretKeyRef:
