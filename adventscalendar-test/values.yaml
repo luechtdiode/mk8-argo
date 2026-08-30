@@ -13,10 +13,10 @@ routes:
     path: 'PathPrefix(`/api`)'
 
 adventscalendar-frontend:
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: ghcr.io/mrcode97/windoworganizer-frontend
-    tag: 1.0.0
+    tag: sha-014a891
   network:
     http:
       servicePort: 3000
@@ -57,7 +57,7 @@ adventscalendar-frontend:
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
-    - name: REACT_APP_BACKEND_URL
+    - name: VITE_BACKEND_URL
       value: https://test.advents-calendar.org
   defaultAffinityRules:
     enabled: false
@@ -74,7 +74,7 @@ adventscalendar-backend:
   replicaCount: 0
   image:
     repository: ghcr.io/mrcode97/windoworganizer-backend
-    tag: 1.0.0
+    tag: sha-014a891
   network:
     http:
       servicePort: 7007
