@@ -16,7 +16,7 @@ adventscalendar-frontend:
   replicaCount: 1
   image:
     repository: ghcr.io/mrcode97/windoworganizer-frontend
-    tag: sha-014a891
+    tag: sha-8ae2dbc
   network:
     http:
       servicePort: 3000
@@ -57,12 +57,12 @@ adventscalendar-frontend:
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
-    - name: VITE_BACKEND_URL
-      value: https://test.advents-calendar.org
+    - name: BACKEND_URL
+      value: http://adventscalendar-backend:7007
   defaultAffinityRules:
     enabled: false
   volumeMounts:
-  - mountPath: /adventscalendar/lang/vars.json
+  - mountPath: /adventscalendar/dist/lang/vars.json
     subPath: vars.json
     name: lang-cm
   volumes:
@@ -71,10 +71,10 @@ adventscalendar-frontend:
         name: lang-cm
 
 adventscalendar-backend:
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: ghcr.io/mrcode97/windoworganizer-backend
-    tag: sha-014a891
+    tag: sha-8ae2dbc
   network:
     http:
       servicePort: 7007
