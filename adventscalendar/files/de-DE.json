@@ -1,0 +1,36 @@
+{
+  "_lang": "de-DE",
+  "public": {
+    "pages": {
+      "lang": {
+        "title": "Sprache",
+        "enUS": "Englisch",
+        "deDE": "Deutsch",
+        "frFR": "Französisch"
+      },
+      "impressum": {
+        "title": "Rechtliche Hinweise (Impressum)",
+        "responsibletitle": "Verantwortliche Organisation",
+        "company": "IG Adventskalender Kleinhüningen",
+        "street": "Gärtnerstrasse 122",
+        "postalcode": "4057 Basel",
+        "country": "Schweiz",
+        "providertitle": "Hosting Provider",
+        "providername": "Roland Seidel",
+        "provideraddress": "Gärtnerstrasse 122, CH 4057 Basel",
+        "providercontact": "+41 61 632 04 65",
+        "iptitle": "Geistiges Eigentum",
+        "iptext": "Der gesamte Inhalt dieser Website, einschliesslich Text, Bilder und Code, ist urheberrechtlich geschützt. Unerlaubte Nutzung oder Reproduktion ist verboten.",
+        "dptitle": "Datenschutz und Privatsphäre",
+        "dptext": "Wir verpflichten uns, Ihre Privatsphäre zu schützen. Da sich der Inhalt dieser App auf Adventsfenster fokussiert, gehen wir davon aus, dass keine schützenswerten oder personenbezogene Daten erfasst werden. Ein Ersteller eines Kalenders ist verpflichtet, verbotene Inhalte zu löschen. Ein Fenster-Schausteller ist verpflichtet, aussliesslich eigene Bilder zu verwenden und beim Kommentieren wird auf die Anstandsregeln verwiesen. Sollte es dennoch zu Verstössen kommen, ist der Webseitenbetreiber zu kontaktieren (siehe oben).",
+        "lawtitle": "Gerichtsstand",
+        "lawtext": "Diese Website unterliegt dem Schweizer Recht. Alle Streitigkeiten, die sich aus der Nutzung dieser Website ergeben, unterliegen der Gerichtsbarkeit der Gerichte in Basel, Schweiz."
+      }
+    },
+    "assets": {
+      "impressum": {
+        "link": "tel:+41 61 632 04 65"
+      }
+    }
+  }
+}
