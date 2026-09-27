@@ -65,6 +65,10 @@ kutuapp:
         secretKeyRef:
           name: kutu-postgres-secret
           key: password
+    - name: X_SMTP_SENDERAPPNAME
+      value: KuTu App (Produktion)
+    - name: X_APP_REMOTE_HOSTNAME
+      value: kutuapp.sharevic.net
     - name: X_DONATION_LINK
       value: "https://kutuapp.zahls.ch/de/pay?cid=2eaa5545&donation[preselect_amount]=:betrag"
     - name: X_DONATION_PRICE
