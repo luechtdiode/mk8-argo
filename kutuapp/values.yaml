@@ -8,7 +8,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: legacy-support-for-web-admin-9f222a7
+    tag: v2r4b0.3
   network:
     metrics:
       servicePort: 3000
