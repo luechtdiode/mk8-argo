@@ -37,7 +37,7 @@ rclone-s3-gateway:
     - --addr=:8080
     - --no-checksum
     - --no-modtime
-    - --s3-upload-cutoff 5G
+    - --vfs-cache-mode writes
 
   env:
     # Lokale NAS-Zugangsberechtigung des Gateways, nicht die Hetzner-Credentials.
