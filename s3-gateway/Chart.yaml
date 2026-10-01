@@ -1,0 +1,11 @@
+apiVersion: v2
+version: 1.0.0
+name: s3-gateway
+dependencies:
+  - name: generic-chart
+    version: 2.1.0
+    repository: https://luechtdiode.github.io/generic-chart
+    alias: s3-gateway
+  - name: valkey
+    version: "~0.12.0"
+    repository: https://valkey.io/valkey-helm
