@@ -1,0 +1,114 @@
+s3-gateway:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/cloud37/s3-encryption-gateway
+    tag: "0.12.2"
+    pullPolicy: IfNotPresent
+  env:
+    - name: LISTEN_ADDR
+      value: ":8080"
+    - name: LOG_LEVEL
+      value: "info"
+    - name: BACKEND_ENDPOINT
+      valueFrom:
+        configMapKeyRef:
+          name: s3-encryption-gateway-config
+          key: backend-endpoint
+    - name: BACKEND_REGION
+      valueFrom:
+        configMapKeyRef:
+          name: s3-encryption-gateway-config
+          key: backend-region
+    - name: BACKEND_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: s3-encryption-gateway-secrets
+          key: backend-access-key
+    - name: BACKEND_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: s3-encryption-gateway-secrets
+          key: backend-secret-key
+    - name: ENCRYPTION_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: s3-encryption-gateway-secrets
+          key: encryption-password
+    # Phase 4: Rate limiting configuration
+    - name: RATE_LIMIT_ENABLED
+      valueFrom:
+        configMapKeyRef:
+          name: s3-encryption-gateway-config
+          key: rate-limit-enabled
+    - name: RATE_LIMIT_REQUESTS
+      valueFrom:
+        configMapKeyRef:
+          name: s3-encryption-gateway-config
+          key: rate-limit-requests
+    - name: RATE_LIMIT_WINDOW
+      valueFrom:
+        configMapKeyRef:
+          name: s3-encryption-gateway-config
+          key: rate-limit-window
+    # Phase 4: Server timeout configuration
+    - name: SERVER_READ_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: s3-encryption-gateway-config
+          key: server-read-timeout
+    - name: SERVER_WRITE_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: s3-encryption-gateway-config
+          key: server-write-timeout
+    - name: SERVER_IDLE_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: s3-encryption-gateway-config
+          key: server-idle-timeout
+    - name: SERVER_READ_HEADER_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: s3-encryption-gateway-config
+          key: server-read-header-timeout
+    - name: VALKEY_ADDR
+      value: "{{ .Release.Name }}-valkey:6379"
+      # valkey-shared.mpu-state.svc.cluster.local:6379
+    - name: VALKEY_ENCRYPTION_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: s3-encryption-gateway-secrets
+          key: valkey-password
+    - name: VALKEY_INSECURE_ALLOW_PLAINTEXT
+      value: "true"
+    - name: VALKEY_ENCRYPTION_PASSWORD
+      value: "true"
+  network:
+    http:
+      containerPort: 8080
+      servicePort: 8080
+  service:
+    type: ClusterIP
+  livenessProbe:
+    httpGet:
+      path: /live
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 30
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 8080
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+  # Single-Node-Cluster: die Standard-PodAntiAffinity des Charts wuerde die
+  # Zustellung sonst verhindern.
+  defaultAffinityRules:
+    enabled: false

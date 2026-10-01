@@ -54,7 +54,7 @@ rclone-s3-gateway:
       containerPort: 8080
       servicePort: 8080
   # ClusterIP: Erreichbarkeit laeuft ausschliesslich ueber die Traefik-Route
-  # in templates/rclone-route.yaml, nicht direkt aus dem LAN.
+  # in templates/s3gw-route.yaml, nicht direkt aus dem LAN.
   service:
     type: ClusterIP
   readinessProbe:
