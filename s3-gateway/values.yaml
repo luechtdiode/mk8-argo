@@ -1,0 +1,230 @@
+s3-gateway:
+  replicaCount: 1
+  image:
+    repository: docker.io/cloud37io/s3-encryption-gateway
+    tag: "0.12.2"
+    pullPolicy: IfNotPresent
+  env:
+    - name: LISTEN_ADDR
+      value: ":8080"
+    - name: TLS_ENABLED
+      value: "false"
+    - name: LOG_LEVEL
+      value: "info"
+    - name: BACKEND_ENDPOINT
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: backend-endpoint
+    - name: BACKEND_REGION
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: backend-region
+    - name: BACKEND_PROVIDER
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: backend-provider
+    - name: BACKEND_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: s3-backend-secrets
+          key: backend-access-key
+    - name: BACKEND_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: s3-backend-secrets
+          key: backend-secret-key
+    - name: ENCRYPTION_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: s3-backend-secrets
+          key: encryption-password
+    - name: ENCRYPTION_PREFERRED_ALGORITHM
+      value: "AES256-GCM"
+    - name: ENCRYPTION_SUPPORTED_ALGORITHMS
+      value: "AES256-GCM, ChaCha20-Poly1305"
+    # Phase 4: Rate limiting configuration
+    - name: RATE_LIMIT_ENABLED
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: rate-limit-enabled
+    - name: RATE_LIMIT_REQUESTS
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: rate-limit-requests
+    - name: RATE_LIMIT_WINDOW
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: rate-limit-window
+    # Phase 4: Server timeout configuration
+    - name: SERVER_READ_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: server-read-timeout
+    - name: SERVER_WRITE_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: server-write-timeout
+    - name: SERVER_IDLE_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: server-idle-timeout
+    - name: SERVER_READ_HEADER_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: server-read-header-timeout
+    - name: VALKEY_ENCRYPT_STATE
+      value: "true"
+    - name: VALKEY_ENCRYPTION_PASSWORD_ENV
+      value: "VALKEY_ENCRYPTION_PASSWORD"
+    - name: VALKEY_ENCRYPTION_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: s3-backend-secrets
+          key: valkey-password
+    - name: VALKEY_ADDR
+      value: "s3-gateway-valkey.s3-gateway:6379"
+    #- name: POLICIES
+    #  value: "/etc/s3-gateway/policies/*.yaml,/mnt/policies/*.yml"
+    - name: VALKEY_MPU_STATE_V2_WRITER
+      value: "true"
+    - name: VALKEY_TLS_ENABLED
+      value: "false"
+    - name: VALKEY_TLS_INSECURE_SKIP_VERIFY
+      value: "true"
+    - name: VALKEY_INSECURE_ALLOW_PLAINTEXT
+      value: "true"
+    # AUTH-Passwort fuer Valkey. VALKEY_PASSWORD_ENV benennt nur die
+    # Umgebungsvariable, die das Passwort enthaelt - nie das Passwort selbst.
+    # Der Chart laesst den User "default" per ACL.requirepass laufen; ein
+    # VALKEY_USERNAME ist deshalb nicht noetig.
+    - name: VALKEY_PASSWORD_ENV
+      value: "VALKEY_AUTH_PASSWORD"
+    - name: VALKEY_AUTH_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: s3-backend-secrets
+          key: valkey-password
+    - name: SELF_CONTAINED_TYPE
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: self-contained-type
+    - name: SELF_CONTAINED_AES_ACTIVE_VERSION
+      valueFrom:
+        configMapKeyRef:
+          name: s3-gateway-config
+          key: self-contained-aes-active-version
+    - name: SELF_CONTAINED_AES_KEY_V1
+      valueFrom:
+        secretKeyRef:
+          name: s3-backend-secrets
+          key: self-contained-aes-key-v1
+    - name: GW_CRED_0_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: s3-gatewayaccess-secrets
+          key: access-key
+    - name: GW_CRED_0_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: s3-gatewayaccess-secrets
+          key: secret-key
+  network:
+    http:
+      containerPort: 8080
+      servicePort: 8080
+  service:
+    type: ClusterIP
+  livenessProbe:
+    httpGet:
+      path: /live
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 30
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 8080
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+  # Single-Node-Cluster: die Standard-PodAntiAffinity des Charts wuerde die
+  # Zustellung sonst verhindern.
+  defaultAffinityRules:
+    enabled: false
+  # Ohne rollingUpdate-Block wendet Kubernetes 25%/25% an. Bei replicaCount 1
+  # heisst das maxSurge 1 / maxUnavailable 0: der neue Pod startet, wird aber
+  # nie ready, der alte wird nie abgeraeumt - das Rollout blockiert dauerhaft
+  # und ArgoCD meldet die Sync trotzdem als erfolgreich, weil die Spec dem Git
+  # entspricht. Mit maxSurge 0 wird der alte Pod zuerst beendet. Preis: bei
+  # replicaCount 1 gibt es pro Sync ein kurzes Fenster ohne Ready-Pod (503 vom
+  # Traefik). Das ist hier vorziehbar, weil zwei gleichzeitige Writer am
+  # state-v2 Gate in Valkey nicht unterstuetzt sind.
+  deployment:
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 0
+        maxUnavailable: 1
+
+# ── Valkey: State-Store fuer In-flight Multipart-Uploads ────────────────
+# Bisher lief die Subchart mit reinen Chart-Defaults (auth aus, Persistenz
+# aus, keine Ressourcenlimits). Der Gateway prueft Valkey ueber /ready,
+# jeder Fehler hier unten erscheint direkt als 503 mit checks.valkey.
+valkey:
+  # Single-Node analog zur defaultAffinityRules-Begruendung weiter oben.
+  # Ausserdem erwartet der state-v2 Writer-Gate (internal/mpu/state.go,
+  # WriterCapabilityReady) genau einen aktiven Writer - zwei ueberlappende
+  # Gateway-Pods wuerden beide Heartbeats in denselben Valkey-Gate schreiben.
+  replica:
+    enabled: false
+
+  dataStorage:
+    enabled: true
+    requestedSize: 2Gi        # Pflicht - ohne diesen Wert erzeugt pvc.yaml kein PVC
+    className: microk8s-hostpath
+    keepPvc: true             # In-flight-MPU-State hat 7 Tage TTL
+
+  auth:
+    enabled: true
+    usersExistingSecret: s3-backend-secrets
+    aclUsers:
+      default:
+        permissions: "~* &* +@all"
+        passwordKey: valkey-password   # sonst wuerde der Chart den Key "default" suchen
+
+  # Wird ans Ende der generierten valkey.conf angehaengt, ueberschreibt also
+  # wirksam. noeviction ist Pflicht: ein LRU-Eviction wuerde MPU-State-Records
+  # entfernen und laufende Multipart-Uploads zerstoeren.
+  valkeyConfig: |
+    maxmemory 384mb
+    maxmemory-policy noeviction
+
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi   # nur mit maxmemory darueber - sonst OOM-Kill statt sauberer Fehler
+      cpu: 500m
+
+  # Chart-Default ist enabled: false - der Pod gilt als Ready, bevor er
+  # tatsaechlich Verbindungen annimmt.
+  readinessProbe:
+    enabled: true
