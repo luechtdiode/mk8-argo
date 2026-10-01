@@ -35,9 +35,9 @@ rclone-s3-gateway:
     # Anfuehrungszeichen noetig: "hetzner-crypt:" ist sonst YAML null.
     - "hetzner-crypt:"
     - --addr=:8080
-    - --vfs-cache-mode writes
-    - --no-check-bucket
-    - --cache-dir /tmp/rclone-cache
+    - --no-checksum
+    - --no-modtime
+    - --s3-upload-cutoff 5G
 
   env:
     # Lokale NAS-Zugangsberechtigung des Gateways, nicht die Hetzner-Credentials.
