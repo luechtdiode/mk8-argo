@@ -5,5 +5,5 @@ dependencies:
     - name: sealed-secrets
       appVersion: v0.34.0
       version: 2.18.0
-      repository: https://bitnami-labs.github.io/sealed-secrets
+      repository: https://bitnami.github.io/sealed-secrets
 
