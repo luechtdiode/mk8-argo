@@ -12,6 +12,7 @@ bootstrap:
  - name: kubernetes-dashboard
  #- name: velero
  - name: storj
+ - name: rclone
  - name: pg-admin
  - name: kmgetubs19-static
  - name: kutuapp-test
