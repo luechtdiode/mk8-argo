@@ -170,11 +170,9 @@ s3-gateway:
     periodSeconds: 10
   resources:
     requests:
-      memory: "64Mi"
-      cpu: "100m"
+      memory: 4Gi
     limits:
-      memory: "512Mi"
-      cpu: "2500m"
+      memory: 10Gi
   # Single-Node-Cluster: die Standard-PodAntiAffinity des Charts wuerde die
   # Zustellung sonst verhindern.
   defaultAffinityRules:
