@@ -230,3 +230,41 @@ valkey:
   # tatsaechlich Verbindungen annimmt.
   readinessProbe:
     enabled: true
+
+opndrive:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/opndrive/opndrive
+    tag: "v3.1.1"
+    pullPolicy: IfNotPresent
+
+  network:
+    http:
+      containerPort: 3000
+      servicePort: 8080
+  service:
+    type: ClusterIP
+  env:
+    # Hier trägst du die Zugangsdaten für dein Gateway ein
+    - name: S3_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: s3-gatewayaccess-secrets
+          key: access-key
+    - name: S3_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: s3-gatewayaccess-secrets
+          key: secret-key
+    # Wichtig: Der Endpoint zeigt auf deine öffentliche URL (wegen Same-Origin)
+    - name: S3_ENDPOINT
+      value: "https://s3gw.interpolar.ch.ch:8443"
+    - name: S3_REGION
+      value: "nbg1"
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+    requests:
+      cpu: "100m"
+      memory: "256Mi"

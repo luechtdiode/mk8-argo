@@ -13,3 +13,10 @@ spec:
         - kind: Service
           name: s3-gateway
           port: http
+    - match: HostRegexp(`^s3\.(.+)\.stargate$`)
+      kind: Rule
+      priority: 5
+      services:
+        - kind: Service
+          name: opndrive
+          port: http
