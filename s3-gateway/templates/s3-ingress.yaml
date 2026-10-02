@@ -20,9 +20,9 @@ metadata:
   name: http-route-s3-ui
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
-    - match: HostRegexp(`^s3\.(.+)\.stargate$`)
+    - match: Host(`s3.interpolar.ch`)
       kind: Rule
       priority: 5
       services:
