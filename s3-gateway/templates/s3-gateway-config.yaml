@@ -8,12 +8,12 @@ data:
   backend-provider: "Hetzner"
   # Phase 4: Rate limiting
   rate-limit-enabled: "false"
-  rate-limit-requests: "100"
+  rate-limit-requests: "5000"
   rate-limit-window: "60s"
   # Phase 4: Server timeouts
-  server-read-timeout: "15s"
-  server-write-timeout: "15s"
+  server-read-timeout: "30s"
+  server-write-timeout: "30s"
   server-idle-timeout: "60s"
-  server-read-header-timeout: "10s"
+  server-read-header-timeout: "30s"
   self-contained-type: "aes"
   self-contained-aes-active-version: "1"

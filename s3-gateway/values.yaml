@@ -1,5 +1,5 @@
 s3-gateway:
-  replicaCount: 10
+  replicaCount: 5
   image:
     repository: docker.io/cloud37io/s3-encryption-gateway
     tag: "0.12.2"
@@ -208,7 +208,7 @@ valkey:
 
   dataStorage:
     enabled: true
-    requestedSize: 2Gi        # Pflicht - ohne diesen Wert erzeugt pvc.yaml kein PVC
+    requestedSize: 5Gi        # Pflicht - ohne diesen Wert erzeugt pvc.yaml kein PVC
     className: microk8s-hostpath
     keepPvc: true             # In-flight-MPU-State hat 7 Tage TTL
 
