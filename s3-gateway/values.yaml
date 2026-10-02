@@ -1,5 +1,5 @@
 s3-gateway:
-  replicaCount: 1
+  replicaCount: 3
   image:
     repository: docker.io/cloud37io/s3-encryption-gateway
     tag: "0.12.2"
@@ -10,7 +10,7 @@ s3-gateway:
     - name: TLS_ENABLED
       value: "false"
     - name: LOG_LEVEL
-      value: "debug"
+      value: "warn"
     - name: BACKEND_ENDPOINT
       valueFrom:
         configMapKeyRef:
@@ -141,6 +141,15 @@ s3-gateway:
           key: secret-key
     - name: ALLOW_BUCKET_CREATION
       value: "true"
+    - name: AUTH_CREDENTIALS_0_BUCKET_PERMISSIONS_0_BUCKET
+      value: "*"
+    - name: AUTH_CREDENTIALS_0_BUCKET_PERMISSIONS_0_GRANT_0
+      value: "manage"
+    - name: AUTH_CREDENTIALS_0_BUCKET_PERMISSIONS_0_GRANT_1
+      value: "create"
+    - name: AUTH_CREDENTIALS_0_BUCKET_PERMISSIONS_0_GRANT_2
+      value: "delete"
+
   network:
     http:
       containerPort: 8080
