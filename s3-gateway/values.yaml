@@ -1,5 +1,5 @@
 s3-gateway:
-  replicaCount: 3
+  replicaCount: 10
   image:
     repository: docker.io/cloud37io/s3-encryption-gateway
     tag: "0.12.2"
