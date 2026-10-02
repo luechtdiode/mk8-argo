@@ -268,3 +268,5 @@ opndrive:
     requests:
       cpu: "100m"
       memory: "256Mi"
+  defaultAffinityRules:
+    enabled: false
