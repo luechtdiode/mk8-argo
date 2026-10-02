@@ -235,7 +235,7 @@ opndrive:
   replicaCount: 1
   image:
     repository: ghcr.io/opndrive/opndrive
-    tag: "v3.1.1"
+    tag: "3.1.1"
     pullPolicy: IfNotPresent
 
   network:
