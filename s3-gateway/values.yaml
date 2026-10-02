@@ -173,8 +173,8 @@ s3-gateway:
       memory: "64Mi"
       cpu: "100m"
     limits:
-      memory: "256Mi"
-      cpu: "500m"
+      memory: "512Mi"
+      cpu: "2500m"
   # Single-Node-Cluster: die Standard-PodAntiAffinity des Charts wuerde die
   # Zustellung sonst verhindern.
   defaultAffinityRules:
