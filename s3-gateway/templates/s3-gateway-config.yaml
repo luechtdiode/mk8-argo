@@ -8,8 +8,8 @@ data:
   backend-provider: "Hetzner"
   # Phase 4: Rate limiting
   rate-limit-enabled: "false"
-  rate-limit-requests: "5000"
-  rate-limit-window: "60s"
+  rate-limit-requests: "7000"
+  rate-limit-window: "10s"
   # Phase 4: Server timeouts
   server-read-timeout: "30s"
   server-write-timeout: "30s"
