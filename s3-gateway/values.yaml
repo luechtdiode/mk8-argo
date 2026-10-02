@@ -10,7 +10,7 @@ s3-gateway:
     - name: TLS_ENABLED
       value: "false"
     - name: LOG_LEVEL
-      value: "info"
+      value: "debug"
     - name: BACKEND_ENDPOINT
       valueFrom:
         configMapKeyRef:
@@ -139,6 +139,8 @@ s3-gateway:
         secretKeyRef:
           name: s3-gatewayaccess-secrets
           key: secret-key
+    - name: ALLOW_BUCKET_CREATION
+      value: "true"
   network:
     http:
       containerPort: 8080
