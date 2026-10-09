@@ -33,3 +33,23 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}
 ### relax sync-checks of SealedSecrets
 *see https://argo-cd.readthedocs.io/en/stable/faq/#why-are-resources-of-type-sealedsecret-stuck-in-the-progressing-state
 for solving endless sync-progressig*
+
+### upgrade ArgoCD CRD's
+before applying new ArgoCD version, ensure to apply the CRDs first, otherwise ArgoCD will not start and will be stuck in a crashloop.
+1) Ensure Helm repo is up to date
+```bash
+helm repo add argo-cd https://argoproj.github.io/argo-helm 2>/dev/null || true
+helm repo update
+```
+2) Apply CRDs for argo-cd 10.10.1 with server-side apply
+   Use one of these (both extract CRDs from the new chart version). Server-side apply with --force-conflicts is required (ApplicationSet CRD is large).
+   Option A (stream directly):
+```bash
+helm template argo-cd argo-cd/argo-cd --version 10.10.1 --namespace argocd --include-crds --set crds.install=true \
+  | kubectl apply --server-side --force-conflicts -f -
+```
+Option B (save to file first, inspect if desired):
+```bash
+helm show crds argo-cd/argo-cd --version 10.10.1 > /tmp/crds-argo-cd-10.10.1.yaml
+kubectl apply --server-side --force-conflicts -f /tmp/crds-argo-cd-10.10.1.yaml
+```
