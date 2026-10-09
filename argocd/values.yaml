@@ -6,11 +6,12 @@ argo-cd:
     # -- Install and upgrade CRDs, is overriden by initial helm install flag
     install: false
 
-  #global:
-  #  image:
-  #    tag: v3.2.3
+  global:
+    networkPolicy:
+      create: false
+
   dex:
-    # name: dex-server
+    enabled: true
     envFrom:
       - secretRef:
           name: argocd-dex-github-secret
@@ -33,6 +34,7 @@ argo-cd:
     cm:
       admin.enabled: 'false'
       statusbadge.enabled: 'true'
+      url: "https://argo.interpolar.ch"
       dex.config: |
         staticClients:
           # This is the OIDC client ID in plaintext
@@ -56,7 +58,6 @@ argo-cd:
             hs.status = "Healthy"
             hs.message = "Controller doesn't report resource status"
             return hs
-      url: 'https://argo.interpolar.ch'
 
     repositories:
       luechtiode-devops:
