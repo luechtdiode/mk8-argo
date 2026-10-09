@@ -19,15 +19,17 @@ kubectl apply -f ~/microk8s-setup/mk8-argo/traefik/apps/traefik-argo-app.yaml
 ```bash
   helm search repo traefik
   # Update Chart-Version in Chart.yaml to latest version, e.g. 38.0
-  # 1. Download and install the new CRDs manually FIRST
-  kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v38.0.1/traefik/crds/traefik.io_ingressroutes.yaml
-  kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v38.0.1/traefik/crds/traefik.io_middlewares.yaml
-  kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v38.0.1/traefik/crds/traefik.io_tlsstores.yaml
+  helm repo add traefik https://helm.traefik.io/traefik 2>/dev/null || true
+  helm repo update
+  helm show crds traefik/traefik | kubectl apply --server-side --force-conflicts -f -
+  helm dependencies update
   # then simulate upgrade:
   helm lint .
   helm template traefik . --values values.yaml --validate --set templates.skippodmonitor=true --set traefik.serviceAccount.name=""
   helm  upgrade -n traefik traefik . --dry-run --debug --values values.yaml --set templates.skippodmonitor=true --set traefik.serviceAccount.name=""
   # If no errors, perform upgrade by argo-cd.
+  # or use
+  helm upgrade -n traefik traefik . --values values.yaml
 ```
 
 ### ArgoCD Resync
