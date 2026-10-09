@@ -5,6 +5,9 @@ templates:
   http_redirect:
     enable: true
 
+core:
+  strictTLSOptions: true
+
 traefik:
   # fullnameOverride: traefik
 
@@ -45,13 +48,11 @@ traefik:
       name: '{{ printf "%s-configs" .Release.Name }}'
       type: configMap
 
-  logs:
-    access:
-      fields:
-        headers:
-          names: {
-            User-Agent: keep
-          }
+  accessLog:
+    fields:
+      headers:
+        names:
+          User-Agent: keep
 
   global:
     checkNewVersion: true
@@ -100,6 +101,7 @@ traefik:
         maxHeaderBytes:  # @schema type:[integer, null]; minimum:0
         # -- See [upstream documentation](https://doc.traefik.io/traefik/security/request-path/#path-sanitization)
         sanitizePath:  # @schema type:[boolean, null]
+        aliasHeadersStrategy: reject
         tls:
           enabled: true
           options: "default"
