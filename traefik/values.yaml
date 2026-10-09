@@ -199,6 +199,8 @@ traefik:
         dnsChallenge:
           provider: cloudflare
           resolvers: 1.1.1.1
+          propagation:
+            delayBeforeChecks: 30s
         storage: /certs/acme-stageing1.json
     cf-production:
       acme:
