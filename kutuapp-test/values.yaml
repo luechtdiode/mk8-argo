@@ -12,7 +12,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: altersklassen-preview-in-admin-web-app-42b261d
+    tag: add-squad-editor-to-admin-web-app-303d647
     pullPolicy: Always
   network:
     metrics:
