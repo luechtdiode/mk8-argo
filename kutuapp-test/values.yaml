@@ -12,7 +12,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: add-squad-editor-to-admin-web-app-303d647
+    tag: add-squad-editor-to-admin-web-app-1b399a6
     pullPolicy: Always
   network:
     metrics:
