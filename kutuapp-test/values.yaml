@@ -12,7 +12,7 @@ kutuapp:
   replicaCount: 1
   image:
     repository: luechtdiode/kutuapp
-    tag: add-squad-editor-to-admin-web-app-1b399a6
+    tag: 1628-admin-webapp---vorbereitete-ranglisten-loeschen-9b810e9
     pullPolicy: Always
   network:
     metrics:
